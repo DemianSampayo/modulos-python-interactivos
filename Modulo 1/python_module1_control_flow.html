@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.6 – Control de Flujo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focused on control flow (if, else, elif). It features a header, an introductory section, and multiple interactive playgrounds: basic if-elif-else, and nested if statements. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding conditional logic.
+        - Basic if-elif-else: Goal: Demonstrate conditional execution. Method: Number input, button to check, and a code-block display area for the output, Python code, and explanation. Interaction: User enters a number, clicks the button, and sees the categorized result based on `if/elif/else` with code context. Justification: Provides a hands-on experience to understand how basic control flow statements direct program execution.
+        - Nested if statements: Goal: Demonstrate complex conditional logic. Method: Multiple inputs (e.g., age, student status), button to check, and a code-block display area for output, Python code, and explanation. Interaction: User provides multiple inputs, sees the result of nested conditions with code context. Justification: Illustrates how conditions can be combined for more specific logic.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.6 – Control de Flujo</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Control de flujo: `if`, `else`, `elif`</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">El control de flujo es la capacidad de tu programa para tomar decisiones y ejecutar diferentes bloques de código basándose en ciertas condiciones. Las sentencias `if`, `elif` (else if) y `else` son las herramientas principales para esto.</p>
+            </section>
+
+            <section id="if-else-elif-basic">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. `if`, `elif`, `else` Básico</h3>
+                        <p class="mt-4 text-slate-600">La estructura `if-elif-else` permite al programa evaluar múltiples condiciones en orden. La primera condición que sea verdadera se ejecuta, y el resto se ignora. Si ninguna es verdadera, se ejecuta el bloque `else`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="flow-input" class="block text-sm font-medium text-slate-700">Introduce un número:</label>
+                            <input type="number" id="flow-input" value="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="check-flow-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Comprobar Flujo</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado del Control de Flujo:</h4>
+                        <div id="flow-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            La categoría del número aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="flow-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Comprobar Flujo" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nested-if">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. `if` Anidados</h3>
+                        <p class="mt-4 text-slate-600">Puedes colocar una sentencia `if` dentro de otra sentencia `if` para manejar condiciones más complejas y específicas. Esto permite tomar decisiones basadas en múltiples criterios.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="age-input" class="block text-sm font-medium text-slate-700">Edad:</label>
+                            <input type="number" id="age-input" value="18" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="has-license-select" class="block text-sm font-medium text-slate-700">¿Tiene licencia de conducir?</label>
+                            <select id="has-license-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="True">Sí</option>
+                                <option value="False">No</option>
+                            </select>
+                            <button id="check-nested-if-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Evaluar Condiciones Anidadas</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado de Condiciones Anidadas:</h4>
+                        <div id="nested-if-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de las condiciones anidadas aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="nested-if-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Evaluar Condiciones Anidadas" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Control de Flujo</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre las sentencias `if`, `else` y `elif`.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.6 – Control de Flujo. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Basic if-elif-else Logic ---
+    const flowInput = document.getElementById('flow-input');
+    const checkFlowBtn = document.getElementById('check-flow-btn');
+    const flowOutput = document.getElementById('flow-output');
+    const flowCodeExplanation = document.getElementById('flow-code-explanation');
+
+    checkFlowBtn.addEventListener('click', () => {
+        const number = parseFloat(flowInput.value);
+        let message = ``;
+        let pythonCode = `numero = ${number}\n`;
+        let explanation = '';
+
+        if (isNaN(number)) {
+            message = "Por favor, introduce un número válido.";
+            pythonCode = `numero = "${flowInput.value}" # Entrada inválida\n`;
+            explanation = `La entrada no es un número, por lo que no se pueden evaluar las condiciones numéricas.`;
+        } else if (number > 0) {
+            message = "El número es positivo.";
+            pythonCode += `if numero > 0:\n    estado = "positivo"\nelif numero < 0:\n    estado = "negativo"\nelse:\n    estado = "cero"`;
+            explanation = `La condición 'numero > 0' es verdadera, por lo que se ejecuta este bloque.`;
+        } else if (number < 0) {
+            message = "El número es negativo.";
+            pythonCode += `if numero > 0:\n    estado = "positivo"\nelif numero < 0:\n    estado = "negativo"\nelse:\n    estado = "cero"`;
+            explanation = `La primera condición es falsa, pero la condición 'numero < 0' es verdadera, por lo que se ejecuta este bloque.`;
+        } else {
+            message = "El número es cero.";
+            pythonCode += `if numero > 0:\n    estado = "positivo"\nelif numero < 0:\n    estado = "negativo"\nelse:\n    estado = "cero"`;
+            explanation = `Ninguna de las condiciones 'if' o 'elif' es verdadera, por lo que se ejecuta el bloque 'else'.`;
+        }
+        flowOutput.textContent = `Resultado: ${message}`;
+        flowCodeExplanation.textContent = `${pythonCode}\nprint(f"El número es: {estado}")\n\n# Explicación\n${explanation}`;
+    });
+
+    // --- 2. Nested if statements Logic ---
+    const ageInput = document.getElementById('age-input');
+    const hasLicenseSelect = document.getElementById('has-license-select');
+    const checkNestedIfBtn = document.getElementById('check-nested-if-btn');
+    const nestedIfOutput = document.getElementById('nested-if-output');
+    const nestedIfCodeExplanation = document.getElementById('nested-if-code-explanation');
+
+    checkNestedIfBtn.addEventListener('click', () => {
+        const age = parseInt(ageInput.value);
+        const hasLicense = hasLicenseSelect.value === 'True';
+        let message = '';
+        let pythonCode = `edad = ${age}\ntiene_licencia = ${hasLicense}\n`;
+        let explanation = '';
+
+        if (isNaN(age) || age < 0) {
+            message = "Por favor, introduce una edad válida.";
+            pythonCode = `edad = "${ageInput.value}" # Entrada inválida\ntiene_licencia = ${hasLicense}\n`;
+            explanation = `La edad debe ser un número válido para evaluar las condiciones.`;
+        } else if (age >= 18) {
+            message = "Es mayor de edad.";
+            pythonCode += `if edad >= 18:\n    print("Es mayor de edad.")\n    if tiene_licencia:\n        print("Puede conducir legalmente.")\n    else:\n        print("Necesita obtener una licencia.")\nelse:\n    print("Es menor de edad.")`;
+            explanation = `La primera condición (mayor de 18) es verdadera. Luego, se evalúa la condición anidada sobre la licencia.`;
+            if (hasLicense) {
+                message += " Puede conducir legalmente.";
+            } else {
+                message += " Necesita obtener una licencia.";
+            }
+        } else {
+            message = "Es menor de edad.";
+            pythonCode += `if edad >= 18:\n    print("Es mayor de edad.")\n    if tiene_licencia:\n        print("Puede conducir legalmente.")\n    else:\n        print("Necesita obtener una licencia.")\nelse:\n    print("Es menor de edad.")`;
+            explanation = `La primera condición (mayor de 18) es falsa, por lo que se ejecuta el bloque 'else' principal.`;
+        }
+        nestedIfOutput.textContent = `Resultado: ${message}`;
+        nestedIfCodeExplanation.textContent = `${pythonCode}\n\n# Explicación\n${explanation}`;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué palabra clave se usa para iniciar una sentencia condicional en Python?",
+            "answerOptions": [
+                {"text": "`then`", "isCorrect": false},
+                {"text": "`if`", "isCorrect": true},
+                {"text": "`start`", "isCorrect": false},
+                {"text": "`check`", "isCorrect": false}
+            ],
+            "rationale": "La palabra clave `if` se utiliza para comenzar una sentencia condicional en Python."
+        },
+        {
+            "question": "Si tienes múltiples condiciones a evaluar en secuencia, ¿qué palabra clave usarías después de un `if` inicial?",
+            "answerOptions": [
+                {"text": "`else if`", "isCorrect": false},
+                {"text": "`otherwise`", "isCorrect": false},
+                {"text": "`elif`", "isCorrect": true},
+                {"text": "`then if`", "isCorrect": false}
+            ],
+            "rationale": "En Python, `elif` es la abreviatura de 'else if' y se usa para probar condiciones adicionales después de un `if`."
+        },
+        {
+            "question": "¿Qué bloque de código se ejecuta si ninguna de las condiciones `if` o `elif` es verdadera?",
+            "answerOptions": [
+                {"text": "El programa se detiene", "isCorrect": false},
+                {"text": "El primer bloque `if`", "isCorrect": false},
+                {"text": "El bloque `else`", "isCorrect": true},
+                {"text": "El último bloque `elif`", "isCorrect": false}
+            ],
+            "rationale": "El bloque `else` es el camino por defecto que se ejecuta cuando ninguna de las condiciones `if` o `elif` anteriores es verdadera."
+        },
+        {
+            "question": "Dado el siguiente código:\n```python\npuntuacion = 85\nif puntuacion > 90:\n    grado = \"A\"\nelif puntuacion > 80:\n    grado = \"B\"\nelif puntuacion > 70:\n    grado = \"C\"\nelse:\n    grado = \"F\"\n```\n¿Cuál será el valor de `grado`?",
+            "answerOptions": [
+                {"text": "\"A\"", "isCorrect": false},
+                {"text": "\"B\"", "isCorrect": true},
+                {"text": "\"C\"", "isCorrect": false},
+                {"text": "\"F\"", "isCorrect": false}
+            ],
+            "rationale": "La primera condición (`puntuacion > 90`) es falsa. La segunda condición (`puntuacion > 80`) es verdadera (85 > 80), por lo que `grado` se asigna a \"B\" y el resto de las condiciones no se evalúan."
+        },
+        {
+            "question": "¿Cuál es la importancia de la indentación en las sentencias `if`, `elif`, `else` en Python?",
+            "answerOptions": [
+                {"text": "Es solo por estética y legibilidad", "isCorrect": false},
+                {"text": "Define qué líneas de código pertenecen a cada bloque condicional", "isCorrect": true},
+                {"text": "Indica el orden de ejecución de las condiciones", "isCorrect": false},
+                {"text": "No tiene ninguna importancia", "isCorrect": false}
+            ],
+            "rationale": "En Python, la indentación es sintácticamente significativa y se utiliza para definir el alcance de los bloques de código, incluyendo los de las sentencias condicionales."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('flow-output').textContent = 'La categoría del número aparecerá aquí.';
+    document.getElementById('flow-code-explanation').textContent = 'Haz clic en "Comprobar Flujo" para ver el código.';
+    document.getElementById('nested-if-output').textContent = 'El resultado de las condiciones anidadas aparecerá aquí.';
+    document.getElementById('nested-if-code-explanation').textContent = 'Haz clic en "Evaluar Condiciones Anidadas" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>
+
+</body>
+</html>

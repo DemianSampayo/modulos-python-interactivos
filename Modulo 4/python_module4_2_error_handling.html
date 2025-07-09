@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4.2 – Manejo de Errores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 4.2 – Manejo robusto de errores con excepciones". It features a header, an introductory section, and interactive playgrounds for demonstrating specific error handling scenarios like FileNotFoundError, PermissionError, and general exceptions, especially in file/API contexts. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding robust error handling.
+        - FileNotFoundError: Goal: Demonstrate handling missing files. Method: Input for filename, button to "read", code-block output for simulated error and Python code/explanation. Interaction: User tries to read a non-existent file, sees the error caught. Justification: Shows how to prevent crashes from common file issues.
+        - PermissionError: Goal: Demonstrate handling access issues. Method: Button to simulate, code-block output for simulated error and Python code/explanation. Interaction: User attempts a restricted operation, sees the error caught. Justification: Explains handling OS-level access problems.
+        - General Exception Handling: Goal: Demonstrate catching any error. Method: Input to trigger various errors, button to execute, code-block output for simulated error and Python code/explanation. Interaction: User triggers different errors, sees how a generic except block works. Justification: Shows a fallback for unforeseen errors.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 4.2 – Manejo de Errores</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module4_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 4</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Manejo robusto de errores con excepciones</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Hacer que tus programas sean robustos significa que pueden manejar situaciones inesperadas sin bloquearse. Python utiliza **excepciones** para señalar errores y el bloque `try/except` para capturarlos y gestionarlos de forma elegante. Esto es crucial cuando se trabaja con operaciones de E/S (entrada/salida) como archivos o redes.</p>
+            </section>
+
+            <section id="filenotfound-error">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Manejo de `FileNotFoundError`</h3>
+                        <p class="mt-4 text-slate-600">Este error ocurre cuando intentas acceder a un archivo que no existe. Podemos usar `try/except` para informar al usuario en lugar de que el programa falle.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="missing-file-name" class="block text-sm font-medium text-slate-700">Nombre de archivo a buscar (ej. `inexistente.txt`):</label>
+                            <input type="text" id="missing-file-name" value="archivo_que_no_existe.txt" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="read-missing-file-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Lectura</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Simulación:</h4>
+                        <div id="missing-file-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="missing-file-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Lectura" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="permission-error">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Manejo de `PermissionError`</h3>
+                        <p class="mt-4 text-slate-600">Este error ocurre cuando no tienes los permisos necesarios para leer o escribir en un archivo o ubicación. Aquí simulamos un intento de escritura sin permisos.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="restricted-file-name" class="block text-sm font-medium text-slate-700">Archivo restringido (simulado):</label>
+                            <input type="text" id="restricted-file-name" value="/root/restricted_file.txt" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="write-restricted-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Escritura Restringida</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Simulación:</h4>
+                        <div id="restricted-file-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="restricted-file-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Escritura Restringida" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="general-exception">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Captura de Excepciones Generales (`except Exception as e`)</h3>
+                        <p class="mt-4 text-slate-600">A veces no sabes qué error específico puede ocurrir. Puedes usar un `except` más general para capturar cualquier tipo de excepción y obtener información sobre ella.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="general-error-scenario" class="block text-sm font-medium text-slate-700">Escenario de error:</label>
+                            <select id="general-error-scenario" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="zerodivision">División por cero</option>
+                                <option value="valueerror">Error de valor (conversión)</option>
+                                <option value="indexerror">Error de índice (lista)</option>
+                            </select>
+                            <button id="run-general-except-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Error General</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Manejo General:</h4>
+                        <div id="general-except-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="general-except-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Error General" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Manejo de Errores</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre el manejo robusto de errores con `try/except`.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 4.2 – Manejo de Errores. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. FileNotFoundError Logic ---
+    const missingFileNameInput = document.getElementById('missing-file-name');
+    const readMissingFileBtn = document.getElementById('read-missing-file-btn');
+    const missingFileOutput = document.getElementById('missing-file-output');
+    const missingFileCodeExplanation = document.getElementById('missing-file-code-explanation');
+
+    readMissingFileBtn.addEventListener('click', () => {
+        const fileName = missingFileNameInput.value;
+        missingFileOutput.textContent = ''; // Clear previous output
+        let pythonCode = `nombre_archivo = "${fileName}"\n`;
+        let explanation = '';
+
+        // Simulate FileNotFoundError
+        if (fileName.includes('no_existe')) { // Simple condition to trigger simulated error
+            missingFileOutput.textContent = `Se capturó un error: FileNotFoundError: [Errno 2] No such file or directory: '${fileName}'`;
+            pythonCode += `try:\n    with open(nombre_archivo, 'r') as f:\n        contenido = f.read()\n        print(contenido)\nexcept FileNotFoundError:\n    print(f"Error: El archivo '{nombre_archivo}' no fue encontrado.")`;
+            explanation = `El bloque 'try' intentó abrir el archivo. Como el archivo no existe, se lanzó un 'FileNotFoundError', que fue capturado por el bloque 'except FileNotFoundError'.`;
+        } else {
+            missingFileOutput.textContent = `Simulación: Archivo '${fileName}' leído con éxito (contenido simulado).`;
+            pythonCode += `try:\n    with open(nombre_archivo, 'r') as f:\n        contenido = f.read()\n        print(contenido)\nexcept FileNotFoundError:\n    print(f"Error: El archivo '{nombre_archivo}' no fue encontrado.")`;
+            explanation = `El bloque 'try' intentó abrir el archivo. Como el archivo (simulado) existe, la operación fue exitosa y no se lanzó ninguna excepción.`;
+        }
+        missingFileCodeExplanation.textContent = pythonCode + `\n\n# Explicación\n` + explanation;
+    });
+
+    // --- 2. PermissionError Logic ---
+    const restrictedFileNameInput = document.getElementById('restricted-file-name');
+    const writeRestrictedBtn = document.getElementById('write-restricted-btn');
+    const restrictedFileOutput = document.getElementById('restricted-file-output');
+    const restrictedFileCodeExplanation = document.getElementById('restricted-file-code-explanation');
+
+    writeRestrictedBtn.addEventListener('click', () => {
+        const fileName = restrictedFileNameInput.value;
+        restrictedFileOutput.textContent = ''; // Clear previous output
+        let pythonCode = `nombre_archivo_restringido = "${fileName}"\n`;
+        let explanation = '';
+
+        // Simulate PermissionError
+        if (fileName.includes('restricted')) { // Simple condition to trigger simulated error
+            restrictedFileOutput.textContent = `Se capturó un error: PermissionError: [Errno 13] Permission denied: '${fileName}'`;
+            pythonCode += `try:\n    with open(nombre_archivo_restringido, 'w') as f:\n        f.write("Intento de escritura")\n    print("Escritura exitosa (simulada).")\nexcept PermissionError:\n    print(f"Error: Permiso denegado para escribir en '{nombre_archivo_restringido}'.")`;
+            explanation = `El bloque 'try' intentó escribir en el archivo. Como no se tienen los permisos necesarios, se lanzó un 'PermissionError', que fue capturado por el bloque 'except PermissionError'.`;
+        } else {
+            restrictedFileOutput.textContent = `Simulación: Escritura en '${fileName}' exitosa (contenido simulado).`;
+            pythonCode += `try:\n    with open(nombre_archivo_restringido, 'w') as f:\n        f.write("Intento de escritura")\n    print("Escritura exitosa (simulada).")\nexcept PermissionError:\n    print(f"Error: Permiso denegado para escribir en '{nombre_archivo_restringido}'.")`;
+            explanation = `El bloque 'try' intentó escribir en el archivo. Como los permisos (simulados) son correctos, la operación fue exitosa y no se lanzó ninguna excepción.`;
+        }
+        restrictedFileCodeExplanation.textContent = pythonCode + `\n\n# Explicación\n` + explanation;
+    });
+
+    // --- 3. General Exception Handling Logic ---
+    const generalErrorScenarioSelect = document.getElementById('general-error-scenario');
+    const runGeneralExceptBtn = document.getElementById('run-general-except-btn');
+    const generalExceptOutput = document.getElementById('general-except-output');
+    const generalExceptCodeExplanation = document.getElementById('general-except-code-explanation');
+
+    runGeneralExceptBtn.addEventListener('click', () => {
+        const scenario = generalErrorScenarioSelect.value;
+        generalExceptOutput.textContent = ''; // Clear previous output
+        let pythonCode = '';
+        let explanation = '';
+        let simulatedError = null;
+
+        switch (scenario) {
+            case 'zerodivision':
+                simulatedError = new Error("ZeroDivisionError: division by zero");
+                pythonCode = `try:\n    resultado = 10 / 0\n    print(resultado)\nexcept Exception as e:\n    print(f"Se capturó un error general: {e}")`;
+                explanation = `Se intenta una división por cero. Este error es capturado por el 'except Exception', que es un manejador general para cualquier tipo de excepción.`;
+                break;
+            case 'valueerror':
+                simulatedError = new Error("ValueError: invalid literal for int() with base 10: 'abc'");
+                pythonCode = `try:\n    num = int("abc")\n    print(num)\nexcept Exception as e:\n    print(f"Se capturó un error general: {e}")`;
+                explanation = `Se intenta convertir una cadena no numérica a entero, lo que causa un 'ValueError'. Este error es capturado por el 'except Exception'.`;
+                break;
+            case 'indexerror':
+                simulatedError = new Error("IndexError: list index out of range");
+                pythonCode = `try:\n    mi_lista = [1, 2]\n    elemento = mi_lista[5]\n    print(elemento)\nexcept Exception as e:\n    print(f"Se capturó un error general: {e}")`;
+                explanation = `Se intenta acceder a un índice fuera del rango de la lista, lo que causa un 'IndexError'. Este error es capturado por el 'except Exception'.`;
+                break;
+        }
+
+        try {
+            if (simulatedError) {
+                throw simulatedError;
+            }
+            generalExceptOutput.textContent = `Operación exitosa (simulada).`; // Should not happen with current scenarios
+        } catch (e) {
+            generalExceptOutput.textContent = `Se capturó un error general: ${e.message}`;
+        }
+        generalExceptCodeExplanation.textContent = pythonCode + `\n\n# Explicación\n` + explanation;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué tipo de error se genera cuando intentas abrir un archivo que no existe?",
+            "answerOptions": [
+                {"text": "`ValueError`", "isCorrect": false},
+                {"text": "`PermissionError`", "isCorrect": false},
+                {"text": "`FileNotFoundError`", "isCorrect": true},
+                {"text": "`IOError`", "isCorrect": false}
+            ],
+            "rationale": "Python lanza un `FileNotFoundError` cuando el sistema operativo no puede encontrar el archivo especificado."
+        },
+        {
+            "question": "¿Qué error indica que no tienes los derechos necesarios para realizar una operación en un archivo o directorio?",
+            "answerOptions": [
+                {"text": "`TypeError`", "isCorrect": false},
+                {"text": "`PermissionError`", "isCorrect": true},
+                {"text": "`AttributeError`", "isCorrect": false},
+                {"text": "`SystemError`", "isCorrect": false}
+            ],
+            "rationale": "El `PermissionError` se produce cuando el programa intenta una operación de sistema (como leer o escribir un archivo) para la cual no tiene los permisos adecuados."
+        },
+        {
+            "question": "¿Cuál es la forma más general de capturar CUALQUIER tipo de excepción en Python?",
+            "answerOptions": [
+                {"text": "`except Error:`", "isCorrect": false},
+                {"text": "`except:`", "isCorrect": false},
+                {"text": "`except Exception as e:`", "isCorrect": true},
+                {"text": "`except AnyError:`", "isCorrect": false}
+            ],
+            "rationale": "Capturar `Exception` con `as e` es la forma más general de atrapar cualquier tipo de excepción y almacenar la instancia de la excepción en la variable `e` para obtener detalles."
+        },
+        {
+            "question": "Si un bloque `try` no lanza ninguna excepción, ¿qué bloque `except` se ejecuta?",
+            "answerOptions": [
+                {"text": "El primer `except`", "isCorrect": false},
+                {"text": "El último `except`", "isCorrect": false},
+                {"text": "Ninguno", "isCorrect": true},
+                {"text": "Todos los `except`", "isCorrect": false}
+            ],
+            "rationale": "Si el código dentro del bloque `try` se ejecuta sin errores (es decir, no se lanza ninguna excepción), los bloques `except` asociados no se ejecutan."
+        },
+        {
+            "question": "¿Por qué es una buena práctica manejar errores específicos (ej. `FileNotFoundError`) en lugar de usar solo un `except Exception` general?",
+            "answerOptions": [
+                {"text": "Para hacer el código más corto", "isCorrect": false},
+                {"text": "Para evitar que el programa se detenga por completo", "isCorrect": false},
+                {"text": "Para proporcionar un manejo de errores más preciso y evitar capturar errores inesperados que no deberían ser ignorados", "isCorrect": true},
+                {"text": "No hay diferencia, ambos son igual de buenos", "isCorrect": false}
+            ],
+            "rationale": "Manejar excepciones específicas te permite responder de manera apropiada a cada tipo de error y evita 'ocultar' errores inesperados que podrían indicar problemas más graves en tu código."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('missing-file-output').textContent = 'La salida de la simulación aparecerá aquí.';
+    document.getElementById('missing-file-code-explanation').textContent = 'Haz clic en "Simular Lectura" para ver el código.';
+    document.getElementById('restricted-file-output').textContent = 'La salida de la simulación aparecerá aquí.';
+    document.getElementById('restricted-file-code-explanation').textContent = 'Haz clic en "Simular Escritura Restringida" para ver el código.';
+    document.getElementById('general-except-output').textContent = 'La salida de manejo general aparecerá aquí.';
+    document.getElementById('general-except-code-explanation').textContent = 'Haz clic en "Simular Error General" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

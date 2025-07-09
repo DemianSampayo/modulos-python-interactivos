@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.3 – Manejo de Errores con try/except</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 2.3 – Manejo de Errores con try/except". It features a header, an introductory section, and interactive playgrounds for demonstrating error handling with division by zero and type conversion errors. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding error handling.
+        - Division by Zero Error Handling: Goal: Demonstrate error prevention. Method: Number inputs, button to divide, code-block output for simulated execution and Python code/explanation. Interaction: User inputs numbers (including zero), sees how `try/except` handles the division. Justification: Visualizes graceful error recovery.
+        - Type Conversion Error Handling: Goal: Demonstrate error prevention for invalid types. Method: Text input, button to convert, code-block output for simulated execution and Python code/explanation. Interaction: User inputs text or numbers, sees how `try/except` handles conversion failures. Justification: Shows how to make programs robust against bad user input.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 2.3 – Manejo de Errores</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module2_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 2</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Validar entradas con `try/except`</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">En la programación, los errores son inevitables. La clave es cómo los manejas. El bloque `try/except` te permite "intentar" ejecutar código que podría fallar y "capturar" esos errores para que tu programa no se detenga abruptamente, sino que los gestione de forma controlada.</p>
+            </section>
+
+            <section id="division-error">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Manejo de `ZeroDivisionError`</h3>
+                        <p class="mt-4 text-slate-600">La división por cero es un error común. Usa este simulador para ver cómo `try/except` puede prevenir que tu programa se bloquee cuando esto sucede.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="numerator-input" class="block text-sm font-medium text-slate-700">Numerador:</label>
+                            <input type="number" id="numerator-input" value="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="denominator-input" class="block text-sm font-medium text-slate-700">Denominador:</label>
+                            <input type="number" id="denominator-input" value="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="divide-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Dividir con `try/except`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de División:</h4>
+                        <div id="division-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="division-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Dividir con `try/except`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="type-conversion-error">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Manejo de `ValueError` (Conversión de Tipo)</h3>
+                        <p class="mt-4 text-slate-600">A menudo, al leer entradas del usuario, esperamos un número pero recibimos texto. `try/except` es perfecto para manejar estos `ValueError`s.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="conversion-input" class="block text-sm font-medium text-slate-700">Introduce un valor (ej. "abc" o "123"):</label>
+                            <input type="text" id="conversion-input" value="abc" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="convert-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Convertir a Número</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Conversión:</h4>
+                        <div id="conversion-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="conversion-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Convertir a Número" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Manejo de Errores</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre `try/except` y el manejo de excepciones en Python.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 2.3 – Manejo de Errores. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Division by Zero Error Handling Logic ---
+    const numeratorInput = document.getElementById('numerator-input');
+    const denominatorInput = document.getElementById('denominator-input');
+    const divideBtn = document.getElementById('divide-btn');
+    const divisionOutput = document.getElementById('division-output');
+    const divisionCodeExplanation = document.getElementById('division-code-explanation');
+
+    divideBtn.addEventListener('click', () => {
+        const numerator = parseFloat(numeratorInput.value);
+        const denominator = parseFloat(denominatorInput.value);
+        divisionOutput.textContent = ''; // Clear previous output
+        let pythonCode = `numerador = ${numerator}\ndenominador = ${denominator}\n`;
+        let explanation = '';
+
+        if (isNaN(numerator) || isNaN(denominator)) {
+            divisionOutput.textContent = 'Error: Por favor, introduce números válidos.';
+            divisionCodeExplanation.textContent = `
+# Código Python (ejemplo de entrada inválida)
+# numerador = ...
+# denominador = ...
+# resultado = numerador / denominador
+
+# Explicación:
+# Los valores deben ser numéricos para realizar la división.
+            `;
+            return;
+        }
+
+        try {
+            if (denominator === 0) {
+                // Simulate Python's ZeroDivisionError
+                throw new Error("ZeroDivisionError: division by zero");
+            }
+            const result = numerator / denominator;
+            divisionOutput.textContent = `Resultado: ${result}`;
+            pythonCode += `try:\n    resultado = numerador / denominador\n    print(f"Resultado: {resultado}")\nexcept ZeroDivisionError:\n    print("Error: No se puede dividir por cero.")`;
+            explanation = `El código dentro del bloque 'try' se ejecuta. Como el denominador no es cero, la división se realiza con éxito.`;
+        } catch (e) {
+            divisionOutput.textContent = `Se capturó un error: ${e.message}`;
+            pythonCode += `try:\n    resultado = numerador / denominador\n    print(f"Resultado: {resultado}")\nexcept ZeroDivisionError:\n    print("Error: No se puede dividir por cero.")`;
+            explanation = `El código dentro del bloque 'try' intentó dividir por cero, lo que causó un 'ZeroDivisionError'. Este error fue capturado por el bloque 'except ZeroDivisionError', y se ejecutó el código dentro de él.`;
+        }
+        divisionCodeExplanation.textContent = pythonCode + `\n\n# Explicación\n` + explanation;
+    });
+
+    // --- 2. Type Conversion Error Handling Logic ---
+    const conversionInput = document.getElementById('conversion-input');
+    const convertBtn = document.getElementById('convert-btn');
+    const conversionOutput = document.getElementById('conversion-output');
+    const conversionCodeExplanation = document.getElementById('conversion-code-explanation');
+
+    convertBtn.addEventListener('click', () => {
+        const valueToConvert = conversionInput.value;
+        conversionOutput.textContent = ''; // Clear previous output
+        let pythonCode = `valor_str = "${valueToConvert}"\n`;
+        let explanation = '';
+
+        try {
+            const num = parseFloat(valueToConvert);
+            if (isNaN(num) || String(num) !== valueToConvert && !valueToConvert.includes('.')) { // Simple check for non-numeric string
+                 // Simulate ValueError if it's clearly not a number
+                throw new Error("ValueError: could not convert string to float");
+            }
+            conversionOutput.textContent = `Convertido a número: ${num} (Tipo: ${typeof num})`;
+            pythonCode += `try:\n    numero = float(valor_str)\n    print(f"Convertido a número: {numero}")\nexcept ValueError:\n    print("Error: Entrada no numérica válida.")`;
+            explanation = `El código dentro del bloque 'try' intentó convertir la cadena a un número. Como la entrada es numérica, la conversión fue exitosa.`;
+        } catch (e) {
+            conversionOutput.textContent = `Se capturó un error: ${e.message}`;
+            pythonCode += `try:\n    numero = float(valor_str)\n    print(f"Convertido a número: {numero}")\nexcept ValueError:\n    print("Error: Entrada no numérica válida.")`;
+            explanation = `El código dentro del bloque 'try' intentó convertir la cadena a un número, lo que causó un 'ValueError' (porque la entrada no era un número válido). Este error fue capturado por el bloque 'except ValueError', y se ejecutó el código dentro de él.`;
+        }
+        conversionCodeExplanation.textContent = pythonCode + `\n\n# Explicación\n` + explanation;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué bloque de código se utiliza para encerrar el código que podría generar un error?",
+            "answerOptions": [
+                {"text": "`except`", "isCorrect": false},
+                {"text": "`finally`", "isCorrect": false},
+                {"text": "`try`", "isCorrect": true},
+                {"text": "`catch`", "isCorrect": false}
+            ],
+            "rationale": "El bloque `try` contiene el código que se intentará ejecutar y que podría lanzar una excepción."
+        },
+        {
+            "question": "¿Qué palabra clave se usa para capturar y manejar un error específico en Python?",
+            "answerOptions": [
+                {"text": "`catch`", "isCorrect": false},
+                {"text": "`handle`", "isCorrect": false},
+                {"text": "`except`", "isCorrect": true},
+                {"text": "`error`", "isCorrect": false}
+            ],
+            "rationale": "El bloque `except` se utiliza para especificar el tipo de excepción que se desea capturar y el código a ejecutar si esa excepción ocurre."
+        },
+        {
+            "question": "Si un programa intenta dividir por cero, ¿qué tipo de error se generará en Python?",
+            "answerOptions": [
+                {"text": "`TypeError`", "isCorrect": false},
+                {"text": "`ValueError`", "isCorrect": false},
+                {"text": "`ZeroDivisionError`", "isCorrect": true},
+                {"text": "`ArithmeticError`", "isCorrect": false}
+            ],
+            "rationale": "Python genera un `ZeroDivisionError` cuando se intenta dividir un número por cero."
+        },
+        {
+            "question": "Dado el siguiente código:\n```python\ntry:\n    num = int(\"hola\")\n    print(num)\nexcept ValueError:\n    print(\"Error de conversión\")\n```\n¿Cuál será la salida?",
+            "answerOptions": [
+                {"text": "Error de conversión", "isCorrect": true},
+                {"text": "hola", "isCorrect": false},
+                {"text": "Se detiene el programa", "isCorrect": false},
+                {"text": "0", "isCorrect": false}
+            ],
+            "rationale": "La función `int(\"hola\")` intentará convertir la cadena \"hola\" a un entero, lo que generará un `ValueError`. Este error será capturado por el bloque `except ValueError`, imprimiendo \"Error de conversión\"."
+        },
+        {
+            "question": "¿Cuál es el beneficio principal de usar `try/except` en tus programas?",
+            "answerOptions": [
+                {"text": "Hace el código más rápido", "isCorrect": false},
+                {"text": "Permite que el programa continúe ejecutándose de forma controlada después de un error", "isCorrect": true},
+                {"text": "Reduce la cantidad de código necesario", "isCorrect": false},
+                {"text": "Solo se usa para errores de sintaxis", "isCorrect": false}
+            ],
+            "rationale": "El principal beneficio de `try/except` es que permite a los programas manejar excepciones de forma controlada, evitando que se bloqueen y permitiendo que continúen su ejecución o que realicen acciones de recuperación."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('division-output').textContent = 'El resultado de la división aparecerá aquí.';
+    document.getElementById('division-code-explanation').textContent = 'Haz clic en "Dividir con try/except" para ver el código.';
+    document.getElementById('conversion-output').textContent = 'El resultado de la conversión aparecerá aquí.';
+    document.getElementById('conversion-code-explanation').textContent = 'Haz clic en "Convertir a Número" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

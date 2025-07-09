@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.4 – Proyecto Clasificador</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 2.4 – Proyecto Clasificador de Cadenas y Coordenadas". It features a header, an introductory section, and an interactive project area. Users can input a comma-separated list of items, and the application will classify them into strings, numbers, or coordinates, demonstrating the application of loops and error handling. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the project.
+        - Classifier Project: Goal: Apply integrated concepts. Method: Textarea for input data (strings/coordinates), button to classify, structured HTML display (e.g., categorized lists). Interaction: User inputs data, clicks classify, sees categorized output based on internal logic using loops and try/except. Justification: A mini-project that ties together input, data structures, loops, and error handling in a practical scenario, allowing users to see the result of their conceptual code. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .input-area {
+            background-color: #2d3748; /* darker slate */
+            color: #f8f8f2; /* light text */
+            border: 1px solid #4a5568; /* slate-600 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem; /* sm:text-sm */
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 2.4 – Clasificador</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module2_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 2</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Proyecto: Clasificador de Cadenas y Coordenadas</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">En este proyecto, aplicarás bucles y manejo de errores para clasificar una lista de entradas que pueden ser cadenas de texto, números o coordenadas. Ingresa una lista de elementos (separados por comas) y el programa intentará clasificarlos en sus respectivas categorías.</p>
+            </section>
+
+            <section id="classifier-project">
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="classifier-input" class="block text-sm font-medium text-slate-700">Entradas (separadas por coma, ej: hola,123,(10,20),mundo):</label>
+                            <textarea id="classifier-input" class="input-area mt-1 block w-full" rows="5">hola,123,(10,20),mundo,45.6,(-5,8),otro texto</textarea>
+                        </div>
+                        <button id="classify-btn" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Clasificar Entradas</button>
+                    </div>
+                    <div id="classifier-output" class="mt-6 p-4 rounded-md bg-slate-100 text-slate-800">
+                        <h4 class="font-semibold text-slate-700 mb-2">Resultados de Clasificación:</h4>
+                        <div id="classified-strings" class="mb-2"><strong>Cadenas:</strong></div>
+                        <div id="classified-numbers" class="mb-2"><strong>Números:</strong></div>
+                        <div id="classified-coordinates"><strong>Coordenadas:</strong></div>
+                        <div id="classified-errors" class="mt-4 text-red-600"></div>
+                    </div>
+                    <h4 class="font-semibold text-slate-700 mt-4">Código Python y Explicación (Simulado):</h4>
+                    <div id="classifier-code-explanation" class="code-block mt-2 h-64 overflow-y-auto text-sm">
+                        Haz clic en "Clasificar Entradas" para ver el código.
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 2.4 – Proyecto Clasificador. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Project Classifier Logic ---
+    const classifierInput = document.getElementById('classifier-input');
+    const classifyBtn = document.getElementById('classify-btn');
+    const classifiedStringsDiv = document.getElementById('classified-strings');
+    const classifiedNumbersDiv = document.getElementById('classified-numbers');
+    const classifiedCoordinatesDiv = document.getElementById('classified-coordinates');
+    const classifiedErrorsDiv = document.getElementById('classified-errors');
+    const classifierCodeExplanation = document.getElementById('classifier-code-explanation');
+
+    classifyBtn.addEventListener('click', () => {
+        const rawInput = classifierInput.value;
+        const items = rawInput.split(',').map(item => item.trim());
+
+        let strings = [];
+        let numbers = [];
+        let coordinates = [];
+        let errors = [];
+
+        let pythonCode = `entradas = "${rawInput}".split(',')\n\ncadenas = []\nnumeros = []\ncoordenadas = []\n\n`;
+        let explanation = `El programa itera sobre cada entrada, intentando clasificarla.`;
+
+        items.forEach(item => {
+            if (item === '') return; // Skip empty items from multiple commas
+
+            pythonCode += `\n# Procesando: "${item}"\n`;
+            let classified = false;
+
+            // Try to parse as number
+            try {
+                const num = parseFloat(item);
+                // Check if it's purely a number string (e.g., "123" but not "123abc")
+                // And if it's not a coordinate string that happens to parse as a number (e.g., "(10,20)")
+                if (!isNaN(num) && String(num) === item && !(item.startsWith('(') && item.endsWith(')'))) {
+                    numbers.push(item);
+                    pythonCode += `try:\n    num = float("${item}")\n    numeros.append(num)\nexcept ValueError:\n    pass # No es un número puro\n`;
+                    explanation += `\n- "${item}" fue reconocido como un número.`;
+                    classified = true;
+                }
+            } catch (e) {
+                // Not a simple number, continue to next checks
+            }
+
+            // Try to parse as coordinate (simple tuple-like string)
+            if (!classified && item.startsWith('(') && item.endsWith(')')) {
+                const inner = item.substring(1, item.length - 1);
+                const parts = inner.split(',').map(p => p.trim());
+                if (parts.length === 2) {
+                    try {
+                        const x = parseFloat(parts[0]);
+                        const y = parseFloat(parts[1]);
+                        if (!isNaN(x) && !isNaN(y)) {
+                            coordinates.push(item);
+                            pythonCode += `if "${item}".startswith('(') and "${item}".endswith('('):\n    # Intenta parsear como tupla de coordenadas\n    try:\n        x, y = map(float, "${inner}".split(','))\n        coordenadas.append((${x}, ${y}))\n    except ValueError:\n        pass # No son coordenadas válidas\n`;
+                            explanation += `\n- "${item}" fue reconocido como coordenadas.`;
+                            classified = true;
+                        }
+                    } catch (e) {
+                        // Not valid numbers inside tuple, fall through
+                    }
+                }
+            }
+
+            // If none of the above, it's a string
+            if (!classified) {
+                strings.push(item);
+                pythonCode += `cadenas.append("${item}")\n`;
+                explanation += `\n- "${item}" fue clasificado como una cadena.`;
+            }
+        });
+
+        classifiedStringsDiv.innerHTML = `<strong>Cadenas:</strong> ${strings.join(', ') || 'Ninguna'}`;
+        classifiedNumbersDiv.innerHTML = `<strong>Números:</strong> ${numbers.join(', ') || 'Ninguno'}`;
+        classifiedCoordinatesDiv.innerHTML = `<strong>Coordenadas:</strong> ${coordinates.join(', ') || 'Ninguna'}`;
+        classifiedErrorsDiv.innerHTML = ``; // No specific errors for this classification, just categorization.
+
+        if (errors.length > 0) {
+            classifiedErrorsDiv.innerHTML = `<strong>Errores en clasificación:</strong> ${errors.join(', ')}`;
+        }
+
+        classifierCodeExplanation.textContent = `
+# Código Python (Simulado)
+# Este es un ejemplo conceptual del código Python que realizaría esta clasificación.
+# En un programa real, se usarían más validaciones y expresiones regulares.
+
+${pythonCode}
+
+print(f"Cadenas: {cadenas}")
+print(f"Números: {numeros}")
+print(f"Coordenadas: {coordenadas}")
+
+# Explicación
+${explanation}
+
+# Nota: La simulación simplifica la detección de tipos.
+# Un clasificador real en Python sería más robusto con manejo de errores y regex.
+        `;
+    });
+
+    setupNav();
+});
+</script>
+
+</body>
+</html>

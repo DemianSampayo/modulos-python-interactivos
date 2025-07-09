@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5.4 – Proyecto Automatización Multi-OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 5.4 – Proyecto: Automatización Multi-OS". It features a header, an introductory section, a conceptual overview of system automation, and an interactive project area. Users can select an operating system, input a simulated command relevant to that OS, execute it (simulated via JS), and view the simulated output. The conceptual Python code using `subprocess` (tailored to the selected OS) is displayed with an explanation. A final quiz section assesses understanding. This structure provides a hands-on experience for understanding how Python can interact with external command-line tools across different operating systems for automation. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the multi-OS automation project.
+        - Automation Concepts: Goal: Inform. Method: HTML text. Justification: Explains general automation and system shells.
+        - Multi-OS Automation Project: Goal: Apply concepts & Demonstrate. Method: OS selection dropdown, text input for a simulated command, button to "execute" (simulate), and a code-block display for the simulated output. Python code and explanation for using `subprocess` (dynamically updated based on selected OS and command) are shown. Interaction: User selects OS, types a command, sees its simulated output, and understands the Python interaction for that specific OS. Justification: Provides a practical, conceptual application of Python interacting with system tools, emphasizing cross-platform considerations.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .input-area {
+            background-color: #2d3748; /* darker slate */
+            color: #f8f8f2; /* light text */
+            border: 1px solid #4a5568; /* slate-600 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem; /* sm:text-sm */
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 5.4 – Automatización Multi-OS</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module5_fundamentals" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 5</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Proyecto: Automatización Multi-OS</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">La automatización de tareas es una habilidad clave para cualquier desarrollador. En este proyecto, exploraremos cómo Python puede interactuar con herramientas de línea de comandos en diferentes sistemas operativos (Windows, Linux, macOS) para automatizar operaciones del sistema. Aunque la ejecución será simulada, te dará una idea clara del concepto.</p>
+            </section>
+
+            <section id="automation-concepts">
+                <h3 class="text-3xl font-bold text-center text-slate-900">1. Conceptos Clave: Shells y Automatización</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Un **shell de línea de comandos** (como Bash en Linux/macOS o PowerShell/CMD en Windows) es un programa que te permite interactuar con el sistema operativo mediante comandos de texto. La **automatización** implica el uso de scripts y herramientas para realizar tareas repetitivas sin intervención manual, mejorando la eficiencia y reduciendo errores. Python, con su módulo `subprocess`, es excelente para esto.</p>
+                <div class="mt-8 bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+                    <h4 class="font-bold text-xl text-teal-700">Ejemplos de Comandos por OS:</h4>
+                    <pre class="code-block mt-2">
+# Windows (PowerShell): Get-Process
+# Linux (Bash/Zsh): ls -l
+# macOS (Zsh/Bash): pwd
+                    </pre>
+                    <p class="mt-4 text-slate-600">Cada sistema operativo tiene sus propios comandos y shells preferidos.</p>
+                </div>
+            </section>
+
+            <section id="multi-os-automation-project">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Automatización de Tareas (Simulado)</h3>
+                        <p class="mt-4 text-slate-600">Selecciona un sistema operativo y luego ingresa un comando para simular cómo Python lo ejecutaría y capturaría su salida. Observa el código Python conceptual que cambia según el OS.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="os-select" class="block text-sm font-medium text-slate-700">Selecciona Sistema Operativo:</label>
+                            <select id="os-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="windows">Windows (PowerShell)</option>
+                                <option value="linux">Linux (Bash)</option>
+                                <option value="macos">macOS (Zsh)</option>
+                            </select>
+                            <label for="command-input" class="block text-sm font-medium text-slate-700">Comando a simular:</label>
+                            <input type="text" id="command-input" value="Get-Service" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="execute-command-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Ejecutar Comando (Simulado)</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida del Comando (Simulada):</h4>
+                        <div id="command-output" class="code-block mt-2 h-48 overflow-y-auto">
+                            La salida del comando aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación (Conceptual):</h4>
+                        <div id="command-code-explanation" class="code-block mt-2 h-64 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Comando (Simulado)" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Automatización Multi-OS</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la automatización y la interacción con herramientas de sistema en diferentes OS.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 5.4 – Automatización Multi-OS. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Multi-OS Automation Project Logic ---
+    const osSelect = document.getElementById('os-select');
+    const commandInput = document.getElementById('command-input');
+    const executeCommandBtn = document.getElementById('execute-command-btn');
+    const commandOutput = document.getElementById('command-output');
+    const commandCodeExplanation = document.getElementById('command-code-explanation');
+
+    // Function to update placeholder/initial command based on OS selection
+    const updateCommandPlaceholder = () => {
+        const selectedOs = osSelect.value;
+        if (selectedOs === 'windows') {
+            commandInput.value = 'Get-Service';
+            commandInput.placeholder = 'Ej: Get-Process, Get-Date';
+        } else if (selectedOs === 'linux') {
+            commandInput.value = 'ls -l';
+            commandInput.placeholder = 'Ej: pwd, echo "Hola"';
+        } else if (selectedOs === 'macos') {
+            commandInput.value = 'pwd';
+            commandInput.placeholder = 'Ej: ls -la, whoami';
+        }
+    };
+
+    osSelect.addEventListener('change', updateCommandPlaceholder); // Update on OS change
+
+    executeCommandBtn.addEventListener('click', () => {
+        const selectedOs = osSelect.value;
+        const command = commandInput.value.trim();
+        let simulatedOutput = '';
+        let pythonCode = `import subprocess\n\ncomando = "${command}"\n`;
+        let explanation = '';
+        let shellCommand = '';
+        let shellArgs = [];
+
+        if (!command) {
+            commandOutput.textContent = 'Por favor, ingresa un comando.';
+            commandCodeExplanation.textContent = `
+# Código Python
+# import subprocess
+# comando = "" # Comando vacío
+# # Esto causaría un error o no haría nada
+
+# Explicación:
+# Un comando vacío no puede ser ejecutado.
+            `;
+            return;
+        }
+
+        // Simulate common commands based on OS
+        if (selectedOs === 'windows') {
+            shellCommand = 'powershell';
+            shellArgs = ['-Command', command];
+            if (command.toLowerCase().includes('get-service')) {
+                simulatedOutput = `
+Status   Name               DisplayName
+------   ----               -----------
+Running  Spooler            Print Spooler
+Stopped  BITS               Background Intelligent Transfer Service
+Running  WSearch            Windows Search
+                `;
+                explanation = `El comando PowerShell '${command}' lista los servicios. Python usa 'subprocess.run(["powershell", "-Command", comando])'.`;
+            } else if (command.toLowerCase().includes('get-process')) {
+                simulatedOutput = `
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s) Id ProcessName
+-------  ------    -----      -----     ------ -- -----------
+    345      12    28480      35200       0.50 1234 Chrome
+    120       5     8760      10240       0.15 5678 Explorer
+                `;
+                explanation = `El comando PowerShell '${command}' lista los procesos.`;
+            } else if (command.toLowerCase().includes('get-date')) {
+                simulatedOutput = `
+Tuesday, July 8, 2025 7:54:30 PM
+                `;
+                explanation = `El comando PowerShell '${command}' muestra la fecha y hora.`;
+            } else {
+                simulatedOutput = `Error: Comando PowerShell no reconocido en esta simulación: '${command}'`;
+                explanation = `Comando no reconocido. Python ejecutaría el comando real si existiera.`;
+            }
+            pythonCode += `
+# Para Windows (PowerShell)
+try:
+    resultado = subprocess.run(["powershell", "-Command", comando], capture_output=True, text=True, check=True)
+    salida = resultado.stdout
+    print(salida)
+except subprocess.CalledProcessError as e:
+    print(f"Error al ejecutar comando: {e.stderr}")
+except FileNotFoundError:
+    print("Error: PowerShell no encontrado. Asegúrate de que esté en tu PATH.")
+            `;
+        } else if (selectedOs === 'linux') {
+            shellCommand = 'bash';
+            shellArgs = ['-c', command];
+            if (command.toLowerCase().includes('ls -l')) {
+                simulatedOutput = `
+total 8
+-rw-r--r-- 1 user user 1234 Jul  8 10:00 archivo.txt
+drwxr-xr-x 2 user user 4096 Jul  7 15:30 mi_carpeta
+                `;
+                explanation = `El comando Bash '${command}' lista el contenido del directorio en formato largo. Python usa 'subprocess.run(["bash", "-c", comando])'.`;
+            } else if (command.toLowerCase().includes('pwd')) {
+                simulatedOutput = `/home/user/proyecto`;
+                explanation = `El comando Bash '${command}' muestra el directorio de trabajo actual.`;
+            } else if (command.toLowerCase().includes('echo')) {
+                simulatedOutput = command.substring(command.indexOf('echo') + 5).trim();
+                explanation = `El comando Bash '${command}' imprime el texto en la salida estándar.`;
+            } else {
+                simulatedOutput = `Error: Comando Bash no reconocido en esta simulación: '${command}'`;
+                explanation = `Comando no reconocido. Python ejecutaría el comando real si existiera.`;
+            }
+            pythonCode += `
+# Para Linux (Bash)
+try:
+    resultado = subprocess.run(["bash", "-c", comando], capture_output=True, text=True, check=True)
+    salida = resultado.stdout
+    print(salida)
+except subprocess.CalledProcessError as e:
+    print(f"Error al ejecutar comando: {e.stderr}")
+except FileNotFoundError:
+    print("Error: Bash no encontrado. Asegúrate de que esté en tu PATH.")
+            `;
+        } else if (selectedOs === 'macos') {
+            shellCommand = 'zsh'; // macOS default shell
+            shellArgs = ['-c', command];
+            if (command.toLowerCase().includes('ls -la')) {
+                simulatedOutput = `
+total 16
+drwxr-xr-x   4 user  staff   128 Jul  8 10:00 .
+drwxr-xr-x  10 user  staff   320 Jul  7 15:30 ..
+-rw-r--r--   1 user  staff   256 Jul  8 10:05 documento.txt
+                `;
+                explanation = `El comando Zsh '${command}' lista el contenido del directorio (incluidos ocultos) en formato largo. Python usa 'subprocess.run(["zsh", "-c", comando])'.`;
+            } else if (command.toLowerCase().includes('pwd')) {
+                simulatedOutput = `/Users/user/Documents/proyecto`;
+                explanation = `El comando Zsh '${command}' muestra el directorio de trabajo actual.`;
+            } else if (command.toLowerCase().includes('whoami')) {
+                simulatedOutput = `user`;
+                explanation = `El comando Zsh '${command}' muestra el nombre de usuario actual.`;
+            } else {
+                simulatedOutput = `Error: Comando Zsh no reconocido en esta simulación: '${command}'`;
+                explanation = `Comando no reconocido. Python ejecutaría el comando real si existiera.`;
+            }
+            pythonCode += `
+# Para macOS (Zsh)
+try:
+    resultado = subprocess.run(["zsh", "-c", comando], capture_output=True, text=True, check=True)
+    salida = resultado.stdout
+    print(salida)
+except subprocess.CalledProcessError as e:
+    print(f"Error al ejecutar comando: {e.stderr}")
+except FileNotFoundError:
+    print("Error: Zsh no encontrado. Asegúrate de que esté en tu PATH.")
+            `;
+        }
+
+        commandOutput.textContent = simulatedOutput;
+        commandCodeExplanation.textContent = pythonCode + `\nprint(f"Salida del comando: {salida.strip()}")\n\n# Explicación\n${explanation}`;
+    });
+
+    // Initial update for placeholder
+    updateCommandPlaceholder();
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué es PowerShell?",
+            "answerOptions": [
+                {"text": "Una librería de Python para gráficos", "isCorrect": false},
+                {"text": "Un lenguaje de programación para desarrollo web", "isCorrect": false},
+                {"text": "Un shell de línea de comandos y lenguaje de scripting de Microsoft para automatización", "isCorrect": true},
+                {"text": "Un sistema operativo basado en Linux", "isCorrect": false}
+            ],
+            "rationale": "PowerShell es una herramienta de Microsoft diseñada para la automatización y gestión de sistemas, usando comandos llamados 'cmdlets'."
+        },
+        {
+            "question": "¿Qué módulo de Python se utiliza para ejecutar comandos externos del sistema (como comandos de PowerShell o Bash)?",
+            "answerOptions": [
+                {"text": "`os`", "isCorrect": false},
+                {"text": "`sys`", "isCorrect": false},
+                {"text": "`subprocess`", "isCorrect": true},
+                {"text": "`commands`", "isCorrect": false}
+            ],
+            "rationale": "El módulo `subprocess` permite ejecutar nuevos procesos, conectar a sus pipes de entrada/salida/error y obtener sus códigos de retorno."
+        },
+        {
+            "question": "Si quieres ejecutar un comando Bash como `ls -l` desde Python, ¿cuál sería la forma correcta de pasar el comando a `subprocess.run()`?",
+            "answerOptions": [
+                {"text": "`subprocess.run('ls -l')`", "isCorrect": false},
+                {"text": "`subprocess.run(['ls', '-l'])`", "isCorrect": true},
+                {"text": "`subprocess.run('ls', '-l')`", "isCorrect": false},
+                {"text": "`subprocess.run(command='ls -l')`", "isCorrect": false}
+            ],
+            "rationale": "Es una buena práctica pasar el comando y sus argumentos como una lista de cadenas a `subprocess.run()` (`['ls', '-l']`) para evitar problemas de shell injection y para que el sistema operativo los interprete correctamente como argumentos separados."
+        },
+        {
+            "question": "¿Cuál es el beneficio principal de automatizar tareas repetitivas?",
+            "answerOptions": [
+                {"text": "Aumentar el tiempo de ejecución de los programas", "isCorrect": false},
+                {"text": "Reducir la eficiencia del trabajo", "isCorrect": false},
+                {"text": "Mejorar la eficiencia, reducir errores y liberar tiempo para tareas más complejas", "isCorrect": true},
+                {"text": "Hacer que los programas sean más difíciles de entender", "isCorrect": false}
+            ],
+            "rationale": "La automatización se enfoca en hacer las tareas más rápidas, consistentes y menos propensas a errores humanos."
+        },
+        {
+            "question": "En el contexto de `subprocess.run()`, ¿qué hace el argumento `capture_output=True`?",
+            "answerOptions": [
+                {"text": "Ejecuta el comando en segundo plano", "isCorrect": false},
+                {"text": "Muestra la salida directamente en la consola de Python", "isCorrect": false},
+                {"text": "Captura la salida estándar y la salida de error del comando ejecutado", "isCorrect": true},
+                {"text": "Detiene la ejecución del comando si hay un error", "isCorrect": false}
+            ],
+            "rationale": "`capture_output=True` redirige la salida estándar (stdout) y la salida de error (stderr) del proceso hijo para que puedan ser leídas por el proceso padre (Python)."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

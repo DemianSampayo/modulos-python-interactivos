@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3.1 – Funciones y Parámetros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 3.1 – Declarar funciones propias con parámetros". It features a header, an introductory section, and interactive playgrounds for basic function definition, parameters (positional, keyword, default), and return values. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding functions.
+        - Basic Function Definition: Goal: Demonstrate function creation and calling. Method: Text input for function name, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User defines a simple function and sees its output. Justification: Visualizes the fundamental syntax.
+        - Positional and Keyword Parameters: Goal: Illustrate argument passing. Method: Inputs for values, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User provides arguments, sees how function uses them. Justification: Shows different ways to pass data to functions.
+        - Default Parameter Values: Goal: Demonstrate optional parameters. Method: Inputs for values (some optional), button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User can omit optional arguments and see default behavior. Justification: Explains flexible function design.
+        - Return Values: Goal: Illustrate function output. Method: Inputs for calculation, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User sees how `return` sends data back. Justification: Clarifies how functions produce results.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 3.1 – Funciones y Parámetros</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module3_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 3</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Declarar funciones propias con parámetros</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Las funciones son bloques de código organizados y reutilizables que realizan una tarea específica. Aprender a definirlas y a usar parámetros te permitirá escribir código más modular, legible y eficiente.</p>
+            </section>
+
+            <section id="basic-function-definition">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Definición y Llamada de Funciones</h3>
+                        <p class="mt-4 text-slate-600">Una función se define con la palabra clave `def`, seguida de su nombre, paréntesis `()` y dos puntos `:`. El código de la función va indentado. Para ejecutarla, simplemente "llámala" por su nombre.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="basic-func-name" class="block text-sm font-medium text-slate-700">Nombre de la función:</label>
+                            <input type="text" id="basic-func-name" value="saludar_simple" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-basic-func-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar Función</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de la Función:</h4>
+                        <div id="basic-func-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="basic-func-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Función" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parameters-return">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Parámetros (Posicionales y por Palabra Clave)</h3>
+                        <p class="mt-4 text-slate-600">Los parámetros son variables que una función puede aceptar como entrada. Los **posicionales** se pasan en orden; los de **palabra clave** se especifican por nombre.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="param-name" class="block text-sm font-medium text-slate-700">Nombre:</label>
+                            <input type="text" id="param-name" value="Ana" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="param-city" class="block text-sm font-medium text-slate-700">Ciudad:</label>
+                            <input type="text" id="param-city" value="Madrid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-params-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con Parámetros</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con Parámetros:</h4>
+                        <div id="params-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="params-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con Parámetros" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="default-params">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Parámetros con Valores por Defecto</h3>
+                        <p class="mt-4 text-slate-600">Puedes asignar un valor por defecto a un parámetro. Si no se proporciona un argumento para ese parámetro al llamar a la función, se usará el valor por defecto.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="default-param-name" class="block text-sm font-medium text-slate-700">Nombre (opcional):</label>
+                            <input type="text" id="default-param-name" value="" placeholder="Deja vacío para usar 'Invitado'" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-default-params-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con Valor por Defecto</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con Valor por Defecto:</h4>
+                        <div id="default-params-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="default-params-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con Valor por Defecto" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="return-values">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">4. Retorno de Valores (`return`)</h3>
+                        <p class="mt-4 text-slate-600">La palabra clave `return` se usa para enviar un resultado de vuelta al lugar donde la función fue llamada. Una función puede devolver cualquier tipo de dato.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="return-num1" class="block text-sm font-medium text-slate-700">Número 1:</label>
+                            <input type="number" id="return-num1" value="7" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="return-num2" class="block text-sm font-medium text-slate-700">Número 2:</label>
+                            <input type="number" id="return-num2" value="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-return-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar y Obtener Retorno</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Valor Retornado:</h4>
+                        <div id="return-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="return-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar y Obtener Retorno" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Funciones y Parámetros</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la declaración de funciones, parámetros y el retorno de valores.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 3.1 – Funciones y Parámetros. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Basic Function Definition Logic ---
+    const basicFuncNameInput = document.getElementById('basic-func-name');
+    const runBasicFuncBtn = document.getElementById('run-basic-func-btn');
+    const basicFuncOutput = document.getElementById('basic-func-output');
+    const basicFuncCodeExplanation = document.getElementById('basic-func-code-explanation');
+
+    runBasicFuncBtn.addEventListener('click', () => {
+        const funcName = basicFuncNameInput.value.trim() || 'saludar_simple';
+        const outputText = `¡Hola desde la función ${funcName}!`;
+        basicFuncOutput.textContent = outputText;
+        basicFuncCodeExplanation.textContent = `
+# Código Python
+def ${funcName}():
+    print("${outputText}")
+
+# Llamada a la función
+${funcName}()
+
+# Explicación
+# 'def' define la función. El código indentado es su cuerpo.
+# Llamar a la función por su nombre la ejecuta.
+        `;
+    });
+
+    // --- 2. Parameters (Positional and Keyword) Logic ---
+    const paramNameInput = document.getElementById('param-name');
+    const paramCityInput = document.getElementById('param-city');
+    const runParamsBtn = document.getElementById('run-params-btn');
+    const paramsOutput = document.getElementById('params-output');
+    const paramsCodeExplanation = document.getElementById('params-code-explanation');
+
+    runParamsBtn.addEventListener('click', () => {
+        const name = paramNameInput.value.trim() || 'usuario';
+        const city = paramCityInput.value.trim() || 'tu ciudad';
+        const outputText = `Hola ${name}, bienvenido/a a ${city}.`;
+        paramsOutput.textContent = outputText;
+        paramsCodeExplanation.textContent = `
+# Código Python
+def saludar_ciudad(nombre, ciudad):
+    print(f"Hola {nombre}, bienvenido/a a {ciudad}.")
+
+# Llamada con parámetros posicionales
+saludar_ciudad("${name}", "${city}")
+
+# Llamada con parámetros por palabra clave (orden no importa)
+# saludar_ciudad(ciudad="${city}", nombre="${name}")
+
+# Explicación
+# 'nombre' y 'ciudad' son parámetros. Al llamar, les pasas argumentos.
+# Posicionales: el orden de los argumentos importa.
+# Palabra clave: especificas el nombre del parámetro, el orden no importa.
+        `;
+    });
+
+    // --- 3. Default Parameter Values Logic ---
+    const defaultParamNameInput = document.getElementById('default-param-name');
+    const runDefaultParamsBtn = document.getElementById('run-default-params-btn');
+    const defaultParamsOutput = document.getElementById('default-params-output');
+    const defaultParamsCodeExplanation = document.getElementById('default-params-code-explanation');
+
+    runDefaultParamsBtn.addEventListener('click', () => {
+        const name = defaultParamNameInput.value.trim();
+        const defaultName = "Invitado";
+        const finalName = name || defaultName;
+        const outputText = `Hola ${finalName}.`;
+        defaultParamsOutput.textContent = outputText;
+        defaultParamsCodeExplanation.textContent = `
+# Código Python
+def saludar_con_defecto(nombre="Invitado"):
+    print(f"Hola {nombre}.")
+
+# Llamada sin argumento (usa el valor por defecto)
+saludar_con_defecto() # Salida: Hola Invitado.
+
+# Llamada con argumento (sobrescribe el valor por defecto)
+saludar_con_defecto("${name || defaultName}") # Salida: Hola ${finalName}.
+
+# Explicación
+# 'nombre="Invitado"' define un valor por defecto.
+# Si no pasas un 'nombre' al llamar, se usa "Invitado".
+# Si pasas un 'nombre', ese valor se usa en su lugar.
+        `;
+    });
+
+    // --- 4. Return Values Logic ---
+    const returnNum1Input = document.getElementById('return-num1');
+    const returnNum2Input = document.getElementById('return-num2');
+    const runReturnBtn = document.getElementById('run-return-btn');
+    const returnOutput = document.getElementById('return-output');
+    const returnCodeExplanation = document.getElementById('return-code-explanation');
+
+    runReturnBtn.addEventListener('click', () => {
+        const num1 = parseFloat(returnNum1Input.value);
+        const num2 = parseFloat(returnNum2Input.value);
+        let result;
+        let outputText = '';
+
+        if (isNaN(num1) || isNaN(num2)) {
+            outputText = 'Por favor, introduce números válidos.';
+            returnOutput.textContent = outputText;
+            returnCodeExplanation.textContent = `
+# Código Python
+# def sumar(a, b):
+#     return a + b
+# resultado = sumar("invalido", 5) # Esto causaría un TypeError
+
+# Explicación
+# Las funciones de retorno esperan argumentos del tipo correcto para operar.
+# Si no se proporcionan, la operación puede fallar.
+            `;
+            return;
+        }
+
+        result = num1 + num2;
+        outputText = `La suma es: ${result}`;
+        returnOutput.textContent = outputText;
+        returnCodeExplanation.textContent = `
+# Código Python
+def sumar(a, b):
+    return a + b
+
+# Llamada a la función y captura del valor retornado
+valor1 = ${num1}
+valor2 = ${num2}
+resultado_suma = sumar(valor1, valor2)
+print(f"La suma es: {resultado_suma}")
+
+# Explicación
+# 'return a + b' envía el resultado de la suma de vuelta.
+# La variable 'resultado_suma' captura ese valor.
+# Una función puede tener múltiples sentencias 'return' pero solo ejecuta una.
+# Una vez que se ejecuta 'return', la función termina.
+        `;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué palabra clave se usa para definir una función en Python?",
+            "answerOptions": [
+                {"text": "`function`", "isCorrect": false},
+                {"text": "`define`", "isCorrect": false},
+                {"text": "`def`", "isCorrect": true},
+                {"text": "`func`", "isCorrect": false}
+            ],
+            "rationale": "En Python, las funciones se definen usando la palabra clave `def`."
+        },
+        {
+            "question": "¿Qué se utiliza para pasar datos a una función?",
+            "answerOptions": [
+                {"text": "Variables globales", "isCorrect": false},
+                {"text": "Argumentos", "isCorrect": true},
+                {"text": "Resultados", "isCorrect": false},
+                {"text": "Módulos", "isCorrect": false}
+            ],
+            "rationale": "Los argumentos son los valores que se pasan a los parámetros de una función cuando se la llama."
+        },
+        {
+            "question": "¿Qué palabra clave se usa para que una función devuelva un valor?",
+            "answerOptions": [
+                {"text": "`send`", "isCorrect": false},
+                {"text": "`output`", "isCorrect": false},
+                {"text": "`return`", "isCorrect": true},
+                {"text": "`yield`", "isCorrect": false}
+            ],
+            "rationale": "La palabra clave `return` se utiliza para especificar el valor que una función debe devolver al punto donde fue llamada."
+        },
+        {
+            "question": "Si una función tiene un parámetro con un valor por defecto, ¿es obligatorio proporcionar un argumento para ese parámetro al llamar a la función?",
+            "answerOptions": [
+                {"text": "Sí, siempre", "isCorrect": false},
+                {"text": "Solo si es el primer parámetro", "isCorrect": false},
+                {"text": "No, es opcional", "isCorrect": true},
+                {"text": "Solo si no hay otros parámetros", "isCorrect": false}
+            ],
+            "rationale": "Un parámetro con un valor por defecto hace que el argumento correspondiente sea opcional. Si no se proporciona, se usa el valor por defecto."
+        },
+        {
+            "question": "¿Cuál es la salida del siguiente código?\n```python\ndef saludo(nombre):\n    return f\"Hola, {nombre}!\"\n\nmensaje = saludo(\"Pedro\")\nprint(mensaje)\n```",
+            "answerOptions": [
+                {"text": "Hola, {nombre}!", "isCorrect": false},
+                {"text": "saludo(\"Pedro\")", "isCorrect": false},
+                {"text": "Hola, Pedro!", "isCorrect": true},
+                {"text": "Error", "isCorrect": false}
+            ],
+            "rationale": "La función `saludo` devuelve una cadena formateada con el nombre 'Pedro', la cual se almacena en `mensaje` y luego se imprime."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('basic-func-output').textContent = 'La salida de la función aparecerá aquí.';
+    document.getElementById('basic-func-code-explanation').textContent = 'Haz clic en "Ejecutar Función" para ver el código.';
+    document.getElementById('params-output').textContent = 'La salida con parámetros aparecerá aquí.';
+    document.getElementById('params-code-explanation').textContent = 'Haz clic en "Ejecutar con Parámetros" para ver el código.';
+    document.getElementById('default-params-output').textContent = 'La salida con valor por defecto aparecerá aquí.';
+    document.getElementById('default-params-code-explanation').textContent = 'Haz clic en "Ejecutar con Valor por Defecto" para ver el código.';
+    document.getElementById('return-output').textContent = 'El valor retornado aparecerá aquí.';
+    document.getElementById('return-code-explanation').textContent = 'Haz clic en "Ejecutar y Obtener Retorno" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

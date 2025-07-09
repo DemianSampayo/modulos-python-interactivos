@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3.2 – *args, **kwargs y Lambda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 3.2 – *args, **kwargs, funciones Lambda". It features a header, an introductory section, and interactive playgrounds for *args, **kwargs, and Lambda functions. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding advanced function arguments and anonymous functions.
+        - *args Demonstration: Goal: Illustrate variable positional arguments. Method: Text input for multiple arguments (comma-separated), button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User provides varying number of arguments, sees how *args collects them. Justification: Visualizes flexibility with positional arguments.
+        - **kwargs Demonstration: Goal: Illustrate variable keyword arguments. Method: Text input for keyword arguments (key=value, comma-separated), button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User provides varying keyword arguments, sees how **kwargs collects them into a dictionary. Justification: Visualizes flexibility with keyword arguments.
+        - Lambda Functions: Goal: Demonstrate anonymous functions. Method: Input for expression, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User defines a simple lambda, sees its immediate result. Justification: Explains concise function creation.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 3.2 – `*args`, `**kwargs` y Lambda</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module3_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 3</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">`*args`, `**kwargs` y Funciones Lambda</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Este módulo profundiza en las capacidades de las funciones en Python, permitiéndote manejar un número variable de argumentos y crear funciones anónimas. Estas herramientas son clave para escribir código más flexible y conciso.</p>
+            </section>
+
+            <section id="args-demo">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. `*args` (Argumentos Posicionales Variables)</h3>
+                        <p class="mt-4 text-slate-600">El parámetro `*args` permite que una función acepte un número variable de argumentos posicionales. Estos argumentos se empaquetan en una tupla dentro de la función.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="args-input" class="block text-sm font-medium text-slate-700">Argumentos (separados por coma, ej: 1, 2, "tres"):</label>
+                            <input type="text" id="args-input" value="10, 20, 30" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-args-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con `*args`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de `*args`:</h4>
+                        <div id="args-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="args-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con `*args`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="kwargs-demo">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. `**kwargs` (Argumentos de Palabra Clave Variables)</h3>
+                        <p class="mt-4 text-slate-600">El parámetro `**kwargs` permite que una función acepte un número variable de argumentos de palabra clave. Estos argumentos se empaquetan en un diccionario dentro de la función.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="kwargs-input" class="block text-sm font-medium text-slate-700">Argumentos (clave=valor, separados por coma, ej: nombre=Juan, edad=30):</label>
+                            <input type="text" id="kwargs-input" value="nombre=Alice, edad=25, ciudad=NY" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-kwargs-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con `**kwargs`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de `**kwargs`:</h4>
+                        <div id="kwargs-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="kwargs-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con `**kwargs`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="lambda-demo">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Funciones Lambda (Anónimas)</h3>
+                        <p class="mt-4 text-slate-600">Las funciones `lambda` son pequeñas funciones anónimas (sin nombre) que pueden tener cualquier número de argumentos, pero solo una expresión. Son útiles para operaciones simples que no requieren una definición `def` completa.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="lambda-expr-input" class="block text-sm font-medium text-slate-700">Expresión Lambda (ej: `x * 2` o `x + y`):</label>
+                            <input type="text" id="lambda-expr-input" value="x * 2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="lambda-arg1" class="block text-sm font-medium text-slate-700">Argumento 1 (x):</label>
+                            <input type="number" id="lambda-arg1" value="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="lambda-arg2" class="block text-sm font-medium text-slate-700">Argumento 2 (y, opcional):</label>
+                            <input type="number" id="lambda-arg2" value="" placeholder="Deja vacío si no usas 'y'" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-lambda-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar Lambda</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Lambda:</h4>
+                        <div id="lambda-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="lambda-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Lambda" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de `*args`, `**kwargs` y Lambda</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre estas características avanzadas de las funciones en Python.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 3.2 – `*args`, `**kwargs` y Lambda. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. *args Demo Logic ---
+    const argsInput = document.getElementById('args-input');
+    const runArgsBtn = document.getElementById('run-args-btn');
+    const argsOutput = document.getElementById('args-output');
+    const argsCodeExplanation = document.getElementById('args-code-explanation');
+
+    runArgsBtn.addEventListener('click', () => {
+        const inputArgs = argsInput.value.split(',').map(arg => arg.trim());
+        const formattedArgs = inputArgs.map(arg => {
+            // Try to parse as number or boolean, otherwise keep as string
+            if (!isNaN(parseFloat(arg)) && isFinite(arg)) return parseFloat(arg);
+            if (arg.toLowerCase() === 'true') return true;
+            if (arg.toLowerCase() === 'false') return false;
+            return `"${arg}"`; // Quote strings for display in Python code
+        }).join(', ');
+
+        argsOutput.textContent = `Número de argumentos: ${inputArgs.length}\nArgumentos: ${JSON.stringify(inputArgs)}`;
+        argsCodeExplanation.textContent = `
+# Código Python
+def mi_funcion_args(*args):
+    print(f"Número de argumentos: {len(args)}")
+    print(f"Argumentos: {args}") # args es una tupla
+
+# Llamada a la función con argumentos variables
+mi_funcion_args(${formattedArgs})
+
+# Explicación
+# '*args' recolecta todos los argumentos posicionales extra en una tupla.
+# Es útil cuando no sabes cuántos argumentos se pasarán.
+        `;
+    });
+
+    // --- 2. **kwargs Demo Logic ---
+    const kwargsInput = document.getElementById('kwargs-input');
+    const runKwargsBtn = document.getElementById('run-kwargs-btn');
+    const kwargsOutput = document.getElementById('kwargs-output');
+    const kwargsCodeExplanation = document.getElementById('kwargs-code-explanation');
+
+    runKwargsBtn.addEventListener('click', () => {
+        const inputKwargsRaw = kwargsInput.value.split(',').map(item => item.trim());
+        let kwargsDict = {};
+        let pythonKwargsDisplay = [];
+
+        inputKwargsRaw.forEach(item => {
+            const parts = item.split('=');
+            if (parts.length === 2) {
+                const key = parts[0].trim();
+                let value = parts[1].trim();
+                // Try to parse value as number or boolean
+                if (!isNaN(parseFloat(value)) && isFinite(value)) {
+                    value = parseFloat(value);
+                } else if (value.toLowerCase() === 'true') {
+                    value = true;
+                } else if (value.toLowerCase() === 'false') {
+                    value = false;
+                } else {
+                    value = value; // Keep as string
+                }
+                kwargsDict[key] = value;
+                pythonKwargsDisplay.push(`${key}=${JSON.stringify(value)}`);
+            }
+        });
+
+        kwargsOutput.textContent = `Argumentos: ${JSON.stringify(kwargsDict, null, 2)}`;
+        kwargsCodeExplanation.textContent = `
+# Código Python
+def mi_funcion_kwargs(**kwargs):
+    print(f"Argumentos: {kwargs}") # kwargs es un diccionario
+
+# Llamada a la función con argumentos de palabra clave variables
+mi_funcion_kwargs(${pythonKwargsDisplay.join(', ')})
+
+# Explicación
+# '**kwargs' recolecta todos los argumentos de palabra clave extra en un diccionario.
+# Es útil cuando no sabes qué argumentos de palabra clave se pasarán.
+        `;
+    });
+
+    // --- 3. Lambda Functions Demo Logic ---
+    const lambdaExprInput = document.getElementById('lambda-expr-input');
+    const lambdaArg1Input = document.getElementById('lambda-arg1');
+    const lambdaArg2Input = document.getElementById('lambda-arg2');
+    const runLambdaBtn = document.getElementById('run-lambda-btn');
+    const lambdaOutput = document.getElementById('lambda-output');
+    const lambdaCodeExplanation = document.getElementById('lambda-code-explanation');
+
+    runLambdaBtn.addEventListener('click', () => {
+        const expr = lambdaExprInput.value.trim();
+        const arg1 = parseFloat(lambdaArg1Input.value);
+        const arg2 = parseFloat(lambdaArg2Input.value);
+        let result;
+        let pythonCode = '';
+        let explanation = '';
+        let argsUsed = [];
+
+        if (isNaN(arg1)) {
+            lambdaOutput.textContent = "Error: Argumento 1 (x) debe ser un número.";
+            lambdaCodeExplanation.textContent = `
+# Código Python
+# mi_lambda = lambda x: ... # Error si x no es numérico
+# resultado = mi_lambda("invalido")
+
+# Explicación
+# Las funciones lambda operan con los tipos de datos que les pasas.
+# Asegúrate de que los argumentos sean compatibles con la expresión.
+            `;
+            return;
+        }
+
+        // Simple simulation of lambda eval
+        try {
+            let evalExpr = expr.replace(/x/g, arg1);
+            if (expr.includes('y')) {
+                if (isNaN(arg2)) {
+                    lambdaOutput.textContent = "Error: La expresión usa 'y', pero el Argumento 2 no es un número.";
+                    return;
+                }
+                evalExpr = evalExpr.replace(/y/g, arg2);
+                argsUsed.push('x', 'y');
+            } else {
+                argsUsed.push('x');
+            }
+            result = eval(evalExpr); // DANGEROUS IN REAL APPS, OK for isolated learning sim
+            lambdaOutput.textContent = `Resultado: ${result}`;
+
+            const lambdaArgs = argsUsed.join(', ');
+            pythonCode = `mi_lambda = lambda ${lambdaArgs}: ${expr}\n`;
+            if (argsUsed.length === 1) {
+                pythonCode += `resultado = mi_lambda(${arg1})`;
+            } else {
+                pythonCode += `resultado = mi_lambda(${arg1}, ${arg2})`;
+            }
+            explanation = `Una función lambda es una función anónima de una sola línea.
+Toma argumentos (${lambdaArgs}) y evalúa una expresión (${expr}).
+El resultado de la expresión es lo que la lambda devuelve.`;
+
+        } catch (e) {
+            lambdaOutput.textContent = `Error al evaluar lambda: ${e.message}`;
+            pythonCode = `mi_lambda = lambda x, y: ${expr} # Posible error en la expresión o argumentos
+# resultado = mi_lambda(${arg1}, ${arg2 || 'N/A'})`;
+            explanation = `Hubo un error al intentar evaluar la expresión lambda.
+Asegúrate de que la sintaxis de la expresión sea correcta y que los argumentos proporcionados sean válidos para la operación.`;
+        }
+        lambdaCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+    });
+
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué tipo de dato se empaqueta en `*args` dentro de una función?",
+            "answerOptions": [
+                {"text": "Lista", "isCorrect": false},
+                {"text": "Diccionario", "isCorrect": false},
+                {"text": "Tupla", "isCorrect": true},
+                {"text": "Conjunto", "isCorrect": false}
+            ],
+            "rationale": "El parámetro `*args` recolecta un número variable de argumentos posicionales y los empaqueta en una tupla."
+        },
+        {
+            "question": "¿Qué tipo de dato se empaqueta en `**kwargs` dentro de una función?",
+            "answerOptions": [
+                {"text": "Lista", "isCorrect": false},
+                {"text": "Diccionario", "isCorrect": true},
+                {"text": "Tupla", "isCorrect": false},
+                {"text": "Conjunto", "isCorrect": false}
+            ],
+            "rationale": "El parámetro `**kwargs` recolecta un número variable de argumentos de palabra clave y los empaqueta en un diccionario."
+        },
+        {
+            "question": "¿Cuál es la principal característica de una función `lambda`?",
+            "answerOptions": [
+                {"text": "Puede tener múltiples líneas de código", "isCorrect": false},
+                {"text": "Siempre requiere un nombre", "isCorrect": false},
+                {"text": "Es una función anónima de una sola expresión", "isCorrect": true},
+                {"text": "Solo puede aceptar un argumento", "isCorrect": false}
+            ],
+            "rationale": "Las funciones `lambda` son pequeñas funciones anónimas que se definen en una sola línea y contienen una única expresión."
+        },
+        {
+            "question": "Si defines `def mi_funcion(a, *args, b):`, ¿cuál de las siguientes llamadas causaría un error?",
+            "answerOptions": [
+                {"text": "`mi_funcion(1, 2, 3)`", "isCorrect": true},
+                {"text": "`mi_funcion(1, b=3)`", "isCorrect": false},
+                {"text": "`mi_funcion(1, 2, b=3)`", "isCorrect": false},
+                {"text": "`mi_funcion(a=1, b=3)`", "isCorrect": false}
+            ],
+            "rationale": "Un parámetro posicional normal (`b`) no puede seguir a un parámetro `*args` si no se le pasa como argumento de palabra clave. En `mi_funcion(1, 2, 3)`, `1` va a `a`, `2` va a `*args`, y `b` no recibe un valor, causando un `TypeError`."
+        },
+        {
+            "question": "¿Para qué se usaría `**kwargs` en una función?",
+            "answerOptions": [
+                {"text": "Para pasar una lista de elementos", "isCorrect": false},
+                {"text": "Para forzar que todos los argumentos sean de palabra clave", "isCorrect": false},
+                {"text": "Para aceptar argumentos de palabra clave arbitrarios", "isCorrect": true},
+                {"text": "Para definir valores por defecto para los parámetros", "isCorrect": false}
+            ],
+            "rationale": " `**kwargs` permite que una función acepte cualquier número de argumentos de palabra clave que no estén definidos explícitamente como parámetros."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('args-output').textContent = 'La salida de *args aparecerá aquí.';
+    document.getElementById('args-code-explanation').textContent = 'Haz clic en "Ejecutar con *args" para ver el código.';
+    document.getElementById('kwargs-output').textContent = 'La salida de **kwargs aparecerá aquí.';
+    document.getElementById('kwargs-code-explanation').textContent = 'Haz clic en "Ejecutar con **kwargs" para ver el código.';
+    document.getElementById('lambda-output').textContent = 'La salida de Lambda aparecerá aquí.';
+    document.getElementById('lambda-code-explanation').textContent = 'Haz clic en "Ejecutar Lambda" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

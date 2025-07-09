@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3.4 – Proyecto Simulación de Red</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 3.4 – Proyecto: Simulación de red". It features a header, an introductory section, and an interactive simulation playground. Users can input parameters for a network (nodes, connections), generate it, and observe a simulated visualization (using Chart.js for scatter plot) and a textual log. The Python code and explanation for the simulation logic are displayed. A final quiz section assesses understanding. This structure provides a hands-on experience for a project integrating various module concepts. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the network simulation project.
+        - Network Simulation: Goal: Apply concepts & Visualize. Method: Number inputs for nodes/connections, buttons to generate/simulate steps. Output includes a textual log and a Chart.js scatter plot on a canvas to visualize network nodes and connections. Python code and explanation are shown for the simulated logic. Interaction: User defines network parameters, generates it, and potentially triggers simulated changes, seeing visual and textual updates. Justification: Provides a practical application of functions, modules (simulated random), and data visualization, allowing users to understand how these concepts build a project.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px; /* Fixed height for the canvas */
+            width: 100%;
+            max-width: 600px; /* Max width to keep it readable */
+            margin: auto; /* Center the chart */
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 3.4 – Simulación de Red</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module3_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 3</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Proyecto: Simulación de red (uso de `random` y `matplotlib`)</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">En este proyecto, simularás una red simple, generando nodos y conexiones de forma aleatoria. Esto te permitirá aplicar conceptos de funciones, módulos (como `random`) y visualizar datos, similar a cómo lo harías con `matplotlib` en Python.</p>
+            </section>
+
+            <section id="network-simulation-project">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">Generador y Visualizador de Red</h3>
+                        <p class="mt-4 text-slate-600">Define el número de nodos y la probabilidad de conexión entre ellos. Luego, genera la red y observa su estructura. Puedes simular "pasos" para ver cómo podría evolucionar.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="num-nodes-input" class="block text-sm font-medium text-slate-700">Número de Nodos (2-20):</label>
+                            <input type="number" id="num-nodes-input" value="10" min="2" max="20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="connection-prob-input" class="block text-sm font-medium text-slate-700">Probabilidad de Conexión (0.0 - 1.0):</label>
+                            <input type="number" id="connection-prob-input" value="0.2" step="0.05" min="0" max="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <div class="flex gap-2">
+                                <button id="generate-network-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Generar Red</button>
+                                <button id="simulate-step-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition" disabled>Simular Paso</button>
+                            </div>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-6 shadow-lg mt-6">
+                            <h4 class="text-slate-300 font-semibold">Registro de la Simulación:</h4>
+                            <div id="simulation-log" class="code-block mt-2 h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-800 font-semibold">Visualización de la Red:</h4>
+                        <div class="chart-container mt-2">
+                            <canvas id="networkChart"></canvas>
+                        </div>
+                        <h4 class="text-slate-800 font-semibold mt-4">Código Python y Explicación (Conceptual):</h4>
+                        <div id="simulation-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Generar Red" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Simulación de Red</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la simulación, `random` y la visualización de datos.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 3.4 – Simulación de Red. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Network Simulation Project Logic ---
+    const numNodesInput = document.getElementById('num-nodes-input');
+    const connectionProbInput = document.getElementById('connection-prob-input');
+    const generateNetworkBtn = document.getElementById('generate-network-btn');
+    const simulateStepBtn = document.getElementById('simulate-step-btn');
+    const simulationLog = document.getElementById('simulation-log');
+    const networkChartCanvas = document.getElementById('networkChart');
+    const simulationCodeExplanation = document.getElementById('simulation-code-explanation');
+
+    let networkChart = null;
+    let nodes = [];
+    let connections = []; // Stores pairs of node indices [node1, node2]
+
+    const logSimulationMessage = (message) => {
+        const p = document.createElement('p');
+        p.textContent = `- ${message}`;
+        simulationLog.appendChild(p);
+        simulationLog.scrollTop = simulationLog.scrollHeight;
+    };
+
+    const generateNetwork = () => {
+        const numNodes = parseInt(numNodesInput.value);
+        const connectionProb = parseFloat(connectionProbInput.value);
+
+        if (isNaN(numNodes) || numNodes < 2 || numNodes > 20) {
+            logSimulationMessage('Error: Número de nodos inválido (2-20).', true);
+            return;
+        }
+        if (isNaN(connectionProb) || connectionProb < 0 || connectionProb > 1) {
+            logSimulationMessage('Error: Probabilidad de conexión inválida (0.0-1.0).', true);
+            return;
+        }
+
+        nodes = [];
+        connections = [];
+        simulationLog.innerHTML = ''; // Clear log
+
+        // Generate nodes with random positions
+        for (let i = 0; i < numNodes; i++) {
+            nodes.push({
+                id: i,
+                x: Math.random() * 100, // Random X position (0-100)
+                y: Math.random() * 100  // Random Y position (0-100)
+            });
+        }
+
+        // Generate connections based on probability
+        for (let i = 0; i < numNodes; i++) {
+            for (let j = i + 1; j < numNodes; j++) {
+                if (Math.random() < connectionProb) {
+                    connections.push([i, j]); // Store indices of connected nodes
+                }
+            }
+        }
+
+        logSimulationMessage(`Red generada con ${numNodes} nodos y ${connections.length} conexiones.`);
+        updateNetworkChart();
+        simulateStepBtn.disabled = false;
+
+        simulationCodeExplanation.textContent = `
+# Código Python (Conceptual)
+import random
+import matplotlib.pyplot as plt # Simulado por Chart.js
+
+def generar_red(num_nodos, prob_conexion):
+    nodos = []
+    conexiones = []
+    
+    # Generar nodos con posiciones aleatorias
+    for i in range(num_nodos):
+        nodos.append({'id': i, 'x': random.uniform(0, 100), 'y': random.uniform(0, 100)})
+    
+    # Generar conexiones
+    for i in range(num_nodos):
+        for j in range(i + 1, num_nodos):
+            if random.random() < prob_conexion:
+                conexiones.append((i, j)) # Tupla de nodos conectados
+                
+    return nodos, conexiones
+
+# Ejecución
+num_nodos_config = ${numNodes}
+prob_conexion_config = ${connectionProb}
+nodos_red, conexiones_red = generar_red(num_nodos_config, prob_conexion_config)
+
+# Visualización (similar a matplotlib.pyplot.scatter y plt.plot)
+# plt.figure(figsize=(8, 6))
+# for nodo in nodos_red:
+#     plt.scatter(nodo['x'], nodo['y'], s=100, label=f'Nodo {nodo["id"]}')
+# for con in conexiones_red:
+#     nodo1_pos = nodos_red[con[0]]
+#     nodo2_pos = nodos_red[con[1]]
+#     plt.plot([nodo1_pos['x'], nodo2_pos['x']], [nodo1_pos['y'], nodo2_pos['y']], 'k-')
+# plt.title("Simulación de Red")
+# plt.show()
+
+# Explicación
+# 1. La función 'generar_red' crea una lista de nodos con posiciones (x, y) aleatorias.
+# 2. Luego, itera a través de todos los pares de nodos posibles.
+# 3. Para cada par, usa 'random.random()' (simulado por Math.random()) para decidir si se crea una conexión basada en 'prob_conexion'.
+# 4. 'Chart.js' (simulando 'matplotlib') visualiza estos nodos como puntos y las conexiones como líneas.
+        `;
+    };
+
+    const updateNetworkChart = () => {
+        if (networkChart) {
+            networkChart.destroy();
+        }
+
+        const nodeData = nodes.map(node => ({ x: node.x, y: node.y }));
+        const connectionLines = connections.map(con => {
+            const node1 = nodes[con[0]];
+            const node2 = nodes[con[1]];
+            return {
+                x1: node1.x, y1: node1.y,
+                x2: node2.x, y2: node2.y
+            };
+        });
+
+        networkChart = new Chart(networkChartCanvas, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Nodos',
+                    data: nodeData,
+                    backgroundColor: 'rgba(20, 184, 166, 0.8)', // Teal
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                }, {
+                    label: 'Conexiones',
+                    data: [], // No direct data for lines in scatter, handled by plugin
+                    showLine: false,
+                    pointRadius: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0 // Disable animation for instant updates
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        min: 0,
+                        max: 100,
+                        title: { display: true, text: 'Posición X' }
+                    },
+                    y: {
+                        type: 'linear',
+                        min: 0,
+                        max: 100,
+                        title: { display: true, text: 'Posición Y' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataset.label === 'Nodos') {
+                                    return `Nodo ${context.dataIndex}: (${context.parsed.x.toFixed(1)}, ${context.parsed.y.toFixed(1)})`;
+                                }
+                                return '';
+                            }
+                        }
+                    },
+                    // Custom plugin to draw lines for connections
+                    beforeDraw: (chart) => {
+                        const ctx = chart.ctx;
+                        const xAxis = chart.scales.x;
+                        const yAxis = chart.scales.y;
+
+                        ctx.save();
+                        ctx.strokeStyle = 'rgba(71, 85, 105, 0.5)'; // Slate-600 for lines
+                        ctx.lineWidth = 1;
+
+                        connectionLines.forEach(line => {
+                            ctx.beginPath();
+                            ctx.moveTo(xAxis.getPixelForValue(line.x1), yAxis.getPixelForValue(line.y1));
+                            ctx.lineTo(xAxis.getPixelForValue(line.x2), yAxis.getPixelForValue(line.y2));
+                            ctx.stroke();
+                        });
+                        ctx.restore();
+                    }
+                }
+            }
+        });
+    };
+
+    const simulateStep = () => {
+        logSimulationMessage('Simulando un paso en la red...');
+        // Example: Randomly move one node
+        if (nodes.length > 0) {
+            const nodeIndex = Math.floor(Math.random() * nodes.length);
+            nodes[nodeIndex].x = Math.random() * 100;
+            nodes[nodeIndex].y = Math.random() * 100;
+            logSimulationMessage(`Nodo ${nodeIndex} movido a nueva posición.`);
+            updateNetworkChart();
+        } else {
+            logSimulationMessage('No hay nodos para simular.', true);
+        }
+
+        simulationCodeExplanation.textContent = `
+# Código Python (Conceptual)
+# Simulación de un paso: Mover un nodo aleatoriamente
+
+import random
+
+def simular_paso(nodos_red):
+    if not nodos_red:
+        return nodos_red # No hay nodos para mover
+
+    # Seleccionar un nodo aleatorio
+    nodo_a_mover = random.choice(nodos_red)
+    
+    # Mover el nodo a una nueva posición aleatoria
+    nodo_a_mover['x'] = random.uniform(0, 100)
+    nodo_a_mover['y'] = random.uniform(0, 100)
+    
+    return nodos_red # Retorna los nodos actualizados
+
+# Ejecución
+# nodos_red = simular_paso(nodos_red) # Se asume que nodos_red ya existe
+# Visualización actualizada con matplotlib
+
+# Explicación
+# 1. 'random.choice()' selecciona un nodo al azar de la lista de nodos.
+# 2. Se actualizan las coordenadas 'x' e 'y' del nodo seleccionado con nuevos valores aleatorios.
+# 3. La visualización se actualiza para reflejar el cambio.
+        `;
+    };
+
+    generateNetworkBtn.addEventListener('click', generateNetwork);
+    simulateStepBtn.addEventListener('click', simulateStep);
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué módulo de Python se utiliza comúnmente para generar números aleatorios?",
+            "answerOptions": [
+                {"text": "`math`", "isCorrect": false},
+                {"text": "`sys`", "isCorrect": false},
+                {"text": "`random`", "isCorrect": true},
+                {"text": "`os`", "isCorrect": false}
+            ],
+            "rationale": "El módulo `random` proporciona funciones para generar números pseudoaleatorios."
+        },
+        {
+            "question": "¿Cuál es el propósito principal de una simulación en programación?",
+            "answerOptions": [
+                {"text": "Hacer que el programa sea más rápido", "isCorrect": false},
+                {"text": "Representar un proceso o sistema del mundo real para estudiarlo o predecir su comportamiento", "isCorrect": true},
+                {"text": "Almacenar grandes cantidades de datos", "isCorrect": false},
+                {"text": "Crear interfaces de usuario complejas", "isCorrect": false}
+            ],
+            "rationale": "Las simulaciones se utilizan para modelar sistemas y procesos, permitiendo experimentar con ellos de forma virtual."
+        },
+        {
+            "question": "Si quisieras visualizar datos numéricos en un gráfico de líneas en Python, ¿qué librería usarías típicamente?",
+            "answerOptions": [
+                {"text": "`pandas`", "isCorrect": false},
+                {"text": "`numpy`", "isCorrect": false},
+                {"text": "`matplotlib`", "isCorrect": true},
+                {"text": "`requests`", "isCorrect": false}
+            ],
+            "rationale": "`matplotlib` es la librería de trazado más popular en Python, utilizada para crear una amplia variedad de gráficos estáticos, animados e interactivos."
+        },
+        {
+            "question": "En una simulación de red con nodos y conexiones, ¿qué podría representar un 'paso' de simulación?",
+            "answerOptions": [
+                {"text": "El color de los nodos", "isCorrect": false},
+                {"text": "Un cambio en el estado de la red, como el movimiento de un nodo o la adición/eliminación de una conexión", "isCorrect": true},
+                {"text": "La cantidad total de memoria utilizada por la red", "isCorrect": false},
+                {"text": "El número de líneas de código en la simulación", "isCorrect": false}
+            ],
+            "rationale": "Un 'paso' en una simulación representa una unidad de tiempo o un evento discreto que causa un cambio en el estado del sistema simulado."
+        },
+        {
+            "question": "¿Qué concepto de programación es fundamental para crear una simulación modular y organizada?",
+            "answerOptions": [
+                {"text": "Comentarios de código", "isCorrect": false},
+                {"text": "Variables globales", "isCorrect": false},
+                {"text": "Funciones y módulos", "isCorrect": true},
+                {"text": "Bucles infinitos", "isCorrect": false}
+            ],
+            "rationale": "Las funciones y los módulos permiten encapsular la lógica de diferentes partes de la simulación (ej. generar red, simular paso, visualizar) en unidades reutilizables y organizadas."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    logSimulationMessage('Introduce el número de nodos y la probabilidad de conexión, luego haz clic en "Generar Red".');
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5 – Agile + SCRUM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application serving as the home/index for "Módulo 5 – Agile + SCRUM". It features a header, a main introductory section, and a grid of interactive cards, each representing a sub-topic of Module 5. Each card includes a title, a brief description, and a button to navigate to its respective detailed sub-page. This structure provides a clear overview of available content and easy navigation within the module, mirroring the home page structure for consistency. All sub-modules are now enabled. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the module.
+        - Sub-Module Cards: Goal: Organize & Navigate. Method: Grid layout of HTML divs, each styled as a card. Each card contains a sub-topic title, a short description, and a clickable button. Interaction: Clicking the button navigates to the associated sub-module's interactive page. Justification: Provides a visually appealing and intuitive way to browse and access different learning sub-topics, maintaining consistency with the main home page.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 5 – Agile + SCRUM</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="../python_home_page.html" class="text-slate-600 hover:text-teal-600 transition">Volver a Módulos</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Agile + SCRUM: Temario</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Aquí encontrarás los temas clave del Módulo 5. Haz clic en cada tarjeta para explorar los conceptos de metodologías ágiles y Scrum.</p>
+            </section>
+
+            <section id="module5-topics">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Conocer roles Scrum y eventos clave -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="People icon">👥</div>
+                        <h4 class="font-bold text-2xl text-slate-900">1. Conocer roles Scrum y eventos clave</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aprende sobre el Product Owner, Scrum Master, Equipo de Desarrollo y las ceremonias principales.</p>
+                        <a href="python_module5_1_roles_events.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Usar historias de usuario y tablero Kanban -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Clipboard icon">📋</div>
+                        <h4 class="font-bold text-2xl text-slate-900">2. Usar historias de usuario y tablero Kanban</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Visualiza el trabajo con historias de usuario y gestiona el flujo con un tablero Kanban interactivo.</p>
+                        <a href="python_module5_2_user_stories_kanban.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Ejecutar simulación de Sprint completo -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Play button icon">▶️</div>
+                        <h4 class="font-bold text-2xl text-slate-900">3. Ejecutar simulación de Sprint completo</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Experimenta el ciclo de un Sprint Scrum de principio a fin de forma interactiva.</p>
+                        <a href="python_module5_3_sprint_simulation.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Proyecto: Automatización con PowerShell (Ahora habilitado) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Robot icon">🤖</div>
+                        <h4 class="font-bold text-2xl text-slate-900">4. Proyecto: Automatización con PowerShell</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aplica principios de automatización en un proyecto práctico (conceptual) con PowerShell.</p>
+                        <a href="python_module5_4_powershell_automation.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 5 – Agile + SCRUM. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

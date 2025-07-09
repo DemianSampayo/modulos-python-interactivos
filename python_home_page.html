@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Módulos Interactivos de Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application serving as a home/dashboard for various Python learning modules. It features a header, a main introductory section, and a grid of interactive cards, each representing a module. Each card includes a title, a brief description, and a button to navigate to its respective module page. This structure provides a clear overview of available content and easy navigation, serving as a central hub for the learning platform. The module "Módulo 3: Funciones, Módulos y Automatización Reutilizable" is now enabled. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the stage for the learning platform.
+        - Module Cards: Goal: Organize & Navigate. Method: Grid layout of HTML divs, each styled as a card. Each card contains a module title, a short description, and a clickable button. Interaction: Clicking the button navigates to the associated module's interactive page. Justification: Provides a visually appealing and intuitive way to browse and access different learning modules. Module 3 link is now functional.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulos de Aprendizaje de Python</h1>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Bienvenido a tu Plataforma Interactiva de Python</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Explora nuestros módulos interactivos diseñados para ayudarte a dominar Python paso a paso. Cada módulo ofrece explicaciones claras, ejemplos prácticos y desafíos para consolidar tu aprendizaje.</p>
+            </section>
+
+            <section id="modules">
+                <h3 class="text-3xl font-bold text-center text-slate-900 mb-10">Nuestros Módulos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Módulo 1: Fundamentos de Python (Done) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Book icon">✅</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 1 – Fundamentos de Python</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aprende la sintaxis básica, variables, operadores, y control de flujo (`if`, `else`, `elif`). Incluye un desafío de calculadora IMC.</p>
+                        <a href="Modulo 1/python_module1_fundamentals.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Ir al Módulo</a>
+                    </div>
+
+                    <!-- Módulo 2: Estructuras de Datos (In progress) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Boxes icon">⏳</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 2 – Estructuras de Datos</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Domina listas, tuplas, conjuntos y diccionarios. Aprende a repetir tareas con bucles (`for`, `while`) y a manejar errores con `try/except`.</p>
+                        <a href="Modulo 2/python_module2_fundamentals.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Ir al Módulo</a>
+                    </div>
+                    
+                    <!-- Módulo 3: Funciones, Módulos y Automatización Reutilizable (Now functional) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Gear icon">⚙️</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 3: Funciones, Módulos y Automatización Reutilizable</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Crea código organizado y reutilizable con funciones, explora módulos y paquetes, y automatiza tareas repetitivas.</p>
+                        <a href="Modulo 3/python_module3_fundamentals.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Ir al Módulo</a>
+                    </div>
+
+                    <!-- Módulo 4: Archivos y Consumo de APIs (Now functional) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Folder icon">📁</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 4: Archivos y Consumo de APIs</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aprende a leer y escribir archivos, y a interactuar con servicios web externos usando APIs.</p>
+                        <a href="Modulo 4/python_module4_fundamentals.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Ir al Módulo</a>
+                    </div>
+
+                    <!-- Módulo 5 – Agile + SCRUM (Now functional) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Team icon">🤝</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 5 – Agile + SCRUM</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Descubre metodologías de desarrollo ágil como Scrum para la gestión eficiente de proyectos de software.</p>
+                        <a href="Modulo 5/python_module5_fundamentals.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Ir al Módulo</a>
+                    </div>
+
+                    <!-- Módulo 6 – Personalización (Not started) -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Palette icon">🎨</div>
+                        <h4 class="font-bold text-2xl text-slate-900">Módulo 6 – Personalización</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Explora técnicas avanzadas para personalizar y adaptar tus aplicaciones Python a necesidades específicas.</p>
+                        <a href="#" class="mt-6 bg-slate-400 text-white px-6 py-2 rounded-md cursor-not-allowed">Próximamente</a>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Plataforma Interactiva de Python. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

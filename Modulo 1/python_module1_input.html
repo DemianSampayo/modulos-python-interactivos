@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.4 – Leer datos con input()</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focused on the `input()` function. It features a header, an introductory section, and multiple interactive playgrounds: basic input, input with type conversion (int/float), and a practical exercise combining input with calculations. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the `input()` function.
+        - Basic `input()`: Goal: Demonstrate input. Method: Text input field, button, code-block display. Interaction: User types, clicks, sees captured value and corresponding Python code/explanation. Justification: Basic understanding of `input()` with code context.
+        - `input()` and Data Types: Goal: Demonstrate type conversion. Method: Text input, buttons for `int()` and `float()` conversion, code-block display. Interaction: User types, clicks conversion, sees value, simulated type, and corresponding Python code/explanation. Justification: Essential for using input in calculations, with code context.
+        - Practical Exercise (Age Calculator): Goal: Apply combined concepts. Method: Text inputs for name and year, button to calculate, text display for greeting/age, and code-block display for the Python logic/explanation. Interaction: User provides data, app calculates and displays personalized output, showing the underlying Python code. Justification: Integrates `input()`, variables, and basic arithmetic with code context.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.4 – Función `input()`</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Leer datos con `input()`</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">La función `input()` es esencial para hacer que tus programas sean interactivos, permitiéndoles recibir datos directamente del usuario. Lo que el usuario escribe se convierte en una cadena de texto que tu programa puede utilizar.</p>
+            </section>
+
+            <section id="basic-input-interactive">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. `input()` Básico: Recibiendo Cadenas de Texto</h3>
+                        <p class="mt-4 text-slate-600">Escribe cualquier texto o número en el campo de abajo. Cuando hagas clic en "Leer input()", verás cómo Python capturaría ese valor como una cadena de texto (`str`).</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="basic-input-field" class="block text-sm font-medium text-slate-700">Introduce un valor:</label>
+                            <input type="text" id="basic-input-field" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" placeholder="Ej: Hola Mundo o 123">
+                            <button id="read-basic-input-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Leer input()</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida Leída (Simulada):</h4>
+                        <div id="basic-input-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El valor de input() aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="basic-input-code-explanation" class="code-block mt-2 h-32 overflow-y-auto text-sm">
+                            Haz clic en "Leer input()" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="input-data-types">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. `input()` y Conversión de Tipos de Datos</h3>
+                        <p class="mt-4 text-slate-600">La función `input()` siempre devuelve una cadena de texto (`str`). Si necesitas realizar operaciones numéricas, debes convertir la entrada usando funciones como `int()` para enteros o `float()` para números decimales.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="type-conversion-input" class="block text-sm font-medium text-slate-700">Introduce un número:</label>
+                            <input type="text" id="type-conversion-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" placeholder="Ej: 10 o 3.14">
+                            <div class="flex gap-2">
+                                <button id="convert-to-int-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Convertir a `int()`</button>
+                                <button id="convert-to-float-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Convertir a `float()`</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado de la Conversión:</h4>
+                        <div id="type-conversion-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la conversión aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="type-conversion-code-explanation" class="code-block mt-2 h-32 overflow-y-auto text-sm">
+                            Haz clic en un botón de conversión para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="practical-exercise">
+                <h3 class="text-3xl font-bold text-center text-slate-900">3. Ejercicio Práctico: Calculadora de Edad Simple</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Crea un programa que pida tu nombre y tu año de nacimiento, y luego calcule y muestre tu edad aproximada. Este ejercicio combina `input()`, variables, operadores y conversión de tipos.</p>
+                
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="user-name-input" class="block text-sm font-medium text-slate-700">Tu Nombre:</label>
+                            <input type="text" id="user-name-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" placeholder="Ej: Juan">
+                        </div>
+                        <div>
+                            <label for="birth-year-input" class="block text-sm font-medium text-slate-700">Año de Nacimiento:</label>
+                            <input type="number" id="birth-year-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" placeholder="Ej: 1990">
+                        </div>
+                        <button id="calculate-age-btn" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Calcular Edad</button>
+                    </div>
+                    <div id="age-result" class="mt-6 p-4 rounded-md bg-slate-100 text-slate-800 hidden">
+                        <p class="font-semibold">Resultado: <span id="calculated-age-output" class="text-teal-600 font-bold"></span></p>
+                    </div>
+                    <h4 class="text-slate-700 font-semibold mt-4">Código Python y Explicación:</h4>
+                    <div id="age-calculator-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                        Haz clic en "Calcular Edad" para ver el código.
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de `input()`</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la función `input()` y la conversión de tipos.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.3 – Función `input()`. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) { // Handle external module links
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Basic Input Section Logic ---
+    const basicInputField = document.getElementById('basic-input-field');
+    const basicInputOutput = document.getElementById('basic-input-output');
+    const readBasicInputBtn = document.getElementById('read-basic-input-btn');
+    const basicInputCodeExplanation = document.getElementById('basic-input-code-explanation');
+
+    readBasicInputBtn.addEventListener('click', () => {
+        const inputValue = basicInputField.value;
+        basicInputOutput.textContent = `input() recibió: "${inputValue}"\nTipo de dato: <class 'str'>`;
+        basicInputCodeExplanation.textContent = `
+# Código Python
+nombre = input("Ingresa tu nombre: ")
+print(f"Hola, {nombre}!")
+
+# Explicación
+# 1. La función input() muestra un mensaje al usuario y espera su entrada.
+# 2. Lo que el usuario escribe (ej. "${inputValue}") se captura y se asigna a la variable 'nombre'.
+# 3. input() siempre devuelve una cadena de texto (str), sin importar lo que se ingrese.
+# 4. print() se usa para mostrar el saludo personalizado.
+        `;
+    });
+
+    // --- 2. Input and Data Types Section Logic ---
+    const typeConversionInput = document.getElementById('type-conversion-input');
+    const convertToIntBtn = document.getElementById('convert-to-int-btn');
+    const convertToFloatBtn = document.getElementById('convert-to-float-btn');
+    const typeConversionOutput = document.getElementById('type-conversion-output');
+    const typeConversionCodeExplanation = document.getElementById('type-conversion-code-explanation');
+
+    convertToIntBtn.addEventListener('click', () => {
+        const inputValue = typeConversionInput.value;
+        try {
+            const intValue = parseInt(inputValue);
+            if (isNaN(intValue)) {
+                throw new Error("No se pudo convertir a entero. Valor no numérico.");
+            }
+            typeConversionOutput.textContent = `input() convertido a int(): ${intValue}\nTipo de dato: <class 'int'>`;
+            typeConversionCodeExplanation.textContent = `
+# Código Python
+edad_str = input("Ingresa tu edad: ") # Ej: "${inputValue}"
+edad_int = int(edad_str)
+
+# Explicación
+# 1. input() obtiene la entrada como cadena (ej. "${inputValue}").
+# 2. int() intenta convertir esa cadena a un número entero.
+# 3. Si la conversión es exitosa, 'edad_int' será un número entero.
+# 4. Si ingresas texto no numérico (ej. "abc"), int() causará un ValueError.
+            `;
+        } catch (e) {
+            typeConversionOutput.textContent = `Error al convertir a int(): ${e.message}`;
+            typeConversionCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+numero_str = input("Ingresa un número: ") # Ej: "${inputValue}"
+numero_int = int(numero_str) # Esto fallaría si "${inputValue}" no es un número
+
+# Explicación
+# Si la cadena de entrada no es un número entero válido, la función int()
+# generará un ValueError, como se muestra en la salida.
+            `;
+        }
+    });
+
+    convertToFloatBtn.addEventListener('click', () => {
+        const inputValue = typeConversionInput.value;
+        try {
+            const floatValue = parseFloat(inputValue);
+            if (isNaN(floatValue)) {
+                throw new Error("No se pudo convertir a flotante. Valor no numérico.");
+            }
+            typeConversionOutput.textContent = `input() convertido a float(): ${floatValue}\nTipo de dato: <class 'float'>`;
+            typeConversionCodeExplanation.textContent = `
+# Código Python
+altura_str = input("Ingresa tu altura: ") # Ej: "${inputValue}"
+altura_float = float(altura_str)
+
+# Explicación
+# 1. input() obtiene la entrada como cadena (ej. "${inputValue}").
+# 2. float() intenta convertir esa cadena a un número flotante (decimal).
+# 3. Si la conversión es exitosa, 'altura_float' será un número flotante.
+# 4. Puede manejar números enteros (ej. "10" -> 10.0) y decimales (ej. "3.14").
+            `;
+        } catch (e) {
+            typeConversionOutput.textContent = `Error al convertir a float(): ${e.message}`;
+            typeConversionCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+precio_str = input("Ingresa el precio: ") # Ej: "${inputValue}"
+precio_float = float(precio_str) # Esto fallaría si "${inputValue}" no es un número decimal
+
+# Explicación
+# Similar a int(), si la cadena no representa un número flotante válido,
+# float() generará un ValueError.
+            `;
+        }
+    });
+
+    // --- 3. Practical Exercise: Simple Age Calculator Logic ---
+    const userNameInput = document.getElementById('user-name-input');
+    const birthYearInput = document.getElementById('birth-year-input');
+    const calculateAgeBtn = document.getElementById('calculate-age-btn');
+    const ageResultDiv = document.getElementById('age-result');
+    const calculatedAgeOutputSpan = document.getElementById('calculated-age-output');
+    const ageCalculatorCodeExplanation = document.getElementById('age-calculator-code-explanation');
+
+    calculateAgeBtn.addEventListener('click', () => {
+        const name = userNameInput.value.trim();
+        const birthYear = parseInt(birthYearInput.value);
+        const currentYear = new Date().getFullYear();
+
+        if (!name || isNaN(birthYear) || birthYear <= 0 || birthYear > currentYear) {
+            calculatedAgeOutputSpan.textContent = 'Por favor, introduce un nombre y un año de nacimiento válidos.';
+            ageResultDiv.classList.remove('hidden');
+            calculatedAgeOutputSpan.className = 'text-red-600 font-bold';
+            ageCalculatorCodeExplanation.textContent = `
+# Código Python (ejemplo de entrada inválida)
+nombre = input("Tu Nombre: ") # Ej: "${name}"
+año_nacimiento_str = input("Año de Nacimiento: ") # Ej: "${birthYearInput.value}"
+
+# Explicación
+# Si el nombre está vacío o el año de nacimiento no es un número válido,
+# las validaciones iniciales detectarían el problema antes de calcular la edad.
+# Es crucial validar las entradas del usuario para evitar errores en el programa.
+            `;
+            return;
+        }
+
+        const age = currentYear - birthYear;
+        calculatedAgeOutputSpan.textContent = `Hola, ${name}! Tienes aproximadamente ${age} años.`;
+        ageResultDiv.classList.remove('hidden');
+        calculatedAgeOutputSpan.className = 'text-teal-600 font-bold';
+        ageCalculatorCodeExplanation.textContent = `
+# Código Python
+nombre = input("Tu Nombre: ") # El usuario ingresa: "${name}"
+año_nacimiento_str = input("Año de Nacimiento: ") # El usuario ingresa: "${birthYearInput.value}"
+
+año_actual = ${currentYear}
+año_nacimiento = int(año_nacimiento_str) # Convierte la cadena a entero
+
+edad = año_actual - año_nacimiento # Calcula la edad
+
+print(f"Hola, {nombre}! Tienes aproximadamente {edad} años.")
+
+# Explicación
+# 1. Se usa input() para obtener el nombre y el año de nacimiento como cadenas.
+# 2. int() convierte el año de nacimiento a un número entero para poder calcular.
+# 3. Se calcula la edad restando el año de nacimiento del año actual.
+# 4. Se usa print() con una f-string para mostrar el resultado personalizado.
+        `;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué tipo de dato devuelve la función `input()` por defecto en Python?",
+            "answerOptions": [
+                {"text": "Entero (int)", "isCorrect": false},
+                {"text": "Flotante (float)", "isCorrect": false},
+                {"text": "Cadena de texto (str)", "isCorrect": true},
+                {"text": "Booleano (bool)", "isCorrect": false}
+            ],
+            "rationale": "Por defecto, `input()` siempre devuelve una cadena de texto, incluso si el usuario ingresa números."
+        },
+        {
+            "question": "¿Qué función se usa para convertir la entrada de `input()` a un número entero?",
+            "answerOptions": [
+                {"text": "`float()`", "isCorrect": false},
+                {"text": "`str()`", "isCorrect": false},
+                {"text": "`int()`", "isCorrect": true},
+                {"text": "`num()`", "isCorrect": false}
+            ],
+            "rationale": "La función `int()` se utiliza para convertir una cadena (o cualquier otro tipo compatible) a un número entero."
+        },
+        {
+            "question": "Si el usuario ingresa '5' en `input()`, y lo almacenas en una variable `x`, ¿qué tipo de dato es `x` antes de cualquier conversión?",
+            "answerOptions": [
+                {"text": "int", "isCorrect": false},
+                {"text": "float", "isCorrect": false},
+                {"text": "str", "isCorrect": true},
+                {"text": "bool", "isCorrect": false}
+            ],
+            "rationale": "Independientemente del contenido, `input()` siempre devuelve una cadena de texto."
+        },
+        {
+            "question": "¿Qué ocurre si intentas realizar una operación matemática (ej. suma) directamente con el resultado de `input()` sin convertirlo a un tipo numérico?",
+            "answerOptions": [
+                {"text": "Se realizará la operación correctamente", "isCorrect": false},
+                {"text": "Python lo convertirá automáticamente", "isCorrect": false},
+                {"text": "Se producirá un `TypeError` o una concatenación de cadenas", "isCorrect": true},
+                {"text": "El programa se detendrá sin error", "isCorrect": false}
+            ],
+            "rationale": "Si intentas sumar una cadena (resultado de `input()`) con un número, Python no sabrá si concatenar o sumar, lo que resultará en un `TypeError`. Si sumas dos cadenas, las concatenará."
+        },
+        {
+            "question": "Para pedirle al usuario su edad y almacenarla como un número entero, ¿cuál es la sintaxis más adecuada?",
+            "answerOptions": [
+                {"text": "`edad = input(\"¿Cuál es tu edad?\")`", "isCorrect": false},
+                {"text": "`edad = int(input(\"¿Cuál es tu edad?\"))`", "isCorrect": true},
+                {"text": "`edad = float(input(\"¿Cuál es tu edad?\"))`", "isCorrect": false},
+                {"text": "`edad = str(input(\"¿Cuál es tu edad?\"))`", "isCorrect": false}
+            ],
+            "rationale": "Necesitas usar `input()` para obtener la entrada del usuario como una cadena, y luego `int()` para convertir esa cadena a un número entero."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('basic-input-output').textContent = 'El valor de input() aparecerá aquí.';
+    document.getElementById('type-conversion-output').textContent = 'El resultado de la conversión aparecerá aquí.';
+    document.getElementById('calculated-age-output').textContent = 'Tu saludo personalizado y edad aparecerán aquí.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

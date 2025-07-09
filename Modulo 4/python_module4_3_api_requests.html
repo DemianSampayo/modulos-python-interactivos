@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4.3 – Consumir Datos de APIs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 4.3 – Consumir datos de una API con requests". It features a header, an introductory section, and interactive playgrounds for making GET requests, processing JSON responses, and handling API errors. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding API consumption.
+        - Realizar Solicitudes GET: Goal: Demonstrate basic API request. Method: Input for API URL, button to fetch, code-block output for raw JSON and Python code/explanation. Interaction: User triggers fetch, sees raw JSON response. Justification: Shows how to retrieve data from web services.
+        - Procesar Respuesta JSON: Goal: Demonstrate data parsing. Method: Textarea for raw JSON, button to parse, code-block output for parsed data and Python code/explanation. Interaction: User provides JSON, sees it converted to a structured object. Justification: Explains how to work with API responses.
+        - Manejo de Errores en Solicitudes API: Goal: Illustrate error handling for network calls. Method: Input for URL (good/bad), button to fetch, code-block output for error message and Python code/explanation. Interaction: User triggers valid/invalid requests, sees how errors are caught. Justification: Emphasizes robust API integration.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .input-area {
+            background-color: #2d3748; /* darker slate */
+            color: #f8f8f2; /* light text */
+            border: 1px solid #4a5568; /* slate-600 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem; /* sm:text-sm */
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 4.3 – Consumir APIs</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module4_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 4</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Consumir datos de una API con `requests`</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Las APIs (Interfaces de Programación de Aplicaciones) son la forma en que los programas se comunican entre sí a través de la web. En Python, la librería `requests` es la forma más popular de hacer solicitudes HTTP para obtener o enviar datos a estas APIs. Aprenderás a hacer solicitudes `GET` y a procesar las respuestas en formato JSON.</p>
+            </section>
+
+            <section id="making-get-requests">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Realizar Solicitudes GET</h3>
+                        <p class="mt-4 text-slate-600">Las solicitudes `GET` se usan para recuperar datos de un servidor. Introduce una URL de API de prueba y haz la solicitud para ver la respuesta en formato JSON.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="api-url-input" class="block text-sm font-medium text-slate-700">URL de API de prueba (ej. `https://jsonplaceholder.typicode.com/todos/1`):</label>
+                            <input type="text" id="api-url-input" value="https://jsonplaceholder.typicode.com/todos/1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="fetch-api-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Hacer Solicitud GET</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Respuesta Bruta de la API (JSON):</h4>
+                        <div id="api-raw-output" class="code-block mt-2 h-48 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="api-get-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Hacer Solicitud GET" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="processing-json">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Procesar la Respuesta JSON</h3>
+                        <p class="mt-4 text-slate-600">Una vez que recibes la respuesta de una API (generalmente en JSON), necesitas "parsearla" para convertirla en un objeto Python (como un diccionario o una lista) con el que puedas trabajar fácilmente.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="json-input" class="block text-sm font-medium text-slate-700">JSON de ejemplo a procesar:</label>
+                            <textarea id="json-input" class="input-area mt-1 block w-full" rows="5">{ "nombre": "Alice", "edad": 30, "ciudad": "Nueva York", "activo": true }</textarea>
+                            <button id="parse-json-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Procesar JSON</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">JSON Procesado (Objeto Python):</h4>
+                        <div id="json-parsed-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="json-parse-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Procesar JSON" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="api-error-handling">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Manejo de Errores en Solicitudes API</h3>
+                        <p class="mt-4 text-slate-600">Las llamadas a la red pueden fallar por muchas razones (URL incorrecta, sin internet, error del servidor). Es crucial usar bloques `try/except` para manejar estas situaciones de forma elegante y evitar que tu programa se bloquee.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="bad-api-url-input" class="block text-sm font-medium text-slate-700">URL para simular error (ej. `https://jsonplaceholder.typicode.com/nonexistent`):</label>
+                            <input type="text" id="bad-api-url-input" value="https://jsonplaceholder.typicode.com/nonexistent" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="fetch-error-btn" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition">Simular Error de API</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con Manejo de Errores:</h4>
+                        <div id="api-error-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="api-error-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Error de API" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Consumo de APIs</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre APIs, JSON y solicitudes HTTP.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 4.3 – Consumir APIs. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Making GET Requests Logic ---
+    const apiURLInput = document.getElementById('api-url-input');
+    const fetchApiBtn = document.getElementById('fetch-api-btn');
+    const apiRawOutput = document.getElementById('api-raw-output');
+    const apiGetCodeExplanation = document.getElementById('api-get-code-explanation');
+
+    fetchApiBtn.addEventListener('click', async () => {
+        const url = apiURLInput.value;
+        apiRawOutput.textContent = 'Cargando...';
+        apiGetCodeExplanation.textContent = `
+# Código Python (usando la librería 'requests')
+import requests
+
+url = "${url}"
+try:
+    response = requests.get(url)
+    response.raise_for_status() # Lanza una excepción para errores HTTP (4xx o 5xx)
+    datos_json = response.json()
+    print(datos_json)
+except requests.exceptions.RequestException as e:
+    print(f"Error al hacer la solicitud: {e}")
+
+# Explicación
+# 'requests.get(url)' envía una solicitud GET a la URL.
+# '.raise_for_status()' verifica si la solicitud fue exitosa.
+# '.json()' parsea la respuesta JSON a un diccionario/lista de Python.
+# Se usa un bloque try/except para manejar errores de red o HTTP.
+        `;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            const data = await response.json();
+            apiRawOutput.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            apiRawOutput.textContent = `Error al obtener datos: ${error.message}`;
+        }
+    });
+
+    // --- 2. Processing JSON Logic ---
+    const jsonInput = document.getElementById('json-input');
+    const parseJsonBtn = document.getElementById('parse-json-btn');
+    const jsonParsedOutput = document.getElementById('json-parsed-output');
+    const jsonParseCodeExplanation = document.getElementById('json-parse-code-explanation');
+
+    parseJsonBtn.addEventListener('click', () => {
+        const jsonString = jsonInput.value;
+        jsonParsedOutput.textContent = ''; // Clear previous output
+        jsonParseCodeExplanation.textContent = `
+# Código Python
+import json
+
+cadena_json = """${jsonString}"""
+try:
+    objeto_python = json.loads(cadena_json)
+    print(f"Nombre: {objeto_python.get('nombre', 'N/A')}")
+    print(f"Edad: {objeto_python.get('edad', 'N/A')}")
+    print(f"Activo: {objeto_python.get('activo', 'N/A')}")
+except json.JSONDecodeError as e:
+    print(f"Error al decodificar JSON: {e}")
+
+# Explicación
+# El módulo 'json' de Python se usa para trabajar con JSON.
+# 'json.loads()' convierte una cadena JSON a un objeto Python (diccionario/lista).
+# Puedes acceder a los datos como en un diccionario normal.
+# Se usa try/except para manejar JSON malformado.
+        `;
+        try {
+            const parsedData = JSON.parse(jsonString);
+            jsonParsedOutput.textContent = `Objeto Python:\n${JSON.stringify(parsedData, null, 2)}`;
+        } catch (error) {
+            jsonParsedOutput.textContent = `Error al procesar JSON: ${error.message}`;
+        }
+    });
+
+    // --- 3. API Error Handling Logic ---
+    const badApiURLInput = document.getElementById('bad-api-url-input');
+    const fetchErrorBtn = document.getElementById('fetch-error-btn');
+    const apiErrorOutput = document.getElementById('api-error-output');
+    const apiErrorCodeExplanation = document.getElementById('api-error-code-explanation');
+
+    fetchErrorBtn.addEventListener('click', async () => {
+        const url = badApiURLInput.value;
+        apiErrorOutput.textContent = 'Intentando solicitud...';
+        apiErrorCodeExplanation.textContent = `
+# Código Python (Manejo de errores con 'requests')
+import requests
+
+url = "${url}"
+try:
+    response = requests.get(url, timeout=5) # Añadir un timeout
+    response.raise_for_status() # Lanza una excepción para errores HTTP
+    datos = response.json()
+    print("Solicitud exitosa:", datos)
+except requests.exceptions.HTTPError as errh:
+    print(f"Error HTTP: {errh}")
+except requests.exceptions.ConnectionError as errc:
+    print(f"Error de Conexión: {errc}")
+except requests.exceptions.Timeout as errt:
+    print(f"Timeout: {errt}")
+except requests.exceptions.RequestException as err:
+    print(f"Error General de Solicitud: {err}")
+
+# Explicación
+# Se usan múltiples bloques 'except' para capturar diferentes tipos de errores de red:
+# - 'HTTPError': Para códigos de estado 4xx/5xx.
+# - 'ConnectionError': Para problemas de conexión (ej. sin internet).
+# - 'Timeout': Si la solicitud tarda demasiado.
+# - 'RequestException': Una clase base para todos los errores de requests.
+        `;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                // Simulate different HTTP errors based on status
+                if (response.status === 404) {
+                    throw new Error(`HTTPError: 404 Client Error: Not Found for url: ${url}`);
+                } else if (response.status === 500) {
+                    throw new Error(`HTTPError: 500 Server Error: Internal Server Error for url: ${url}`);
+                } else {
+                    throw new Error(`HTTPError: ${response.status} ${response.statusText} for url: ${url}`);
+                }
+            }
+            const data = await response.json();
+            apiErrorOutput.textContent = `Éxito (inesperado para URL de error): ${JSON.stringify(data, null, 2)}`;
+        } catch (error) {
+            // Simulate different error types based on the JS Error message
+            if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                apiErrorOutput.textContent = `Se capturó un error: ConnectionError: No se pudo conectar al host.`;
+            } else if (error.message.includes('HTTPError')) {
+                apiErrorOutput.textContent = `Se capturó un error: ${error.message}`;
+            } else {
+                apiErrorOutput.textContent = `Se capturó un error general: ${error.message}`;
+            }
+        }
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué módulo de Python se usa comúnmente para realizar solicitudes HTTP a APIs?",
+            "answerOptions": [
+                {"text": "`json`", "isCorrect": false},
+                {"text": "`http`", "isCorrect": false},
+                {"text": "`requests`", "isCorrect": true},
+                {"text": "`urllib`", "isCorrect": false}
+            ],
+            "rationale": "La librería `requests` es la forma más popular y fácil de usar para hacer solicitudes HTTP en Python."
+        },
+        {
+            "question": "¿Qué formato de datos es el más común para el intercambio de información en APIs web?",
+            "answerOptions": [
+                {"text": "XML", "isCorrect": false},
+                {"text": "CSV", "isCorrect": false},
+                {"text": "JSON", "isCorrect": true},
+                {"text": "YAML", "isCorrect": false}
+            ],
+            "rationale": "JSON (JavaScript Object Notation) es el formato estándar para el intercambio de datos en APIs web debido a su simplicidad y legibilidad."
+        },
+        {
+            "question": "¿Qué método HTTP se utiliza para solicitar datos de un servidor sin modificar el recurso?",
+            "answerOptions": [
+                {"text": "POST", "isCorrect": false},
+                {"text": "PUT", "isCorrect": false},
+                {"text": "GET", "isCorrect": true},
+                {"text": "DELETE", "isCorrect": false}
+            ],
+            "rationale": "El método `GET` se usa para recuperar datos de un servidor. Es idempotente y seguro (no cambia el estado del servidor)."
+        },
+        {
+            "question": "Para convertir una cadena de texto JSON a un objeto Python (diccionario o lista), ¿qué función del módulo `json` usarías?",
+            "answerOptions": [
+                {"text": "`json.dumps()`", "isCorrect": false},
+                {"text": "`json.load()`", "isCorrect": false},
+                {"text": "`json.loads()`", "isCorrect": true},
+                {"text": "`json.parse()`", "isCorrect": false}
+            ],
+            "rationale": "`json.loads()` (load string) se utiliza para decodificar una cadena JSON en un objeto Python. `json.load()` es para leer desde un archivo."
+        },
+        {
+            "question": "¿Qué tipo de excepción de `requests` se lanzaría si el servidor responde con un error de cliente (ej. 404 Not Found) o servidor (ej. 500 Internal Server Error)?",
+            "answerOptions": [
+                {"text": "`ConnectionError`", "isCorrect": false},
+                {"text": "`Timeout`", "isCorrect": false},
+                {"text": "`HTTPError`", "isCorrect": true},
+                {"text": "`RequestException`", "isCorrect": false}
+            ],
+            "rationale": "El método `response.raise_for_status()` de `requests` lanza una `HTTPError` para respuestas con códigos de estado de error (4xx o 5xx)."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('api-raw-output').textContent = 'La respuesta de la API aparecerá aquí.';
+    document.getElementById('api-get-code-explanation').textContent = 'Haz clic en "Hacer Solicitud GET" para ver el código.';
+    document.getElementById('json-parsed-output').textContent = 'El JSON procesado aparecerá aquí.';
+    document.getElementById('json-parse-code-explanation').textContent = 'Haz clic en "Procesar JSON" para ver el código.';
+    document.getElementById('api-error-output').textContent = 'Los errores de la API aparecerán aquí.';
+    document.getElementById('api-error-code-explanation').textContent = 'Haz clic en "Simular Error de API" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

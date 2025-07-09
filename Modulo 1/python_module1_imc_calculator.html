@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.7 – Proyecto Calculadora de IMC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focused on the BMI Calculator project. Users are presented with instructions for the project. They can input values to see the *expected* BMI and category. A "Ver Solución" button is now present to reveal the correct Python code for the project. The code editor for user input has been removed. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the project.
+        - IMC Calculator Project: Goal: Apply multiple concepts & Challenge. Method: Number inputs for weight/height, a button to calculate and display expected IMC/Category. A "Ver Solución" button reveals the correct Python code. Interaction: User inputs values, clicks "Calcular IMC" to see expected results. User can click "Ver Solución" to view the correct implementation. Justification: Focuses on the conceptual understanding and comparison with a provided solution, simplifying the interactive element to direct input/output.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.7 – Calculadora IMC</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Proyecto: Elabora tu Calculadora de IMC</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Tu desafío es elaborar el código Python para una calculadora de Índice de Masa Corporal (IMC). Deberás considerar cómo leer el peso y la altura, calcular el IMC y luego categorizarlo usando control de flujo. Una vez que tengas tu solución conceptual (o escrita en otro lugar), puedes usar los campos de abajo y hacer clic en "Calcular IMC" para ver los resultados esperados y compararlos con tu propia lógica.</p>
+            </section>
+                
+            <section id="imc-calculator-project">
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="weight-input" class="block text-sm font-medium text-slate-700">Peso (kg):</label>
+                            <input type="number" id="weight-input" value="70" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                        </div>
+                        <div>
+                            <label for="height-input" class="block text-sm font-medium text-slate-700">Altura (metros):</label>
+                            <input type="number" id="height-input" value="1.75" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                        </div>
+                        <button id="calculate-imc-btn" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Calcular IMC</button>
+                    </div>
+                    <div id="imc-result" class="mt-6 p-4 rounded-md bg-slate-100 text-slate-800 hidden">
+                        <p class="font-semibold">IMC Esperado: <span id="imc-value" class="text-teal-600 font-bold"></span></p>
+                        <p class="font-semibold">Categoría Esperada: <span id="imc-category" class="font-bold"></span></p>
+                        <p class="mt-2 text-sm text-slate-600" id="imc-feedback-message">Compara estos resultados con lo que tu propia lógica Python produciría.</p>
+                    </div>
+                    <button id="show-solution-btn" class="mt-4 bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition">Ver Solución</button>
+                    <div id="solution-code" class="code-block mt-4 hidden overflow-y-auto max-h-[500px]">
+                        <pre>
+# Código Python para la Calculadora de IMC
+
+peso = float(input("Introduce tu peso en kg: "))
+altura = float(input("Introduce tu altura en metros: "))
+imc = peso / (altura ** 2)
+print(f"Tu IMC es: {imc:.2f}")
+
+if imc < 18.5:
+    print("Estás por debajo del peso normal.")
+elif 18.5 <= imc < 24.9:
+    print("Tienes un peso normal.")
+elif 25 <= imc < 29.9:
+    print("Tienes sobrepeso.")
+else:
+    print("Tienes obesidad.")
+print("Gracias por usar la calculadora de IMC.")
+# Fin del proyecto: Calculadora de IMC
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.7 – Proyecto Calculadora de IMC. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const weightInput = document.getElementById('weight-input');
+    const heightInput = document.getElementById('height-input');
+    const calculateImcBtn = document.getElementById('calculate-imc-btn'); // Changed ID from evaluate to calculate
+    const imcResultDiv = document.getElementById('imc-result');
+    const imcValueSpan = document.getElementById('imc-value');
+    const imcCategorySpan = document.getElementById('imc-category');
+    const imcFeedbackMessage = document.getElementById('imc-feedback-message');
+    const showSolutionBtn = document.getElementById('show-solution-btn'); // Added back
+    const solutionCodeDiv = document.getElementById('solution-code'); // Added back
+
+    // Function to calculate expected IMC and category (internal reference)
+    const calculateExpectedIMC = (weight, height) => {
+        const imc = weight / (height * height);
+        let category = '';
+        if (imc < 18.5) {
+            category = 'Bajo peso';
+        } else if (imc >= 18.5 && imc < 24.9) {
+            category = 'Peso normal';
+        } else if (imc >= 25 && imc < 29.9) {
+            category = 'Sobrepeso';
+        } else {
+            category = 'Obesidad';
+        }
+        return { imc: imc, category: category };
+    };
+
+    calculateImcBtn.addEventListener('click', () => {
+        const weight = parseFloat(weightInput.value);
+        const height = parseFloat(heightInput.value);
+
+        imcResultDiv.classList.remove('hidden');
+        imcFeedbackMessage.textContent = 'Compara estos resultados con lo que tu propia lógica Python produciría.';
+        imcFeedbackMessage.className = 'mt-2 text-sm text-slate-600'; // Reset feedback style
+        solutionCodeDiv.classList.add('hidden'); // Hide solution if it was open
+
+        if (isNaN(weight) || isNaN(height) || height <= 0 || weight <= 0) {
+            imcValueSpan.textContent = 'N/A';
+            imcCategorySpan.textContent = 'Por favor, introduce valores numéricos válidos para peso y altura.';
+            imcCategorySpan.className = 'font-bold text-red-600';
+            imcFeedbackMessage.textContent = 'Asegúrate de que el peso y la altura sean números positivos.';
+            return;
+        }
+
+        const expected = calculateExpectedIMC(weight, height);
+        imcValueSpan.textContent = expected.imc.toFixed(2);
+        imcCategorySpan.textContent = expected.category;
+        imcCategorySpan.className = `font-bold ${expected.category.includes('Normal') ? 'text-green-600' : 'text-orange-600'}`;
+    });
+
+    showSolutionBtn.addEventListener('click', () => {
+        solutionCodeDiv.classList.toggle('hidden');
+    });
+
+    // Optional: Add navigation setup if needed for this standalone page
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            window.location.href = targetId; // Redirect to the module home page
+        });
+    });
+});
+</script>
+
+</body>
+</html>

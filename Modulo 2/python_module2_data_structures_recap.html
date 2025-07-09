@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2.1 – Estructuras de Datos (Repaso)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 2.1 – Estructuras de Datos (Repaso)". It features a header, an introductory section, and a grid of cards summarizing the key properties of Lists, Tuples, Sets, and Dictionaries. This structure provides a quick, organized overview of fundamental data structures. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the module and the recap.
+        - Data Structure Cards: Goal: Recap & Inform. Method: HTML text within styled cards. Code examples within <pre> tags are now styled to wrap and handle overflow. Justification: Provides a concise summary of each data structure's characteristics, acting as a quick reference, with improved readability for code examples.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Estilos para los bloques de código dentro de las tarjetas */
+        .bg-white pre {
+            white-space: pre-wrap; /* Permite que el texto se ajuste */
+            word-break: break-all; /* Rompe palabras largas si es necesario */
+            overflow-x: auto; /* Agrega scroll horizontal si el contenido es demasiado ancho */
+            background-color: #f1f5f9; /* slate-100 */
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 2.1 – Repaso Estructuras</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module2_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 2</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Repaso: Listas, Tuplas, Conjuntos, Diccionarios</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Antes de sumergirnos en bucles y manejo de errores, es crucial tener frescos los conceptos de las estructuras de datos fundamentales de Python. Aquí te recordamos sus características principales.</p>
+            </section>
+
+            <section id="data-structures-overview">
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Listas `[]`</h4>
+                        <p class="mt-2 text-slate-600">Colecciones ordenadas, mutables, permiten duplicados. Acceso por índice.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>mi_lista = [1, "dos", 3]</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Tuplas `()`</h4>
+                        <p class="mt-2 text-slate-600">Colecciones ordenadas, inmutables, permiten duplicados. Acceso por índice.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>mi_tupla = (1, "dos", 3)</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Conjuntos `{}` / `set()`</h4>
+                        <p class="mt-2 text-slate-600">Colecciones desordenadas, mutables, NO permiten duplicados. Sin acceso por índice.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>mi_conjunto = {1, 2, 2, 3} # -> {1, 2, 3}</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Diccionarios `{}`</h4>
+                        <p class="mt-2 text-slate-600">Pares clave-valor, mutables, claves únicas. Ordenados (desde Python 3.7).</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>mi_dict = {"a": 1, "b": 2}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 2.1 – Estructuras de Datos (Repaso). Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

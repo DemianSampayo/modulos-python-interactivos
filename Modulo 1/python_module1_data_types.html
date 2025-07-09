@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.2 – Tipos de Datos en Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focused on Python data types. It features a header, an introductory section, and a grid of cards, each explaining a different data type with examples. This structure provides a clear and organized overview of fundamental data types. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding data types.
+        - Data Type Cards: Goal: Inform. Method: HTML text within styled cards, with code examples. Justification: Clearly defines and illustrates each basic data type, making the information digestible.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.2 – Tipos de Datos</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Tipos de Datos en Python</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Python maneja varios tipos de datos para almacenar diferentes tipos de información. Comprenderlos es fundamental para manipular y procesar datos correctamente en tus programas.</p>
+            </section>
+
+            <section id="data-types-overview">
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Números Enteros (`int`)</h4>
+                        <p class="mt-2 text-slate-600">Representan números enteros, positivos o negativos, sin componentes fraccionarios. Son ideales para contar o para valores discretos.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>edad = 30
+cantidad = -5
+año = 2025</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Números Flotantes (`float`)</h4>
+                        <p class="mt-2 text-slate-600">Representan números reales, con parte decimal. Se utilizan para mediciones, cálculos científicos o cualquier valor que requiera precisión decimal.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>pi = 3.14159
+temperatura = 25.5
+precio = 99.99</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Cadenas de Texto (`str`)</h4>
+                        <p class="mt-2 text-slate-600">Son secuencias de caracteres (letras, números, símbolos), encerradas entre comillas simples (`'`) o dobles (`"`). Se usan para texto, nombres, mensajes.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>nombre = "Juan Pérez"
+mensaje = 'Hola a todos'
+codigo = "ABC123"</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Booleanos (`bool`)</h4>
+                        <p class="mt-2 text-slate-600">Representan uno de dos valores: `True` (verdadero) o `False` (falso). Son fundamentales para la lógica condicional y las decisiones en los programas.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>es_activo = True
+tiene_permiso = False
+es_mayor_edad = (edad >= 18)</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Listas (`list`)</h4>
+                        <p class="mt-2 text-slate-600">Colecciones ordenadas y mutables de elementos. Pueden contener diferentes tipos de datos. Se definen con corchetes `[]`.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>frutas = ["manzana", "banana", "cereza"]
+numeros = [1, 2, 3, 4]
+mixta = [1, "texto", True]</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Tuplas (`tuple`)</h4>
+                        <p class="mt-2 text-slate-600">Colecciones ordenadas e inmutables de elementos. Una vez creadas, no se pueden modificar. Se definen con paréntesis `()`.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>coordenadas = (10.0, 20.5)
+colores_rgb = (255, 0, 0)
+dias_semana = ("Lun", "Mar", "Mié")</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Conjuntos (`set`)</h4>
+                        <p class="mt-2 text-slate-600">Colecciones desordenadas de elementos únicos. Son mutables, pero sus elementos deben ser inmutables. Útiles para operaciones matemáticas de conjuntos.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>numeros_unicos = {1, 2, 3, 3, 4} # -> {1, 2, 3, 4}
+letras = {'a', 'b', 'c'}</code></pre>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Diccionarios (`dict`)</h4>
+                        <p class="mt-2 text-slate-600">Colecciones desordenadas de pares clave-valor. Cada clave debe ser única e inmutable. Son perfectos para almacenar datos estructurados.</p>
+                        <pre class="font-fira bg-slate-100 p-2 rounded-md mt-2 text-sm"><code>persona = {
+    "nombre": "Ana",
+    "edad": 28,
+    "ciudad": "Madrid"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.2 – Tipos de Datos. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

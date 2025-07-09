@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4.1 – Leer y Escribir Archivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 4.1 – Leer y escribir archivos .txt y .csv". It features a header, an introductory section, and interactive playgrounds for reading text files, writing text files, and handling CSV files (read/write). Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding file I/O.
+        - Reading Text Files (Simulated): Goal: Demonstrate file input. Method: Textarea with sample content, button to "read", code-block output for simulated execution and Python code/explanation. Interaction: User clicks, content appears. Justification: Visualizes basic file reading.
+        - Writing Text Files (Simulated): Goal: Demonstrate file output. Method: Input for filename, textarea for content, button to "write", code-block output for simulated execution and Python code/explanation. Interaction: User inputs data, confirms write. Justification: Visualizes basic file writing.
+        - Reading CSV Files (Simulated): Goal: Demonstrate structured data input. Method: Textarea with sample CSV, button to "read", code-block output for parsed data and Python code/explanation. Interaction: User sees how CSV data is interpreted. Justification: Explains handling of tabular data.
+        - Writing CSV Files (Simulated): Goal: Demonstrate structured data output. Method: Table input for data, button to "write", code-block output for simulated CSV string and Python code/explanation. Interaction: User inputs data, sees how it's formatted as CSV. Justification: Shows how to create CSV files.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .input-area {
+            background-color: #2d3748; /* darker slate */
+            color: #f8f8f2; /* light text */
+            border: 1px solid #4a5568; /* slate-600 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem; /* sm:text-sm */
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 4.1 – Archivos</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module4_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 4</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Leer y escribir archivos .txt y .csv</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">La interacción con archivos es fundamental para cualquier programa que necesite almacenar o recuperar datos de forma persistente. Aprenderás a leer y escribir información en archivos de texto plano (`.txt`) y en archivos de valores separados por coma (`.csv`), que son comunes para datos tabulares.</p>
+            </section>
+
+            <section id="reading-text-files">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Lectura de Archivos de Texto (`.txt`)</h3>
+                        <p class="mt-4 text-slate-600">Para leer un archivo de texto, lo abres en modo lectura (`'r'`) y luego puedes leer todo su contenido o línea por línea. Aquí simulamos la lectura de un archivo.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="read-txt-content" class="block text-sm font-medium text-slate-700">Contenido del archivo simulado:</label>
+                            <textarea id="read-txt-content" class="input-area mt-1 block w-full" rows="5">Línea 1: Hola Python
+Línea 2: Aprendiendo a leer archivos
+Línea 3: ¡Es muy útil!</textarea>
+                            <button id="read-txt-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Lectura de Archivo</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Lectura:</h4>
+                        <div id="read-txt-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="read-txt-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Lectura de Archivo" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="writing-text-files">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Escritura de Archivos de Texto (`.txt`)</h3>
+                        <p class="mt-4 text-slate-600">Puedes escribir contenido en un archivo usando el modo escritura (`'w'`) para sobrescribir o el modo añadir (`'a'`) para agregar al final. Aquí simulamos la escritura.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="write-txt-file-name" class="block text-sm font-medium text-slate-700">Nombre del archivo (simulado):</label>
+                            <input type="text" id="write-txt-file-name" value="mi_notas.txt" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="write-txt-content" class="block text-sm font-medium text-slate-700">Contenido a escribir:</label>
+                            <textarea id="write-txt-content" class="input-area mt-1 block w-full" rows="5">Esta es una nueva línea de texto.</textarea>
+                            <label for="write-txt-mode" class="block text-sm font-medium text-slate-700">Modo de escritura:</label>
+                            <select id="write-txt-mode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="w">Sobrescribir ('w')</option>
+                                <option value="a">Añadir ('a')</option>
+                            </select>
+                            <button id="write-txt-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Escritura</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Escritura:</h4>
+                        <div id="write-txt-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="write-txt-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Escritura" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reading-csv-files">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Lectura de Archivos CSV (`.csv`)</h3>
+                        <p class="mt-4 text-slate-600">Los archivos CSV (Comma Separated Values) almacenan datos tabulares. Python tiene un módulo `csv` para manejarlos fácilmente. Aquí simulamos la lectura de un CSV.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="read-csv-content" class="block text-sm font-medium text-slate-700">Contenido CSV simulado:</label>
+                            <textarea id="read-csv-content" class="input-area mt-1 block w-full" rows="5">Nombre,Edad,Ciudad
+Alice,30,Nueva York
+Bob,24,Londres
+Charlie,35,París</textarea>
+                            <button id="read-csv-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Lectura CSV</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Datos Leídos del CSV:</h4>
+                        <div id="read-csv-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="read-csv-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Lectura CSV" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="writing-csv-files">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">4. Escritura de Archivos CSV (`.csv`)</h3>
+                        <p class="mt-4 text-slate-600">Puedes escribir listas de listas o diccionarios en un archivo CSV, asegurando que los datos se estructuren correctamente con comas y saltos de línea. Aquí simulamos la escritura.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="write-csv-data" class="block text-sm font-medium text-slate-700">Datos a escribir (JSON de lista de listas):</label>
+                            <textarea id="write-csv-data" class="input-area mt-1 block w-full" rows="5">[["Producto", "Precio"], ["Manzana", 1.50], ["Banana", 0.75]]</textarea>
+                            <button id="write-csv-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Simular Escritura CSV</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Contenido CSV Generado:</h4>
+                        <div id="write-csv-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="write-csv-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Simular Escritura CSV" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Archivos</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la lectura y escritura de archivos de texto y CSV.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 4.1 – Archivos. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Reading Text Files Logic ---
+    const readTxtContentInput = document.getElementById('read-txt-content');
+    const readTxtBtn = document.getElementById('read-txt-btn');
+    const readTxtOutput = document.getElementById('read-txt-output');
+    const readTxtCodeExplanation = document.getElementById('read-txt-code-explanation');
+
+    readTxtBtn.addEventListener('click', () => {
+        const content = readTxtContentInput.value;
+        readTxtOutput.textContent = `Contenido leído:\n${content}`;
+        readTxtCodeExplanation.textContent = `
+# Código Python
+nombre_archivo = "ejemplo.txt"
+with open(nombre_archivo, 'r') as archivo:
+    contenido = archivo.read()
+    print(f"Contenido del archivo:\\n{contenido}")
+
+# Explicación
+# 'with open(...) as archivo:' abre el archivo de forma segura.
+# 'r' indica modo de lectura.
+# 'archivo.read()' lee todo el contenido del archivo como una cadena.
+# El bloque 'with' asegura que el archivo se cierre automáticamente.
+        `;
+    });
+
+    // --- 2. Writing Text Files Logic ---
+    const writeTxtFileNameInput = document.getElementById('write-txt-file-name');
+    const writeTxtContentInput = document.getElementById('write-txt-content');
+    const writeTxtModeSelect = document.getElementById('write-txt-mode');
+    const writeTxtBtn = document.getElementById('write-txt-btn');
+    const writeTxtOutput = document.getElementById('write-txt-output');
+    const writeTxtCodeExplanation = document.getElementById('write-txt-code-explanation');
+
+    writeTxtBtn.addEventListener('click', () => {
+        const fileName = writeTxtFileNameInput.value;
+        const content = writeTxtContentInput.value;
+        const mode = writeTxtModeSelect.value;
+        let modeDescription = mode === 'w' ? 'sobrescribiendo' : 'añadiendo a';
+        writeTxtOutput.textContent = `Simulando escritura en "${fileName}" (${modeDescription}) con el contenido:\n"${content}"\n\nArchivo "${fileName}" actualizado (simulado).`;
+        writeTxtCodeExplanation.textContent = `
+# Código Python
+nombre_archivo = "${fileName}"
+contenido_a_escribir = "${content}"
+modo = "${mode}" # 'w' para sobrescribir, 'a' para añadir
+
+with open(nombre_archivo, modo) as archivo:
+    archivo.write(contenido_a_escribir)
+    print(f"Contenido escrito en '{nombre_archivo}' en modo '{modo}'.")
+
+# Explicación
+# 'w' (write): Crea el archivo si no existe, o lo trunca (borra contenido) si existe.
+# 'a' (append): Crea el archivo si no existe, o añade contenido al final si existe.
+# 'archivo.write()' escribe la cadena en el archivo.
+        `;
+    });
+
+    // --- 3. Reading CSV Files Logic ---
+    const readCsvContentInput = document.getElementById('read-csv-content');
+    const readCsvBtn = document.getElementById('read-csv-btn');
+    const readCsvOutput = document.getElementById('read-csv-output');
+    const readCsvCodeExplanation = document.getElementById('read-csv-code-explanation');
+
+    readCsvBtn.addEventListener('click', () => {
+        const csvContent = readCsvContentInput.value;
+        const lines = csvContent.split('\n').filter(line => line.trim() !== '');
+        let parsedData = [];
+        lines.forEach(line => {
+            parsedData.push(line.split(',').map(item => item.trim()));
+        });
+
+        readCsvOutput.textContent = `Datos leídos (lista de listas):\n${JSON.stringify(parsedData, null, 2)}`;
+        readCsvCodeExplanation.textContent = `
+# Código Python
+import csv
+
+csv_simulado = """${csvContent}"""
+# Para simular, dividimos por líneas y luego por comas
+# En un archivo real:
+# with open('datos.csv', 'r', newline='') as archivo_csv:
+#     lector_csv = csv.reader(archivo_csv)
+#     for fila in lector_csv:
+#         print(fila)
+
+# Simulación de lectura:
+filas = [fila.split(',') for fila in csv_simulado.strip().split('\\n')]
+print("Datos leídos:")
+for fila in filas:
+    print(fila)
+
+# Explicación
+# El módulo 'csv' de Python facilita la lectura de archivos CSV.
+# 'csv.reader' itera sobre las líneas del archivo, tratando cada línea como una lista de cadenas.
+# 'newline=''' es importante para evitar problemas con saltos de línea en diferentes SO.
+        `;
+    });
+
+    // --- 4. Writing CSV Files Logic ---
+    const writeCsvDataInput = document.getElementById('write-csv-data');
+    const writeCsvBtn = document.getElementById('write-csv-btn');
+    const writeCsvOutput = document.getElementById('write-csv-output');
+    const writeCsvCodeExplanation = document.getElementById('write-csv-code-explanation');
+
+    writeCsvBtn.addEventListener('click', () => {
+        const jsonDataStr = writeCsvDataInput.value;
+        let dataToWrite = [];
+        let generatedCsv = '';
+
+        try {
+            dataToWrite = JSON.parse(jsonDataStr);
+            if (!Array.isArray(dataToWrite) || !dataToWrite.every(row => Array.isArray(row))) {
+                throw new Error("Formato JSON inválido. Debe ser una lista de listas.");
+            }
+            
+            generatedCsv = dataToWrite.map(row => row.join(',')).join('\n');
+            writeCsvOutput.textContent = `Contenido CSV generado:\n${generatedCsv}`;
+            writeCsvCodeExplanation.textContent = `
+# Código Python
+import csv
+
+datos = ${JSON.stringify(dataToWrite, null, 2)}
+
+# En un archivo real:
+# with open('salida.csv', 'w', newline='') as archivo_csv:
+#     escritor_csv = csv.writer(archivo_csv)
+#     for fila in datos:
+#         escritor_csv.writerow(fila)
+
+# Simulación de escritura:
+csv_generado = ""
+for fila in datos:
+    csv_generado += ",".join(map(str, fila)) + "\\n"
+print("Contenido CSV generado:")
+print(csv_generado)
+
+# Explicación
+# 'csv.writer' se usa para escribir datos en formato CSV.
+# 'writerow()' escribe una sola fila (lista de elementos) en el archivo, añadiendo comas y un salto de línea.
+# 'newline=''' es importante para evitar líneas en blanco extra.
+        `;
+
+        } catch (e) {
+            writeCsvOutput.textContent = `Error: ${e.message}`;
+            writeCsvCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+# import csv
+# datos = "Esto no es una lista de listas"
+# # Esto causaría un error al intentar escribirlo como CSV
+
+# Explicación
+# El módulo 'csv' espera que los datos a escribir sean iterables (como una lista de listas).
+# Asegúrate de que tus datos estén en el formato correcto para evitar errores.
+            `;
+        }
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué modo de apertura de archivo se usa para leer un archivo de texto en Python?",
+            "answerOptions": [
+                {"text": "`'w'`", "isCorrect": false},
+                {"text": "`'a'`", "isCorrect": false},
+                {"text": "`'r'`", "isCorrect": true},
+                {"text": "`'x'`", "isCorrect": false}
+            ],
+            "rationale": "El modo `'r'` se utiliza para abrir un archivo en modo de lectura."
+        },
+        {
+            "question": "¿Qué sucede si abres un archivo con el modo `'w'` (escritura) y el archivo ya existe?",
+            "answerOptions": [
+                {"text": "Se añade el nuevo contenido al final", "isCorrect": false},
+                {"text": "Se genera un error", "isCorrect": false},
+                {"text": "El contenido existente se sobrescribe (se borra)", "isCorrect": true},
+                {"text": "Se abre en modo de solo lectura", "isCorrect": false}
+            ],
+            "rationale": "El modo `'w'` (write) sobrescribe el contenido del archivo si ya existe. Si el archivo no existe, lo crea."
+        },
+        {
+            "question": "¿Qué módulo de Python es el más adecuado para trabajar con archivos CSV?",
+            "answerOptions": [
+                {"text": "`json`", "isCorrect": false},
+                {"text": "`os`", "isCorrect": false},
+                {"text": "`csv`", "isCorrect": true},
+                {"text": "`text_files`", "isCorrect": false}
+            ],
+            "rationale": "El módulo `csv` de la biblioteca estándar de Python está diseñado específicamente para leer y escribir archivos CSV."
+        },
+        {
+            "question": "Para añadir contenido al final de un archivo de texto existente sin borrar lo que ya hay, ¿qué modo de apertura usarías?",
+            "answerOptions": [
+                {"text": "`'w'`", "isCorrect": false},
+                {"text": "`'r'`", "isCorrect": false},
+                {"text": "`'a'`", "isCorrect": true},
+                {"text": "`'x'`", "isCorrect": false}
+            ],
+            "rationale": "El modo `'a'` (append) abre el archivo para escritura, añadiendo el nuevo contenido al final del archivo."
+        },
+        {
+            "question": "Si lees un archivo CSV usando `csv.reader`, ¿cómo se representa cada fila de datos?",
+            "answerOptions": [
+                {"text": "Como un diccionario", "isCorrect": false},
+                {"text": "Como una cadena de texto única", "isCorrect": false},
+                {"text": "Como una tupla", "isCorrect": false},
+                {"text": "Como una lista de cadenas", "isCorrect": true}
+            ],
+            "rationale": "El `csv.reader` devuelve un iterador donde cada elemento es una lista de cadenas, representando una fila del archivo CSV."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('read-txt-output').textContent = 'El contenido del archivo aparecerá aquí.';
+    document.getElementById('read-txt-code-explanation').textContent = 'Haz clic en "Simular Lectura de Archivo" para ver el código.';
+    document.getElementById('write-txt-output').textContent = 'El resultado de la escritura aparecerá aquí.';
+    document.getElementById('write-txt-code-explanation').textContent = 'Haz clic en "Simular Escritura" para ver el código.';
+    document.getElementById('read-csv-output').textContent = 'Los datos leídos del CSV aparecerán aquí.';
+    document.getElementById('read-csv-code-explanation').textContent = 'Haz clic en "Simular Lectura CSV" para ver el código.';
+    document.getElementById('write-csv-output').textContent = 'El contenido CSV generado aparecerá aquí.';
+    document.getElementById('write-csv-code-explanation').textContent = 'Haz clic en "Simular Escritura CSV" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.5 – Variables y Operadores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focused on variables and operators. It features a header, an introductory section, and multiple interactive playgrounds for different types of operators (Arithmetic, Assignment, Comparison, Logical, Identity, Membership, Bitwise). Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides a clear explanation and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for variables and operators.
+        - Operator Sections (Arithmetic, Assignment, Comparison, Logical, Identity, Membership, Bitwise): Goal: Demonstrate functionality. Method: Inputs (numbers, text, booleans), dropdowns for operators, buttons to execute, and code-block displays for output, Python code, and explanations. Interaction: User defines values/selects operators, clicks buttons, and sees results with contextual code. Justification: Provides hands-on experience with each operator type, enhanced with direct code context.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.5 – Variables y Operadores</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Crear variables y usar operadores</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Las variables son fundamentales en programación para almacenar y manipular datos. Los operadores te permiten realizar diversas operaciones con esos datos, desde cálculos matemáticos hasta comparaciones lógicas. Explora los diferentes tipos de operadores y cómo funcionan.</p>
+            </section>
+
+            <section id="operadores-aritmeticos">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Operadores Aritméticos</h3>
+                        <p class="mt-4 text-slate-600">Realizan operaciones matemáticas básicas como suma, resta, multiplicación, división, módulo y exponenciación.</p>
+                        <div class="mt-6 space-y-4">
+                            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                                <div class="flex-1">
+                                    <label for="arith-var-a" class="block text-sm font-medium text-slate-700">Número A:</label>
+                                    <input type="number" id="arith-var-a" value="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                </div>
+                                <div class="flex-1">
+                                    <label for="arith-operator-select" class="block text-sm font-medium text-slate-700">Operador:</label>
+                                    <select id="arith-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                        <option value="+">+</option>
+                                        <option value="-">-</option>
+                                        <option value="*">*</option>
+                                        <option value="/">/</option>
+                                        <option value="%">% (Módulo)</option>
+                                        <option value="**">** (Exponenciación)</option>
+                                        <option value="//">// (Div. Entera)</option>
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="arith-var-b" class="block text-sm font-medium text-slate-700">Número B:</label>
+                                    <input type="number" id="arith-var-b" value="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                </div>
+                            </div>
+                            <button id="calculate-arith-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Calcular</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="arith-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la operación aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="arith-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Calcular" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-asignacion">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Operadores de Asignación</h3>
+                        <p class="mt-4 text-slate-600">Se usan para asignar valores a variables. Los operadores combinados (`+=`, `-=`, etc.) realizan una operación y asignan el resultado en un solo paso.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="assign-initial-value" class="block text-sm font-medium text-slate-700">Valor inicial de `x`:</label>
+                            <input type="number" id="assign-initial-value" value="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="assign-operator-select" class="block text-sm font-medium text-slate-700">Operador de Asignación:</label>
+                            <select id="assign-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="=">`=` (Asignar)</option>
+                                <option value="+=">`+=` (Sumar y Asignar)</option>
+                                <option value="-=">`-=` (Restar y Asignar)</option>
+                                <option value="*=">`*=` (Multiplicar y Asignar)</option>
+                                <option value="/=">`/=` (Dividir y Asignar)</option>
+                                <option value="%=">`%=` (Módulo y Asignar)</option>
+                                <option value="**=">`**=` (Exponenciar y Asignar)</option>
+                                <option value="//=">`//=` (Div. Entera y Asignar)</option>
+                            </select>
+                            <label for="assign-value" class="block text-sm font-medium text-slate-700">Valor a operar:</label>
+                            <input type="number" id="assign-value" value="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-assign-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar Asignación</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Estado de `x`:</h4>
+                        <div id="assign-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El valor de `x` aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="assign-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Asignación" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-comparacion">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. Operadores de Comparación</h3>
+                        <p class="mt-4 text-slate-600">Comparan dos valores y devuelven un resultado booleano (`True` o `False`).</p>
+                        <div class="mt-6 space-y-4">
+                            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                                <div class="flex-1">
+                                    <label for="comp-var-a" class="block text-sm font-medium text-slate-700">Valor A:</label>
+                                    <input type="text" id="comp-var-a" value="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                </div>
+                                <div class="flex-1">
+                                    <label for="comp-operator-select" class="block text-sm font-medium text-slate-700">Operador:</label>
+                                    <select id="comp-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                        <option value="==">== (Igual a)</option>
+                                        <option value="!=">!= (Distinto de)</option>
+                                        <option value=">">> (Mayor que)</option>
+                                        <option value="<">< (Menor que)</option>
+                                        <option value=">=">>= (Mayor o igual que)</option>
+                                        <option value="<="><= (Menor o igual que)</option>
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="comp-var-b" class="block text-sm font-medium text-slate-700">Valor B:</label>
+                                    <input type="text" id="comp-var-b" value="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                </div>
+                            </div>
+                            <button id="run-comp-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Comparar</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="comp-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la comparación aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="comp-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Comparar" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-logicos">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">4. Operadores Lógicos</h3>
+                        <p class="mt-4 text-slate-600">Combinan expresiones booleanas y devuelven un resultado booleano. Los principales son `and`, `or`, `not`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="logic-expr1" class="block text-sm font-medium text-slate-700">Expresión 1 (True/False):</label>
+                            <select id="logic-expr1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                            <label for="logic-operator-select" class="block text-sm font-medium text-slate-700">Operador Lógico:</label>
+                            <select id="logic-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="and">and</option>
+                                <option value="or">or</option>
+                                <option value="not">not (solo Expresión 1)</option>
+                            </select>
+                            <label for="logic-expr2" class="block text-sm font-medium text-slate-700">Expresión 2 (True/False):</label>
+                            <select id="logic-expr2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            </select>
+                            <button id="run-logic-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Evaluar Lógica</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="logic-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la operación lógica aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="logic-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Evaluar Lógica" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-identidad">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">5. Operadores de Identidad</h3>
+                        <p class="mt-4 text-slate-600">Comprueban si dos variables apuntan al mismo objeto en memoria. Son `is` y `is not`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="id-val1" class="block text-sm font-medium text-slate-700">Valor 1 (ej. 10, "hola", [1,2]):</label>
+                            <input type="text" id="id-val1" value="[1, 2]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="id-val2" class="block text-sm font-medium text-slate-700">Valor 2 (ej. 10, "hola", [1,2]):</label>
+                            <input type="text" id="id-val2" value="[1, 2]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="id-operator-select" class="block text-sm font-medium text-slate-700">Operador de Identidad:</label>
+                            <select id="id-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="is">is</option>
+                                <option value="is not">is not</option>
+                            </select>
+                            <button id="run-id-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Comprobar Identidad</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="id-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la identidad aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="id-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Comprobar Identidad" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-pertenencia">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">6. Operadores de Pertenencia</h3>
+                        <p class="mt-4 text-slate-600">Comprueban si un valor está presente en una secuencia (cadena, lista, tupla, conjunto, diccionario). Son `in` y `not in`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="mem-element" class="block text-sm font-medium text-slate-700">Elemento a buscar (ej. "a", 5):</label>
+                            <input type="text" id="mem-element" value="manzana" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="mem-sequence" class="block text-sm font-medium text-slate-700">Secuencia (ej. "hola", [1,2,3], {a:1}):</label>
+                            <input type="text" id="mem-sequence" value="['manzana', 'banana', 'cereza']" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="mem-operator-select" class="block text-sm font-medium text-slate-700">Operador de Pertenencia:</label>
+                            <select id="mem-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="in">in</option>
+                                <option value="not in">not in</option>
+                            </select>
+                            <button id="run-mem-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Comprobar Pertenencia</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="mem-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la pertenencia aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="mem-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Comprobar Pertenencia" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="operadores-bitwise">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">7. Operadores Bitwise (a nivel de bits)</h3>
+                        <p class="mt-4 text-slate-600">Operan sobre los bits individuales de los números enteros. Son usados en programación de bajo nivel o para optimizaciones específicas. Requieren entender la representación binaria.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="bit-num1" class="block text-sm font-medium text-slate-700">Número 1 (entero):</label>
+                            <input type="number" id="bit-num1" value="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="bit-operator-select" class="block text-sm font-medium text-slate-700">Operador Bitwise:</label>
+                            <select id="bit-operator-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                                <option value="&">`&` (AND)</option>
+                                <option value="|">`|` (OR)</option>
+                                <option value="^">`^` (XOR)</option>
+                                <option value="~">`~` (NOT)</option>
+                                <option value="<<">`<<` (Desplazamiento a la izquierda)</option>
+                                <option value=">>">`>>` (Desplazamiento a la derecha)</option>
+                            </select>
+                            <label for="bit-num2" class="block text-sm font-medium text-slate-700">Número 2 (entero, para AND, OR, XOR, Desplazamiento):</label>
+                            <input type="number" id="bit-num2" value="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-bit-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar Bitwise</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Resultado:</h4>
+                        <div id="bit-output" class="code-block mt-2 h-32 overflow-y-auto">
+                            El resultado de la operación bitwise aparecerá aquí.
+                        </div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="bit-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Bitwise" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Variables y Operadores</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre los diferentes tipos de operadores en Python.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.4 – Variables y Operadores. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // No setupNav() call for top links as they are removed.
+    // The setupNav() function itself is still present in the shared JS block if needed elsewhere.
+
+    // --- 1. Operadores Aritméticos Logic ---
+    const arithVarAInput = document.getElementById('arith-var-a');
+    const arithOperatorSelect = document.getElementById('arith-operator-select');
+    const arithVarBInput = document.getElementById('arith-var-b');
+    const calculateArithBtn = document.getElementById('calculate-arith-btn');
+    const arithOutput = document.getElementById('arith-output');
+    const arithCodeExplanation = document.getElementById('arith-code-explanation');
+
+    calculateArithBtn.addEventListener('click', () => {
+        const a = parseFloat(arithVarAInput.value);
+        const b = parseFloat(arithVarBInput.value);
+        const operator = arithOperatorSelect.value;
+        let result;
+        let pythonCode = `a = ${a}\nb = ${b}\n`;
+        let explanation = '';
+
+        if (isNaN(a) || isNaN(b)) {
+            arithOutput.textContent = "Error: Por favor, introduce números válidos para A y B.";
+            arithCodeExplanation.textContent = `
+# Código Python
+# a = ... (entrada inválida)
+# b = ... (entrada inválida)
+# resultado = a ${operator} b
+
+# Explicación:
+# Los operadores aritméticos requieren entradas numéricas válidas.
+            `;
+            return;
+        }
+
+        try {
+            switch (operator) {
+                case '+':
+                    result = a + b;
+                    pythonCode += `resultado = a + b`;
+                    explanation = `El operador '+' realiza la suma.`;
+                    break;
+                case '-':
+                    result = a - b;
+                    pythonCode += `resultado = a - b`;
+                    explanation = `El operador '-' realiza la resta.`;
+                    break;
+                case '*':
+                    result = a * b;
+                    pythonCode += `resultado = a * b`;
+                    explanation = `El operador '*' realiza la multiplicación.`;
+                    break;
+                case '/':
+                    if (b === 0) {
+                        result = "Error: División por cero";
+                        pythonCode += `# Esto causaría un ZeroDivisionError si b es 0\nresultado = a / b`;
+                        explanation = `El operador '/' realiza la división. No se puede dividir por cero.`;
+                    } else {
+                        result = a / b;
+                        pythonCode += `resultado = a / b`;
+                        explanation = `El operador '/' realiza la división.`;
+                    }
+                    break;
+                case '%':
+                    if (b === 0) {
+                        result = "Error: Módulo por cero";
+                        pythonCode += `# Esto causaría un ZeroDivisionError si b es 0\nresultado = a % b`;
+                        explanation = `El operador '%' (módulo) devuelve el resto de la división.`;
+                    } else {
+                        result = a % b;
+                        pythonCode += `resultado = a % b`;
+                        explanation = `El operador '%' (módulo) devuelve el resto de la división.`;
+                    }
+                    break;
+                case '**':
+                    result = Math.pow(a, b);
+                    pythonCode += `resultado = a ** b`;
+                    explanation = `El operador '**' realiza la exponenciación (A elevado a la potencia de B).`;
+                    break;
+                case '//':
+                    if (b === 0) {
+                        result = "Error: División entera por cero";
+                        pythonCode += `# Esto causaría un ZeroDivisionError si b es 0\nresultado = a // b`;
+                        explanation = `El operador '//' realiza la división entera (sin decimales). No se puede dividir por cero.`;
+                    } else {
+                        result = Math.floor(a / b);
+                        pythonCode += `resultado = a // b`;
+                        explanation = `El operador '//' realiza la división entera (devuelve la parte entera del cociente).`;
+                    }
+                    break;
+                default:
+                    result = "Operador inválido";
+                    pythonCode += `# Operador no reconocido`;
+                    explanation = `El operador seleccionado no es válido para esta demostración.`;
+            }
+            arithOutput.textContent = `Resultado: ${result}`;
+            arithCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+        } catch (e) {
+            arithOutput.textContent = `Error de cálculo: ${e.message}`;
+            arithCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+# El cálculo falló debido a un error inesperado en la simulación.
+# En Python real, errores como ZeroDivisionError serían capturados.
+            `;
+        }
+    });
+
+    // --- 2. Operadores de Asignación Logic ---
+    const assignInitialValueInput = document.getElementById('assign-initial-value');
+    const assignOperatorSelect = document.getElementById('assign-operator-select');
+    const assignValueInput = document.getElementById('assign-value');
+    const runAssignBtn = document.getElementById('run-assign-btn');
+    const assignOutput = document.getElementById('assign-output');
+    const assignCodeExplanation = document.getElementById('assign-code-explanation');
+
+    runAssignBtn.addEventListener('click', () => {
+        let x = parseFloat(assignInitialValueInput.value);
+        const value = parseFloat(assignValueInput.value);
+        const operator = assignOperatorSelect.value;
+        let pythonCode = `x = ${x}\n`;
+        let explanation = '';
+        let finalX;
+
+        if (isNaN(x) || isNaN(value)) {
+            assignOutput.textContent = "Error: Introduce números válidos.";
+            assignCodeExplanation.textContent = `
+# Código Python
+# x = ... (entrada inválida)
+# x ${operator} ${value}
+
+# Explicación:
+# Los operadores de asignación requieren entradas numéricas válidas.
+            `;
+            return;
+        }
+
+        try {
+            switch (operator) {
+                case '=':
+                    finalX = value;
+                    pythonCode += `x = ${value}`;
+                    explanation = `Asigna el valor directamente a la variable 'x'.`;
+                    break;
+                case '+=':
+                    finalX = x + value;
+                    pythonCode += `x += ${value}  # Equivalente a x = x + ${value}`;
+                    explanation = `Suma el valor a 'x' y asigna el resultado a 'x'.`;
+                    break;
+                case '-=':
+                    finalX = x - value;
+                    pythonCode += `x -= ${value}  # Equivalente a x = x - ${value}`;
+                    explanation = `Resta el valor a 'x' y asigna el resultado a 'x'.`;
+                    break;
+                case '*=':
+                    finalX = x * value;
+                    pythonCode += `x *= ${value}  # Equivalente a x = x * ${value}`;
+                    explanation = `Multiplica 'x' por el valor y asigna el resultado a 'x'.`;
+                    break;
+                case '/=':
+                    if (value === 0) {
+                        finalX = "Error: División por cero";
+                        pythonCode += `x /= ${value}  # Causaría ZeroDivisionError`;
+                        explanation = `Divide 'x' por el valor y asigna. No se puede dividir por cero.`;
+                    } else {
+                        finalX = x / value;
+                        pythonCode += `x /= ${value}  # Equivalente a x = x / ${value}`;
+                        explanation = `Divide 'x' por el valor y asigna el resultado a 'x'.`;
+                    }
+                    break;
+                case '%=':
+                     if (value === 0) {
+                        finalX = "Error: Módulo por cero";
+                        pythonCode += `x %= ${value}  # Causaría ZeroDivisionError`;
+                        explanation = `Calcula el módulo de 'x' por el valor y asigna. No se puede usar módulo por cero.`;
+                    } else {
+                        finalX = x % value;
+                        pythonCode += `x %= ${value}  # Equivalente a x = x % ${value}`;
+                        explanation = `Calcula el módulo de 'x' por el valor y asigna el resultado a 'x'.`;
+                    }
+                    break;
+                case '**=':
+                    finalX = Math.pow(x, value);
+                    pythonCode += `x **= ${value}  # Equivalente a x = x ** ${value}`;
+                    explanation = `Eleva 'x' a la potencia del valor y asigna el resultado a 'x'.`;
+                    break;
+                case '//=':
+                    if (value === 0) {
+                        finalX = "Error: División entera por cero";
+                        pythonCode += `x //= ${value}  # Causaría ZeroDivisionError`;
+                        explanation = `Realiza la división entera de 'x' por el valor y asigna. No se puede dividir por cero.`;
+                    } else {
+                        finalX = Math.floor(x / value);
+                        pythonCode += `x //= ${value}  # Equivalente a x = x // ${value}`;
+                        explanation = `Realiza la división entera de 'x' por el valor y asigna el resultado a 'x'.`;
+                    }
+                    break;
+                default:
+                    finalX = "Operador inválido";
+                    pythonCode += `# Operador no reconocido`;
+                    explanation = `El operador seleccionado no es válido para esta demostración.`;
+            }
+            assignOutput.textContent = `x después de la operación: ${finalX}`;
+            assignCodeExplanation.textContent = `${pythonCode}\nprint(f"x después de la operación: {x}")\n\n# Explicación\n${explanation}`;
+        } catch (e) {
+            assignOutput.textContent = `Error de cálculo: ${e.message}`;
+            assignCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+# El cálculo falló debido a un error inesperado en la simulación.
+# En Python real, errores como ZeroDivisionError serían capturados.
+            `;
+        }
+    });
+
+    // --- 3. Operadores de Comparación Logic ---
+    const compVarAInput = document.getElementById('comp-var-a');
+    const compOperatorSelect = document.getElementById('comp-operator-select');
+    const compVarBInput = document.getElementById('comp-var-b');
+    const runCompBtn = document.getElementById('run-comp-btn');
+    const compOutput = document.getElementById('comp-output');
+    const compCodeExplanation = document.getElementById('comp-code-explanation');
+
+    runCompBtn.addEventListener('click', () => {
+        const a = compVarAInput.value; // Keep as string for flexible comparison
+        const b = compVarBInput.value; // Keep as string
+        const operator = compOperatorSelect.value;
+        let result;
+        let pythonCode = `a = ${JSON.stringify(a)}\nb = ${JSON.stringify(b)}\n`; // Use strings for display flexibility
+        let explanation = '';
+
+        // Attempt numerical comparison if possible, otherwise string comparison
+        let valA = isNaN(parseFloat(a)) ? a : parseFloat(a);
+        let valB = isNaN(parseFloat(b)) ? b : parseFloat(b);
+
+        try {
+            switch (operator) {
+                case '==':
+                    result = (valA == valB); // Use == for loose JS comparison to match Python's behavior for different types
+                    pythonCode += `resultado = (a == b)`;
+                    explanation = `Comprueba si los valores son iguales. Puede comparar tipos diferentes si son equivalentes (ej. 10 == 10.0 es True).`;
+                    break;
+                case '!=':
+                    result = (valA != valB);
+                    pythonCode += `resultado = (a != b)`;
+                    explanation = `Comprueba si los valores son distintos.`;
+                    break;
+                case '>':
+                    result = (valA > valB);
+                    pythonCode += `resultado = (a > b)`;
+                    explanation = `Comprueba si el primer valor es mayor que el segundo.`;
+                    break;
+                case '<':
+                    result = (valA < valB);
+                    pythonCode += `resultado = (a < b)`;
+                    explanation = `Comprueba si el primer valor es menor que el segundo.`;
+                    break;
+                case '>=':
+                    result = (valA >= valB);
+                    pythonCode += `resultado = (a >= b)`;
+                    explanation = `Comprueba si el primer valor es mayor o igual que el segundo.`;
+                    break;
+                case '<=':
+                    result = (valA <= valB);
+                    pythonCode += `resultado = (a <= b)`;
+                    explanation = `Comprueba si el primer valor es menor o igual que el segundo.`;
+                    break;
+                default:
+                    result = "Operador inválido";
+                    pythonCode = `# Operador no reconocido`;
+                    explanation = `El operador seleccionado no es válido para esta demostración.`;
+            }
+            compOutput.textContent = `Resultado: ${result}`;
+            compCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+        } catch (e) {
+            compOutput.textContent = `Error en la comparación: ${e.message}`;
+            compCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+# La comparación falló. Asegúrate de que los tipos de datos sean comparables.
+            `;
+        }
+    });
+
+    // --- 4. Operadores Lógicos Logic ---
+    const logicExpr1Select = document.getElementById('logic-expr1');
+    const logicOperatorSelect = document.getElementById('logic-operator-select');
+    const logicExpr2Select = document.getElementById('logic-expr2');
+    const runLogicBtn = document.getElementById('run-logic-btn');
+    const logicOutput = document.getElementById('logic-output');
+    const logicCodeExplanation = document.getElementById('logic-code-explanation');
+
+    runLogicBtn.addEventListener('click', () => {
+        const expr1 = logicExpr1Select.value === 'True';
+        const expr2 = logicExpr2Select.value === 'True';
+        const operator = logicOperatorSelect.value;
+        let result;
+        let pythonCode = '';
+        let explanation = '';
+
+        if (operator === 'not') {
+            result = !expr1;
+            pythonCode = `expr1 = ${expr1}\nresultado = not expr1`;
+            explanation = `El operador 'not' invierte el valor booleano de la expresión.`;
+        } else {
+            if (operator === 'and') {
+                result = expr1 && expr2;
+                pythonCode = `expr1 = ${expr1}\nexpr2 = ${expr2}\nresultado = expr1 and expr2`;
+                explanation = `El operador 'and' devuelve True si AMBAS expresiones son True.`;
+            } else if (operator === 'or') {
+                result = expr1 || expr2;
+                pythonCode = `expr1 = ${expr1}\nexpr2 = ${expr2}\nresultado = expr1 or expr2`;
+                explanation = `El operador 'or' devuelve True si al menos UNA de las expresiones es True.`;
+            } else {
+                result = "Operador inválido";
+                pythonCode = `# Operador no reconocido`;
+                explanation = `El operador lógico seleccionado no es válido.`;
+            }
+        }
+        logicOutput.textContent = `Resultado: ${result}`;
+        logicCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+    });
+
+    // --- 5. Operadores de Identidad Logic ---
+    const idVal1Input = document.getElementById('id-val1');
+    const idVal2Input = document.getElementById('id-val2');
+    const idOperatorSelect = document.getElementById('id-operator-select');
+    const runIdBtn = document.getElementById('run-id-btn');
+    const idOutput = document.getElementById('id-output');
+    const idCodeExplanation = document.getElementById('id-code-explanation');
+
+    runIdBtn.addEventListener('click', () => {
+        const val1Str = idVal1Input.value;
+        const val2Str = idVal2Input.value;
+        const operator = idOperatorSelect.value;
+        let result;
+        let pythonCode = '';
+        let explanation = '';
+
+        // Helper to parse Python-like literals in JS context for simulation
+        const parsePythonLiteralForIdentity = (str) => {
+            try {
+                // Attempt to parse as JSON first (for numbers, booleans, null, valid JSON arrays/objects)
+                // This will handle "True", "False", "null", numbers, and valid JSON.
+                return JSON.parse(str);
+            } catch (jsonError) {
+                // If JSON.parse fails, try to handle simple string literals with single quotes
+                if (str.startsWith("'") && str.endsWith("'")) {
+                    return str.slice(1, -1); // Remove quotes, treat as raw string
+                }
+                // Fallback for other cases (e.g., unquoted strings, complex Python objects not easily JSON-parseable)
+                // For 'is' operator, JS strict equality (===) on primitives often matches Python's 'is'
+                // For objects (arrays, objects), JS === checks reference, which matches Python's 'is'
+                return str; // Return as string for direct comparison
+            }
+        };
+
+        const val1 = parsePythonLiteralForIdentity(val1Str);
+        const val2 = parsePythonLiteralForIdentity(val2Str);
+
+        // For identity, directly compare JS objects/primitives
+        if (operator === 'is') {
+            result = (val1 === val2); // Strict equality for JS objects/primitives
+            pythonCode = `a = ${val1Str}\nb = ${val2Str}\nresultado = (a is b)`;
+            explanation = `El operador 'is' comprueba si dos variables se refieren al MISMO objeto en memoria. Es importante para tipos mutables como listas.`;
+        } else if (operator === 'is not') {
+            result = (val1 !== val2);
+            pythonCode = `a = ${val1Str}\nb = ${val2Str}\nresultado = (a is not b)`;
+            explanation = `El operador 'is not' comprueba si dos variables NO se refieren al MISMO objeto en memoria.`;
+        } else {
+            result = "Operador inválido";
+            pythonCode = `# Operador no reconocido`;
+            explanation = `El operador de identidad seleccionado no es válido.`;
+        }
+
+        idOutput.textContent = `Resultado: ${result}`;
+        idCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+    });
+
+    // --- 6. Operadores de Pertenencia Logic ---
+    const memElementInput = document.getElementById('mem-element');
+    const memSequenceInput = document.getElementById('mem-sequence');
+    const memOperatorSelect = document.getElementById('mem-operator-select');
+    const runMemBtn = document.getElementById('run-mem-btn');
+    const memOutput = document.getElementById('mem-output');
+    const memCodeExplanation = document.getElementById('mem-code-explanation');
+
+    runMemBtn.addEventListener('click', () => {
+        const elementStr = memElementInput.value;
+        const sequenceStr = memSequenceInput.value;
+        const operator = memOperatorSelect.value;
+        let result;
+        let pythonCode = '';
+        let explanation = '';
+
+        // Helper to parse Python-like literals for membership
+        const parsePythonLiteralForMembership = (str) => {
+            try {
+                // Attempt to parse as JSON first (for numbers, booleans, null, valid JSON arrays/objects)
+                const parsed = JSON.parse(str);
+                return parsed;
+            } catch (jsonError) {
+                // If JSON.parse fails, try to handle Python-specific literals
+                // This is a simplified eval for lists, tuples, sets, dicts, and direct strings/numbers
+                // WARNING: eval is dangerous in production. Used here for simulation only.
+                let evalStr = str.replace(/None/g, 'null')
+                                 .replace(/True/g, 'true')
+                                 .replace(/False/g, 'false');
+
+                // Handle single-quoted strings for eval
+                if (evalStr.startsWith("'") && evalStr.endsWith("'")) {
+                    evalStr = `"${evalStr.slice(1, -1)}"`; // Convert to double-quoted JSON string
+                }
+                
+                // Convert Python tuple syntax to JS array syntax for eval
+                if (evalStr.startsWith('(') && evalStr.endsWith(')')) {
+                    evalStr = `[${evalStr.slice(1, -1)}]`;
+                }
+                // Convert Python set syntax to JS Array for eval (then convert to Set object)
+                if (evalStr.startsWith('{') && evalStr.endsWith('}') && !evalStr.includes(':')) { // Check for dict-like
+                    evalStr = `[${evalStr.slice(1, -1)}]`;
+                }
+
+                try {
+                    const evaluated = eval(evalStr);
+                    // If it's an array from a set-like string, convert to Set object
+                    if (Array.isArray(evaluated) && str.startsWith('{') && str.endsWith('}') && !str.includes(':')) {
+                        return new Set(evaluated);
+                    }
+                    return evaluated;
+                } catch (evalError) {
+                    return str; // Fallback to original string if eval also fails
+                }
+            }
+        };
+
+        let element = parsePythonLiteralForMembership(elementStr);
+        let sequence = parsePythonLiteralForMembership(sequenceStr);
+        let pythonSequenceDisplay = JSON.stringify(sequenceStr); // Default for explanation
+
+        // Adjust pythonSequenceDisplay for Python literal syntax
+        if (Array.isArray(sequence) && sequenceStr.startsWith('[')) {
+            pythonSequenceDisplay = `[${sequence.map(item => JSON.stringify(item)).join(', ')}]`;
+        } else if (Array.isArray(sequence) && sequenceStr.startsWith('(')) {
+            pythonSequenceDisplay = `(${sequence.map(item => JSON.stringify(item)).join(', ')})`;
+        } else if (sequence instanceof Set) {
+            pythonSequenceDisplay = `{${[...sequence].map(item => JSON.stringify(item)).join(', ')}}`;
+        } else if (typeof sequence === 'object' && sequence !== null && !Array.isArray(sequence) && !(sequence instanceof Set)) {
+            pythonSequenceDisplay = JSON.stringify(sequence); // For dicts
+        } else if (typeof sequence === 'string') {
+            pythonSequenceDisplay = JSON.stringify(sequence); // For strings
+        } else if (typeof sequence === 'number' || typeof sequence === 'boolean' || sequence === null) {
+            pythonSequenceDisplay = String(sequence); // For numbers, booleans, None
+        }
+
+
+        try {
+            if (operator === 'in') {
+                if (typeof sequence === 'string') {
+                    result = sequence.includes(elementStr); // String membership uses string element
+                } else if (Array.isArray(sequence)) { // Covers lists and tuples (as JS arrays)
+                    result = sequence.includes(element);
+                } else if (sequence instanceof Set) {
+                    result = sequence.has(element);
+                } else if (typeof sequence === 'object' && sequence !== null) { // For dictionaries, 'in' checks keys
+                    result = Object.keys(sequence).includes(elementStr); // Check if elementStr is a key
+                } else {
+                    result = false; // Cannot check membership for other types
+                }
+                pythonCode = `elemento = ${JSON.stringify(elementStr)}\nsecuencia = ${pythonSequenceDisplay}\nresultado = elemento in secuencia`;
+                explanation = `El operador 'in' comprueba si el elemento está presente en la secuencia. Para diccionarios, comprueba si el elemento es una clave.`;
+            } else if (operator === 'not in') {
+                if (typeof sequence === 'string') {
+                    result = !sequence.includes(elementStr);
+                } else if (Array.isArray(sequence)) {
+                    result = !sequence.includes(element);
+                } else if (sequence instanceof Set) {
+                    result = !sequence.has(element);
+                } else if (typeof sequence === 'object' && sequence !== null) {
+                    result = !Object.keys(sequence).includes(elementStr);
+                } else {
+                    result = true; // Cannot check membership, so 'not in' is true
+                }
+                pythonCode = `elemento = ${JSON.stringify(elementStr)}\nsecuencia = ${pythonSequenceDisplay}\nresultado = elemento not in secuencia`;
+                explanation = `El operador 'not in' comprueba si el elemento NO está presente en la secuencia.`;
+            } else {
+                result = "Operador inválido";
+                pythonCode = `# Operador no reconocido`;
+                explanation = `El operador de pertenencia seleccionado no es válido.`;
+            }
+
+            memOutput.textContent = `Resultado: ${result}`;
+            memCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+        } catch (e) {
+            memOutput.textContent = `Error: No se pudo evaluar la pertenencia. Revisa el formato de tu secuencia.`;
+            memCodeExplanation.textContent = `
+# Código Python
+# elemento = ${JSON.stringify(elementStr)}
+# secuencia = ${JSON.stringify(sequenceStr)} # Esto causó un error de evaluación
+
+# Explicación:
+# Hubo un problema al interpretar tu entrada de secuencia.
+# Asegúrate de que sea una cadena, lista, tupla, conjunto o diccionario válido en Python.
+            `;
+        }
+    });
+
+    // --- 7. Operadores Bitwise Logic ---
+    const bitNum1Input = document.getElementById('bit-num1');
+    const bitNum2Input = document.getElementById('bit-num2');
+    const bitOperatorSelect = document.getElementById('bit-operator-select');
+    const runBitBtn = document.getElementById('run-bit-btn');
+    const bitOutput = document.getElementById('bit-output');
+    const bitCodeExplanation = document.getElementById('bit-code-explanation');
+
+    runBitBtn.addEventListener('click', () => {
+        const num1 = parseInt(bitNum1Input.value);
+        const num2 = parseInt(bitNum2Input.value); // Only used for binary ops
+        const operator = bitOperatorSelect.value;
+        let result;
+        let pythonCode = '';
+        let explanation = '';
+
+        if (isNaN(num1) || (operator !== '~' && isNaN(num2))) {
+            bitOutput.textContent = "Error: Introduce números enteros válidos.";
+            bitCodeExplanation.textContent = `
+# Código Python
+# num1 = ... (entrada inválida)
+# num2 = ... (entrada inválida)
+# resultado = num1 ${operator} num2
+
+# Explicación:
+# Los operadores bitwise solo funcionan con números enteros.
+            `;
+            return;
+        }
+
+        // Helper to convert decimal to binary string (for positive integers)
+        const toBinary = (n, bits = 8) => {
+            if (n < 0) { // Handle negative numbers for Python's 2's complement representation
+                // For simplicity in JS, just show positive binary and note 2's complement for Python
+                return `(negativo, Python usa complemento a 2)`;
+            }
+            return (n >>> 0).toString(2).padStart(bits, '0');
+        };
+
+        try {
+            switch (operator) {
+                case '&':
+                    result = num1 & num2;
+                    pythonCode = `num1 = ${num1}  # Binario: ${toBinary(num1)}\nnum2 = ${num2}  # Binario: ${toBinary(num2)}\nresultado = num1 & num2`;
+                    explanation = `AND a nivel de bits: Cada bit del resultado es 1 si los bits correspondientes en ambos números son 1.`;
+                    break;
+                case '|':
+                    result = num1 | num2;
+                    pythonCode = `num1 = ${num1}  # Binario: ${toBinary(num1)}\nnum2 = ${num2}  # Binario: ${toBinary(num2)}\nresultado = num1 | num2`;
+                    explanation = `OR a nivel de bits: Cada bit del resultado es 1 si al menos uno de los bits correspondientes es 1.`;
+                    break;
+                case '^':
+                    result = num1 ^ num2;
+                    pythonCode = `num1 = ${num1}  # Binario: ${toBinary(num1)}\nnum2 = ${num2}  # Binario: ${toBinary(num2)}\nresultado = num1 ^ num2`;
+                    explanation = `XOR a nivel de bits: Cada bit del resultado es 1 si los bits correspondientes son diferentes.`;
+                    break;
+                case '~':
+                    result = ~num1; // Bitwise NOT in JS is tricky for negative numbers, Python's ~x is -(x+1)
+                    pythonCode = `num = ${num1}  # Binario: ${toBinary(num1)}\nresultado = ~num`;
+                    explanation = `NOT a nivel de bits (complemento a uno): Invierte todos los bits. En Python, ~x es equivalente a -(x+1).`;
+                    break;
+                case '<<':
+                    result = num1 << num2;
+                    pythonCode = `num = ${num1}  # Binario: ${toBinary(num1)}\nresultado = num << ${num2}`;
+                    explanation = `Desplazamiento a la izquierda: Mueve los bits de 'num' a la izquierda por 'num2' posiciones. Equivalente a multiplicar por $2^{num2}$.`;
+                    break;
+                case '>>':
+                    result = num1 >> num2;
+                    pythonCode = `num = ${num1}  # Binario: ${toBinary(num1)}\nresultado = num >> ${num2}`;
+                    explanation = `Desplazamiento a la derecha: Mueve los bits de 'num' a la derecha por 'num2' posiciones. Equivalente a dividir por $2^{num2}$ (división entera).`;
+                    break;
+                default:
+                    result = "Operador inválido";
+                    pythonCode = `# Operador no reconocido`;
+                    explanation = `El operador bitwise seleccionado no es válido.`;
+            }
+            bitOutput.textContent = `Resultado: ${result}`;
+            bitCodeExplanation.textContent = `${pythonCode}\nprint(f"Resultado: {resultado}")\n\n# Explicación\n${explanation}`;
+        } catch (e) {
+            bitOutput.textContent = `Error en la operación bitwise: ${e.message}`;
+            bitCodeExplanation.textContent = `
+# Código Python (ejemplo de error)
+# La operación bitwise falló. Asegúrate de que las entradas sean enteras.
+            `;
+        }
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué operador aritmético devuelve el resto de una división?",
+            "answerOptions": [
+                {"text": "`//`", "isCorrect": false},
+                {"text": "`*`", "isCorrect": false},
+                {"text": "`%`", "isCorrect": true},
+                {"text": "`**`", "isCorrect": false}
+            ],
+            "rationale": "El operador `%` es el operador de módulo, que devuelve el resto de la división."
+        },
+        {
+            "question": "Si `x = 5`, ¿cuál es el valor de `x` después de ejecutar `x += 3`?",
+            "answerOptions": [
+                {"text": "5", "isCorrect": false},
+                {"text": "3", "isCorrect": false},
+                {"text": "8", "isCorrect": true},
+                {"text": "15", "isCorrect": false}
+            ],
+            "rationale": "El operador `+=` suma el valor a la variable y asigna el resultado. `x += 3` es equivalente a `x = x + 3`."
+        },
+        {
+            "question": "¿Qué operador de comparación se usa para verificar si dos valores NO son iguales?",
+            "answerOptions": [
+                {"text": "`==`", "isCorrect": false},
+                {"text": "`=`", "isCorrect": false},
+                {"text": "`!=`", "isCorrect": true},
+                {"text": "`<>`", "isCorrect": false}
+            ],
+            "rationale": "El operador `!=` se utiliza para la desigualdad, es decir, para comprobar si dos valores son distintos."
+        },
+        {
+            "question": "Si `condicion1 = True` y `condicion2 = False`, ¿cuál es el resultado de `condicion1 and condicion2`?",
+            "answerOptions": [
+                {"text": "True", "isCorrect": false},
+                {"text": "False", "isCorrect": true},
+                {"text": "Error", "isCorrect": false},
+                {"text": "None", "isCorrect": false}
+            ],
+            "rationale": "El operador lógico `and` devuelve `True` solo si *ambas* condiciones son `True`. Si una es `False`, el resultado es `False`."
+        },
+        {
+            "question": "Dado `lista1 = [1, 2, 3]` y `lista2 = [1, 2, 3]`, ¿cuál es el resultado de `lista1 is lista2`?",
+            "answerOptions": [
+                {"text": "True", "isCorrect": false},
+                {"text": "False", "isCorrect": true},
+                {"text": "Error", "isCorrect": false},
+                {"text": "Depende de la implementación de Python", "isCorrect": false}
+            ],
+            "rationale": "El operador `is` comprueba si dos variables se refieren al *mismo objeto en memoria*. Aunque `lista1` y `lista2` tienen el mismo contenido, son objetos distintos en memoria, por lo que `is` devuelve `False`. `==` sí devolvería `True`."
+        },
+        {
+            "question": "¿Qué operador se usaría para comprobar si el número `7` está dentro de la lista `[1, 5, 7, 9]`?",
+            "answerOptions": [
+                {"text": "`==`", "isCorrect": false},
+                {"text": "`is`", "isCorrect": false},
+                {"text": "`in`", "isCorrect": true},
+                {"text": "`has`", "isCorrect": false}
+            ],
+            "rationale": "El operador `in` se utiliza para comprobar la pertenencia de un elemento a una secuencia o colección."
+        },
+        {
+            "question": "¿Cuál es el resultado de la operación bitwise `5 & 3`?",
+            "answerOptions": [
+                {"text": "7", "isCorrect": false},
+                {"text": "1", "isCorrect": true},
+                {"text": "4", "isCorrect": false},
+                {"text": "0", "isCorrect": false}
+            ],
+            "rationale": "En binario, 5 es `0101` y 3 es `0011`. La operación AND bit a bit (`&`) da `0001`, que es 1 en decimal."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    // Removed setupNav() call as top links are removed.
+    // The setupNav() function itself is still present in the shared JS block if needed elsewhere.
+
+    // Initialize interactive sections
+    document.getElementById('arith-output').textContent = 'El resultado de la operación aparecerá aquí.';
+    document.getElementById('arith-code-explanation').textContent = 'Haz clic en "Calcular" para ver el código.';
+    document.getElementById('assign-output').textContent = 'El valor de `x` aparecerá aquí.';
+    document.getElementById('assign-code-explanation').textContent = 'Haz clic en "Ejecutar Asignación" para ver el código.';
+    document.getElementById('comp-output').textContent = 'El resultado de la comparación aparecerá aquí.';
+    document.getElementById('comp-code-explanation').textContent = 'Haz clic en "Comparar" para ver el código.';
+    document.getElementById('logic-output').textContent = 'El resultado de la operación lógica aparecerá aquí.';
+    document.getElementById('logic-code-explanation').textContent = 'Haz clic en "Evaluar Lógica" para ver el código.';
+    document.getElementById('id-output').textContent = 'El resultado de la identidad aparecerá aquí.';
+    document.getElementById('id-code-explanation').textContent = 'Haz clic en "Comprobar Identidad" para ver el código.';
+    document.getElementById('mem-output').textContent = 'El resultado de la pertenencia aparecerá aquí.';
+    document.getElementById('mem-code-explanation').textContent = 'Haz clic en "Comprobar Pertenencia" para ver el código.';
+    document.getElementById('bit-output').textContent = 'El resultado de la operación bitwise aparecerá aquí.';
+    document.getElementById('bit-code-explanation').textContent = 'Haz clic en "Ejecutar Bitwise" para ver el código.';
+
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

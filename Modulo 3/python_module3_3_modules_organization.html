@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3.3 – Módulos y Organización de Código</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 3.3 – Importar módulos y organizar código en archivos". It features a header, an introductory section, and interactive playgrounds for basic module import, importing specific functions, and a simulated example of organizing code into multiple files. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for understanding modules and code organization.
+        - Basic Module Import: Goal: Demonstrate importing an entire module. Method: Number input for calculation, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User sees how to use functions from an imported module. Justification: Visualizes basic module usage.
+        - Importing Specific Functions: Goal: Demonstrate selective import. Method: Number input for calculation, button to execute, code-block output for simulated execution and Python code/explanation. Interaction: User sees how to import and use only specific functions from a module. Justification: Explains more granular control over imports.
+        - Organizing Code in Files (Simulated): Goal: Illustrate multi-file structure. Method: Text areas representing different files, button to "run" main file, code-block output for simulated execution and Python code/explanation. Interaction: User sees how functions defined in one "file" can be used in another. Justification: Provides a conceptual understanding of modular programming.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .input-area {
+            background-color: #2d3748; /* darker slate */
+            color: #f8f8f2; /* light text */
+            border: 1px solid #4a5568; /* slate-600 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem; /* sm:text-sm */
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 3.3 – Módulos y Organización</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module3_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 3</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Importar módulos y organizar código en archivos</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">A medida que tus programas crecen, organizar el código se vuelve crucial. Python te permite dividir tu código en archivos separados llamados **módulos**, y luego importar y reutilizar las funcionalidades de esos módulos. Esto fomenta la reutilización y mejora la legibilidad.</p>
+            </section>
+
+            <section id="basic-import">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. Importación Básica (`import modulo`)</h3>
+                        <p class="mt-4 text-slate-600">La forma más común de importar un módulo es usando la sentencia `import`. Esto hace que todas las funciones, clases y variables definidas en ese módulo estén disponibles para su uso, prefijándolas con el nombre del módulo.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="math-input" class="block text-sm font-medium text-slate-700">Número para `math.sqrt()`:</label>
+                            <input type="number" id="math-input" value="25" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-basic-import-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar `import math`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Importación:</h4>
+                        <div id="basic-import-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="basic-import-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar `import math`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="from-import">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. Importación Específica (`from modulo import funcion`)</h3>
+                        <p class="mt-4 text-slate-600">Si solo necesitas una o unas pocas funciones o clases de un módulo, puedes importarlas directamente usando `from ... import ...`. Esto te permite usarlas sin el prefijo del módulo.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="from-math-input" class="block text-sm font-medium text-slate-700">Número para `sqrt()`:</label>
+                            <input type="number" id="from-math-input" value="36" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-from-import-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar `from math import sqrt`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Importación Específica:</h4>
+                        <div id="from-import-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="from-import-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar `from math import sqrt`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="code-organization">
+                <h3 class="text-3xl font-bold text-center text-slate-900">3. Organización de Código en Múltiples Archivos (Simulado)</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">En proyectos reales, divides tu código en varios archivos (`.py`) para mantenerlo organizado. Un archivo puede contener funciones relacionadas, y otro archivo principal puede importarlas y usarlas.</p>
+                
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <h4 class="font-semibold text-slate-700 mb-4">Simulación de Archivos:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-fira text-sm text-slate-600 mb-1">`operaciones.py`:</p>
+                            <pre class="code-block h-48">
+def sumar(a, b):
+    return a + b
+
+def restar(a, b):
+    return a - b
+                            </pre>
+                        </div>
+                        <div>
+                            <p class="font-fira text-sm text-slate-600 mb-1">`main.py`:</p>
+                            <pre class="code-block h-48">
+import operaciones
+
+num1 = 10
+num2 = 5
+
+suma = operaciones.sumar(num1, num2)
+resta = operaciones.restar(num1, num2)
+
+print(f"Suma: {suma}")
+print(f"Resta: {resta}")
+                            </pre>
+                        </div>
+                    </div>
+                    <button id="run-organization-btn" class="mt-6 w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Ejecutar `main.py` (Simulado)</button>
+                    <h4 class="text-slate-700 font-semibold mt-6">Salida de `main.py` (Simulada):</h4>
+                    <div id="organization-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                    <h4 class="text-slate-700 font-semibold mt-4">Explicación:</h4>
+                    <div id="organization-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                        Haz clic en "Ejecutar `main.py` (Simulado)" para ver el código en acción.
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Módulos y Organización</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la importación de módulos y la organización de código.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 3.3 – Módulos y Organización. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- 1. Basic Import Logic ---
+    const mathInput = document.getElementById('math-input');
+    const runBasicImportBtn = document.getElementById('run-basic-import-btn');
+    const basicImportOutput = document.getElementById('basic-import-output');
+    const basicImportCodeExplanation = document.getElementById('basic-import-code-explanation');
+
+    runBasicImportBtn.addEventListener('click', () => {
+        const num = parseFloat(mathInput.value);
+        if (isNaN(num) || num < 0) {
+            basicImportOutput.textContent = 'Error: Introduce un número no negativo válido.';
+            basicImportCodeExplanation.textContent = `
+# Código Python
+# import math
+# num = "invalido"
+# resultado = math.sqrt(num) # Causaría un TypeError
+
+# Explicación:
+# Las funciones de módulo esperan argumentos del tipo correcto.
+            `;
+            return;
+        }
+        const result = Math.sqrt(num).toFixed(2);
+        basicImportOutput.textContent = `La raíz cuadrada de ${num} es ${result}`;
+        basicImportCodeExplanation.textContent = `
+# Código Python
+import math
+
+numero = ${num}
+raiz_cuadrada = math.sqrt(numero)
+print(f"La raíz cuadrada de {numero} es {raiz_cuadrada:.2f}")
+
+# Explicación
+# 'import math' hace que el módulo 'math' esté disponible.
+# Usas 'math.sqrt()' para llamar a la función 'sqrt' dentro de 'math'.
+        `;
+    });
+
+    // --- 2. From Import Logic ---
+    const fromMathInput = document.getElementById('from-math-input');
+    const runFromImportBtn = document.getElementById('run-from-import-btn');
+    const fromImportOutput = document.getElementById('from-import-output');
+    const fromImportCodeExplanation = document.getElementById('from-import-code-explanation');
+
+    runFromImportBtn.addEventListener('click', () => {
+        const num = parseFloat(fromMathInput.value);
+        if (isNaN(num) || num < 0) {
+            fromImportOutput.textContent = 'Error: Introduce un número no negativo válido.';
+            fromImportCodeExplanation.textContent = `
+# Código Python
+# from math import sqrt
+# num = "invalido"
+# resultado = sqrt(num) # Causaría un TypeError
+
+# Explicación:
+# Las funciones importadas directamente también esperan argumentos válidos.
+            `;
+            return;
+        }
+        const result = Math.sqrt(num).toFixed(2);
+        fromImportOutput.textContent = `La raíz cuadrada de ${num} es ${result}`;
+        fromImportCodeExplanation.textContent = `
+# Código Python
+from math import sqrt
+
+numero = ${num}
+raiz_cuadrada = sqrt(numero) # No necesitas 'math.'
+print(f"La raíz cuadrada de {numero} es {raiz_cuadrada:.2f}")
+
+# Explicación
+# 'from math import sqrt' importa solo la función 'sqrt' directamente.
+# Puedes usar 'sqrt()' sin prefijo. Útil para funciones muy usadas.
+        `;
+    });
+
+    // --- 3. Code Organization Logic (Simulated) ---
+    const runOrganizationBtn = document.getElementById('run-organization-btn');
+    const organizationOutput = document.getElementById('organization-output');
+    const organizationCodeExplanation = document.getElementById('organization-code-explanation');
+
+    runOrganizationBtn.addEventListener('click', () => {
+        const num1 = 10;
+        const num2 = 5;
+        const suma = num1 + num2;
+        const resta = num1 - num2;
+        organizationOutput.textContent = `Suma: ${suma}\nResta: ${resta}`;
+        organizationCodeExplanation.textContent = `
+# Código Python (operaciones.py)
+def sumar(a, b):
+    return a + b
+
+def restar(a, b):
+    return a - b
+
+# Código Python (main.py)
+import operaciones
+
+num1 = 10
+num2 = 5
+
+suma = operaciones.sumar(num1, num2)
+resta = operaciones.restar(num1, num2)
+
+print(f"Suma: {suma}")
+print(f"Resta: {resta}")
+
+# Explicación
+# El archivo 'operaciones.py' define las funciones 'sumar' y 'restar'.
+# El archivo 'main.py' usa 'import operaciones' para acceder a ellas.
+# Luego, llama a 'operaciones.sumar()' y 'operaciones.restar()'.
+# Esto mantiene el código modular y fácil de mantener.
+        `;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Cuál es la sentencia correcta para importar el módulo `random` en Python?",
+            "answerOptions": [
+                {"text": "`include random`", "isCorrect": false},
+                {"text": "`use random`", "isCorrect": false},
+                {"text": "`import random`", "isCorrect": true},
+                {"text": "`get random`", "isCorrect": false}
+            ],
+            "rationale": "La palabra clave `import` se utiliza para importar módulos completos en Python."
+        },
+        {
+            "question": "Si importas un módulo usando `import mi_modulo`, ¿cómo llamarías a una función `mi_funcion()` dentro de `mi_modulo`?",
+            "answerOptions": [
+                {"text": "`mi_funcion()`", "isCorrect": false},
+                {"text": "`mi_modulo.mi_funcion()`", "isCorrect": true},
+                {"text": "`call mi_funcion()`", "isCorrect": false},
+                {"text": "`from mi_modulo mi_funcion()`", "isCorrect": false}
+            ],
+            "rationale": "Cuando se importa un módulo completo, sus contenidos se acceden usando la notación de punto (`nombre_modulo.nombre_funcion`)."
+        },
+        {
+            "question": "¿Qué sentencia usarías si solo quieres importar la función `sqrt` del módulo `math` y usarla directamente sin el prefijo `math.`?",
+            "answerOptions": [
+                {"text": "`import math.sqrt`", "isCorrect": false},
+                {"text": "`from math import sqrt`", "isCorrect": true},
+                {"text": "`import sqrt from math`", "isCorrect": false},
+                {"text": "`use math.sqrt as sqrt`", "isCorrect": false}
+            ],
+            "rationale": "La sentencia `from ... import ...` permite importar nombres específicos directamente al espacio de nombres actual."
+        },
+        {
+            "question": "¿Cuál es el beneficio principal de organizar el código en módulos separados?",
+            "answerOptions": [
+                {"text": "Hace que el programa sea más lento", "isCorrect": false},
+                {"text": "Aumenta el tamaño del archivo ejecutable", "isCorrect": false},
+                {"text": "Mejora la organización, reutilización y mantenibilidad del código", "isCorrect": true},
+                {"text": "Elimina la necesidad de usar funciones", "isCorrect": false}
+            ],
+            "rationale": "La modularización del código en archivos separados mejora la estructura, facilita la reutilización de componentes y simplifica el mantenimiento del proyecto."
+        },
+        {
+            "question": "Si tienes un archivo `utilidades.py` con una función `saludar()`, y quieres usarla en `main.py`, ¿qué harías en `main.py`?",
+            "answerOptions": [
+                {"text": "Copiar y pegar el código de `saludar()` en `main.py`", "isCorrect": false},
+                {"text": "`import utilidades` y luego `utilidades.saludar()`", "isCorrect": true},
+                {"text": "`run utilidades.py`", "isCorrect": false},
+                {"text": "`include utilidades.saludar`", "isCorrect": false}
+            ],
+            "rationale": "Para usar una función de otro archivo, lo importas como un módulo y accedes a la función usando la notación de punto."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Initialize interactive sections
+    document.getElementById('basic-import-output').textContent = 'La salida de la importación aparecerá aquí.';
+    document.getElementById('basic-import-code-explanation').textContent = 'Haz clic en "Ejecutar import math" para ver el código.';
+    document.getElementById('from-import-output').textContent = 'La salida de la importación específica aparecerá aquí.';
+    document.getElementById('from-import-code-explanation').textContent = 'Haz clic en "Ejecutar from math import sqrt" para ver el código.';
+    document.getElementById('organization-output').textContent = 'La salida de main.py aparecerá aquí.';
+    document.getElementById('organization-code-explanation').textContent = 'Haz clic en "Ejecutar main.py (Simulado)" para ver el código.';
+    
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

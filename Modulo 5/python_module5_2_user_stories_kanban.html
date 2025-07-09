@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5.2 – Historias de Usuario y Kanban</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 5.2 – Usar historias de usuario y tablero Kanban". It features a header, an introductory section, and interactive playgrounds for user stories and a Kanban board simulation. The Kanban board allows users to drag-and-drop (simulated click-to-move) tasks between columns. A final quiz section assesses understanding. This structure provides clear explanations and direct interactive demonstrations for each concept. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for user stories and Kanban.
+        - User Stories: Goal: Inform & Illustrate. Method: Text explanation with examples. Justification: Explains how user stories are structured.
+        - Kanban Board Simulation: Goal: Demonstrate workflow management. Method: Clickable task cards that move between columns (To Do, In Progress, Done). Textual log of actions. Interaction: User clicks a task, it moves to the next logical column. Justification: Provides a hands-on understanding of Kanban flow.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .kanban-column {
+            background-color: #f1f5f9; /* slate-100 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .kanban-task-card {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .kanban-task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 5.2 – Historias de Usuario y Kanban</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module5_fundamentals" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 5</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Usar historias de usuario y tablero Kanban</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Las historias de usuario y el tablero Kanban son herramientas visuales y colaborativas clave en las metodologías ágiles. Ayudan a los equipos a entender las necesidades del cliente, priorizar el trabajo y visualizar el flujo de valor.</p>
+            </section>
+
+            <section id="user-stories">
+                <h3 class="text-3xl font-bold text-center text-slate-900">1. Historias de Usuario</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Una historia de usuario es una descripción simple y concisa de una funcionalidad desde la perspectiva del usuario final. Siguen el formato: "Como [tipo de usuario], quiero [alguna meta], para que [alguna razón/beneficio]".</p>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Ejemplo 1:</h4>
+                        <p class="mt-2 text-slate-600"><strong>Como</strong> cliente, <br><strong>quiero</strong> poder buscar productos por categoría, <br><strong>para que</strong> pueda encontrar rápidamente lo que necesito.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-teal-700">Ejemplo 2:</h4>
+                        <p class="mt-2 text-slate-600"><strong>Como</strong> usuario registrado, <br><strong>quiero</strong> restablecer mi contraseña, <br><strong>para que</strong> pueda acceder a mi cuenta si la olvido.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="kanban-board">
+                <h3 class="text-3xl font-bold text-center text-slate-900">2. Tablero Kanban (Simulación Interactiva)</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Un tablero Kanban es una herramienta visual para gestionar el flujo de trabajo. Las tareas se mueven a través de diferentes columnas (ej. To Do, In Progress, Done) para visualizar el progreso. Haz clic en las tarjetas para moverlas a la siguiente columna.</p>
+                
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div id="kanban-todo" class="kanban-column">
+                            <h4 class="font-bold text-slate-800 mb-2">To Do</h4>
+                            <div class="kanban-task-card" data-task-id="1">Configurar base de datos</div>
+                            <div class="kanban-task-card" data-task-id="2">Diseñar interfaz de usuario</div>
+                            <div class="kanban-task-card" data-task-id="3">Implementar lógica de negocio</div>
+                        </div>
+                        <div id="kanban-in-progress" class="kanban-column">
+                            <h4 class="font-bold text-slate-800 mb-2">In Progress</h4>
+                        </div>
+                        <div id="kanban-done" class="kanban-column">
+                            <h4 class="font-bold text-slate-800 mb-2">Done</h4>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-4 shadow-lg mt-6">
+                        <h4 class="text-slate-300 font-semibold">Registro de Actividad:</h4>
+                        <div id="kanban-log" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                    </div>
+                    <button id="reset-kanban-btn" class="mt-6 bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition">Resetear Tablero</button>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Historias de Usuario y Kanban</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre las historias de usuario y el tablero Kanban.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 5.2 – Historias de Usuario y Kanban. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Kanban Board Simulation Logic ---
+    const kanbanTodo = document.getElementById('kanban-todo');
+    const kanbanInProgress = document.getElementById('kanban-in-progress');
+    const kanbanDone = document.getElementById('kanban-done');
+    const kanbanLog = document.getElementById('kanban-log');
+    const resetKanbanBtn = document.getElementById('reset-kanban-btn');
+
+    const initialTasks = [
+        { id: 1, text: "Configurar base de datos", status: "todo" },
+        { id: 2, text: "Diseñar interfaz de usuario", status: "todo" },
+        { id: 3, text: "Implementar lógica de negocio", status: "todo" }
+    ];
+    let currentTasks = [];
+
+    const logKanbanMessage = (message) => {
+        const p = document.createElement('p');
+        p.textContent = `- ${message}`;
+        kanbanLog.appendChild(p);
+        kanbanLog.scrollTop = kanbanLog.scrollHeight;
+    };
+
+    const renderKanbanTasks = () => {
+        kanbanTodo.innerHTML = '<h4 class="font-bold text-slate-800 mb-2">To Do</h4>';
+        kanbanInProgress.innerHTML = '<h4 class="font-bold text-slate-800 mb-2">In Progress</h4>';
+        kanbanDone.innerHTML = '<h4 class="font-bold text-slate-800 mb-2">Done</h4>';
+
+        currentTasks.forEach(task => {
+            const taskCard = document.createElement('div');
+            taskCard.className = 'kanban-task-card';
+            taskCard.textContent = task.text;
+            taskCard.dataset.taskId = task.id;
+            taskCard.dataset.taskStatus = task.status;
+
+            taskCard.addEventListener('click', () => moveTask(task.id));
+
+            if (task.status === 'todo') {
+                kanbanTodo.appendChild(taskCard);
+            } else if (task.status === 'in_progress') {
+                kanbanInProgress.appendChild(taskCard);
+            } else if (task.status === 'done') {
+                kanbanDone.appendChild(taskCard);
+            }
+        });
+    };
+
+    const moveTask = (taskId) => {
+        const taskIndex = currentTasks.findIndex(task => task.id === taskId);
+        if (taskIndex === -1) return;
+
+        const task = currentTasks[taskIndex];
+        let oldStatus = task.status;
+        let newStatus = oldStatus;
+
+        if (oldStatus === 'todo') {
+            newStatus = 'in_progress';
+            logKanbanMessage(`Tarea "${task.text}" movida de "To Do" a "In Progress".`);
+        } else if (oldStatus === 'in_progress') {
+            newStatus = 'done';
+            logKanbanMessage(`Tarea "${task.text}" movida de "In Progress" a "Done". ¡Completada!`);
+        } else if (oldStatus === 'done') {
+            logKanbanMessage(`Tarea "${task.text}" ya está en "Done".`, true);
+            return;
+        }
+
+        task.status = newStatus;
+        renderKanbanTasks();
+    };
+
+    const resetKanban = () => {
+        currentTasks = JSON.parse(JSON.stringify(initialTasks)); // Deep copy
+        kanbanLog.innerHTML = '';
+        logKanbanMessage('Tablero Kanban reseteado a su estado inicial.');
+        renderKanbanTasks();
+    };
+
+    resetKanbanBtn.addEventListener('click', resetKanban);
+    resetKanban(); // Initial render
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Cuál es el formato estándar de una historia de usuario?",
+            "answerOptions": [
+                {"text": "Título: Acción, Descripción: Detalle", "isCorrect": false},
+                {"text": "Como [rol], quiero [funcionalidad], para que [beneficio]", "isCorrect": true},
+                {"text": "ID: #, Tarea: Descripción, Estado: Abierta/Cerrada", "isCorrect": false},
+                {"text": "Verbo + Objeto + Criterios de Aceptación", "isCorrect": false}
+            ],
+            "rationale": "El formato 'Como [tipo de usuario], quiero [alguna meta], para que [alguna razón/beneficio]' es el estándar para las historias de usuario."
+        },
+        {
+            "question": "¿Cuál es el propósito principal de un tablero Kanban?",
+            "answerOptions": [
+                {"text": "Asignar salarios a los miembros del equipo", "isCorrect": false},
+                {"text": "Documentar todos los requisitos del proyecto en detalle", "isCorrect": false},
+                {"text": "Visualizar el flujo de trabajo, limitar el trabajo en progreso y maximizar la eficiencia", "isCorrect": true},
+                {"text": "Realizar reuniones diarias de sincronización", "isCorrect": false}
+            ],
+            "rationale": "El tablero Kanban se centra en la visualización del trabajo, la limitación del trabajo en curso (WIP) y la mejora del flujo para la eficiencia."
+        },
+        {
+            "question": "¿Qué columna representa el trabajo que está actualmente en ejecución en un tablero Kanban típico?",
+            "answerOptions": [
+                {"text": "To Do", "isCorrect": false},
+                {"text": "Done", "isCorrect": false},
+                {"text": "In Progress", "isCorrect": true},
+                {"text": "Backlog", "isCorrect": false}
+            ],
+            "rationale": "La columna 'In Progress' (En Progreso) contiene las tareas en las que el equipo está trabajando activamente en ese momento."
+        },
+        {
+            "question": "¿Cuál de las siguientes afirmaciones es VERDADERA sobre las historias de usuario?",
+            "answerOptions": [
+                {"text": "Deben ser muy detalladas y contener todos los requisitos técnicos.", "isCorrect": false},
+                {"text": "Son una herramienta de comunicación centrada en el valor para el usuario.", "isCorrect": true},
+                {"text": "Solo las escribe el Project Manager.", "isCorrect": false},
+                {"text": "Se usan únicamente en proyectos de desarrollo de software.", "isCorrect": false}
+            ],
+            "rationale": "Las historias de usuario son descripciones concisas que facilitan la conversación y se centran en el valor que aportan al usuario, no en el detalle técnico exhaustivo."
+        },
+        {
+            "question": "¿Qué principio de Kanban se relaciona con la idea de que debes limitar el número de tareas en las que se está trabajando simultáneamente?",
+            "answerOptions": [
+                {"text": "Gestionar el flujo", "isCorrect": false},
+                {"text": "Hacer las políticas explícitas", "isCorrect": false},
+                {"text": "Limitar el trabajo en progreso (WIP)", "isCorrect": true},
+                {"text": "Implementar bucles de retroalimentación", "isCorrect": false}
+            ],
+            "rationale": "El principio de 'Limitar el trabajo en progreso (WIP)' es fundamental en Kanban para mejorar el enfoque, reducir los cuellos de botella y acelerar la finalización del trabajo."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

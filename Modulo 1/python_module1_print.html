@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.3 – Guía de la Función print() en Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 1.3 – Guía de la Función print()". It features a fixed top navigation bar with a 'Volver al Módulo 1' link, an introductory section, and interactive playgrounds for basic print(), sep, end, multiple arguments, f-strings, and explicit newlines. Each interactive demonstration shows the Python code and an explanation. A final quiz section assesses understanding. The structure is harmonized with other module pages, and the hamburger menu button has been removed. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Provides context for the print() function.
+        - Basic Print, Separator, End, Multiple Arguments, F-Strings, Newlines: Goal: Demonstrate functionality. Method: Text inputs, dropdowns, buttons, and code-block output areas. Interaction: User modifies input/selects options, clicks a button, and sees the simulated print() output. Justification: Direct, hands-on experience with each print() feature, with code context.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.3 – Función `print()`</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Explorando la Función `print()` en Python</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">La función `print()` es tu herramienta principal para mostrar información en la consola de Python. Aunque parece simple, tiene varias funcionalidades que te permiten controlar la salida de forma precisa. ¡Vamos a explorarlas de manera interactiva!</p>
+            </section>
+
+            <section id="basico">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">1. `print()` Básico</h3>
+                        <p class="mt-4 text-slate-600">La forma más sencilla de usar `print()` es pasarle una cadena de texto o una variable. Por defecto, añade un salto de línea al final.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="basic-print-input" class="block text-sm font-medium text-slate-700">Texto a imprimir:</label>
+                            <input type="text" id="basic-print-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="¡Hola, mundo!">
+                            <button id="run-basic-print-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar `print()`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de `print()`:</h4>
+                        <div id="basic-print-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="basic-print-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar `print()`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sep">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">2. El Parámetro `sep` (Separador)</h3>
+                        <p class="mt-4 text-slate-600">Cuando imprimes múltiples argumentos separados por comas, `print()` los une con un espacio por defecto. Puedes cambiar este separador usando el parámetro `sep`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="sep-arg1" class="block text-sm font-medium text-slate-700">Argumento 1:</label>
+                            <input type="text" id="sep-arg1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="manzana">
+                            <label for="sep-arg2" class="block text-sm font-medium text-slate-700">Argumento 2:</label>
+                            <input type="text" id="sep-arg2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="banana">
+                            <label for="sep-value" class="block text-sm font-medium text-slate-700">Valor de `sep` (ej. `-`, `_`, `, `):</label>
+                            <input type="text" id="sep-value" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="-">
+                            <button id="run-sep-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con `sep`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con `sep`:</h4>
+                        <div id="sep-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="sep-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con `sep`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="end">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">3. El Parámetro `end` (Finalizador)</h3>
+                        <p class="mt-4 text-slate-600">Por defecto, `print()` añade un salto de línea (`\n`) al final de la salida. Puedes cambiar este comportamiento usando el parámetro `end`.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="end-text" class="block text-sm font-medium text-slate-700">Texto a imprimir:</label>
+                            <input type="text" id="end-text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="Hola">
+                            <label for="end-value" class="block text-sm font-medium text-slate-700">Valor de `end` (ej. ` `, `...`, `\t`):</label>
+                            <input type="text" id="end-value" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value=" ">
+                            <button id="run-end-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con `end`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con `end`:</h4>
+                        <div id="end-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <p class="mt-2 text-slate-400 text-sm">Nota: Si ejecutas varias veces, el texto se concatenará en la misma línea si `end` no es `\n`.</p>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="end-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con `end`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="multiples-args">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">4. Imprimir Múltiples Argumentos</h3>
+                        <p class="mt-4 text-slate-600">Puedes pasar varios elementos a `print()` separados por comas. Por defecto, se imprimirán separados por un espacio.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="multi-arg-input" class="block text-sm font-medium text-slate-700">Argumentos (separados por coma, ej: 10, "texto", True):</label>
+                            <input type="text" id="multi-arg-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2" value="Nombre, Juan, Edad, 30">
+                            <button id="run-multi-arg-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar Múltiples Argumentos</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de Múltiples Argumentos:</h4>
+                        <div id="multi-arg-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="multi-arg-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar Múltiples Argumentos" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="f-strings">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">5. Formato de Cadenas con F-Strings</h3>
+                        <p class="mt-4 text-slate-600">Las f-strings (cadenas literales formateadas) son una forma moderna y legible de incrustar expresiones Python dentro de cadenas de texto. Se definen con una `f` o `F` antes de las comillas.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="fstring-name" class="block text-sm font-medium text-slate-700">Nombre:</label>
+                            <input type="text" id="fstring-name" value="María" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <label for="fstring-age" class="block text-sm font-medium text-slate-700">Edad:</label>
+                            <input type="number" id="fstring-age" value="28" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                            <button id="run-fstring-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar F-String</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida de F-String:</h4>
+                        <div id="fstring-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="fstring-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar F-String" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="saltos-linea">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">6. Saltos de Línea Explícitos (`\n`)</h3>
+                        <p class="mt-4 text-slate-600">Puedes insertar saltos de línea dentro de una cadena de texto usando el carácter de escape `\n`. Esto te permite controlar dónde se rompe el texto.</p>
+                        <div class="mt-6 space-y-4">
+                            <label for="newline-text" class="block text-sm font-medium text-slate-700">Texto con `\n`:</label>
+                            <textarea id="newline-text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2 h-24" placeholder="Primera línea\nSegunda línea\nTercera línea">Primera línea\nSegunda línea\nTercera línea</textarea>
+                            <button id="run-newline-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Ejecutar con `\n`</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-300 font-semibold">Salida con `\n`:</h4>
+                        <div id="newline-output" class="code-block mt-2 h-32 overflow-y-auto"></div>
+                        <h4 class="text-slate-300 font-semibold mt-4">Código Python y Explicación:</h4>
+                        <div id="newline-code-explanation" class="code-block mt-2 h-48 overflow-y-auto text-sm">
+                            Haz clic en "Ejecutar con `\n`" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de la Función `print()`</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre las diferentes formas de usar la función `print()` en Python.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Guía Interactiva de `print()`. Creada para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) { // Handle external module links
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Menu Overlay Logic ---
+    // Removed menuToggleBtn as per user request
+    const menuOverlay = document.getElementById('menu-overlay');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const menuLinks = document.querySelectorAll('.menu-content .menu-link');
+
+    if (menuOverlay && closeMenuBtn) { // Ensure elements exist before adding listeners
+        // No click listener for menuToggleBtn as it's removed
+        closeMenuBtn.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else if (targetId.startsWith('python_module')) { // Handle external module links
+                    window.location.href = targetId;
+                }
+                menuOverlay.classList.remove('active'); // Close menu after clicking a link
+            });
+        });
+    }
+
+
+    // --- 1. Basic Print Section Logic ---
+    const basicPrintInput = document.getElementById('basic-print-input');
+    const basicPrintOutput = document.getElementById('basic-print-output');
+    const runBasicPrintBtn = document.getElementById('run-basic-print-btn');
+    const basicPrintCodeExplanation = document.getElementById('basic-print-code-explanation'); // Added
+
+    runBasicPrintBtn.addEventListener('click', () => {
+        const textToPrint = basicPrintInput.value;
+        basicPrintOutput.textContent = textToPrint;
+        basicPrintCodeExplanation.textContent = `
+# Código Python
+print("${textToPrint}")
+
+# Explicación
+# La función 'print()' muestra la cadena de texto directamente en la consola.
+# Por defecto, añade un salto de línea al final.
+        `;
+    });
+
+    // --- 2. sep Parameter Section Logic ---
+    const sepArg1Input = document.getElementById('sep-arg1');
+    const sepArg2Input = document.getElementById('sep-arg2');
+    const sepValueInput = document.getElementById('sep-value');
+    const sepOutput = document.getElementById('sep-output');
+    const runSepBtn = document.getElementById('run-sep-btn');
+    const sepCodeExplanation = document.getElementById('sep-code-explanation'); // Added
+
+    runSepBtn.addEventListener('click', () => {
+        const arg1 = sepArg1Input.value;
+        const arg2 = sepArg2Input.value;
+        const sep = sepValueInput.value;
+        sepOutput.textContent = `${arg1}${sep}${arg2}`;
+        sepCodeExplanation.textContent = `
+# Código Python
+print("${arg1}", "${arg2}", sep="${sep}")
+
+# Explicación
+# El parámetro 'sep' (separator) define la cadena que se inserta entre los argumentos.
+# Por defecto, 'sep' es un espacio.
+        `;
+    });
+
+    // --- 3. end Parameter Section Logic ---
+    const endTextInput = document.getElementById('end-text');
+    const endValueInput = document.getElementById('end-value');
+    const endOutput = document.getElementById('end-output');
+    const runEndBtn = document.getElementById('run-end-btn');
+    const endCodeExplanation = document.getElementById('end-code-explanation'); // Added
+
+    runEndBtn.addEventListener('click', () => {
+        const text = endTextInput.value;
+        const end = endValueInput.value;
+        endOutput.textContent += `${text}${end}`; // Accumulate output to show effect of 'end'
+        endCodeExplanation.textContent = `
+# Código Python
+print("${text}", end="${end.replace(/\n/g, '\\n')}") # \\n se escapa para mostrarlo literalmente
+
+# Explicación
+# El parámetro 'end' define la cadena que se añade al final de la salida.
+# Por defecto, 'end' es un salto de línea ('\\n').
+# Si no es '\\n', las siguientes llamadas a print() continuarán en la misma línea.
+        `;
+    });
+
+    // --- 4. Multiple Arguments Section Logic ---
+    const multiArgInput = document.getElementById('multi-arg-input');
+    const multiArgOutput = document.getElementById('multi-arg-output');
+    const runMultiArgBtn = document.getElementById('run-multi-arg-btn');
+    const multiArgCodeExplanation = document.getElementById('multi-arg-code-explanation'); // Added
+
+    runMultiArgBtn.addEventListener('click', () => {
+        const args = multiArgInput.value.split(',').map(arg => arg.trim());
+        multiArgOutput.textContent = args.join(' '); // Default sep is space
+        multiArgCodeExplanation.textContent = `
+# Código Python
+print(${args.map(arg => JSON.stringify(arg)).join(', ')})
+
+# Explicación
+# Puedes pasar múltiples argumentos a print() separados por comas.
+# Por defecto, print() los separa con un espacio.
+        `;
+    });
+
+    // --- 5. F-Strings Section Logic ---
+    const fstringNameInput = document.getElementById('fstring-name');
+    const fstringAgeInput = document.getElementById('fstring-age');
+    const fstringOutput = document.getElementById('fstring-output');
+    const runFstringBtn = document.getElementById('run-fstring-btn');
+    const fstringCodeExplanation = document.getElementById('fstring-code-explanation'); // Added
+
+    runFstringBtn.addEventListener('click', () => {
+        const name = fstringNameInput.value;
+        const age = fstringAgeInput.value;
+        fstringOutput.textContent = `Mi nombre es ${name} y tengo ${age} años.`;
+        fstringCodeExplanation.textContent = `
+# Código Python
+nombre = "${name}"
+edad = ${age}
+print(f"Mi nombre es {nombre} y tengo {edad} años.")
+
+# Explicación
+# Las f-strings (cadenas literales formateadas) permiten incrustar variables
+# y expresiones directamente dentro de llaves {} dentro de una cadena prefijada con 'f'.
+        `;
+    });
+
+    // --- 6. Newlines Section Logic ---
+    const newlineTextInput = document.getElementById('newline-text');
+    const newlineOutput = document.getElementById('newline-output');
+    const runNewlineBtn = document.getElementById('run-newline-btn');
+    const newlineCodeExplanation = document.getElementById('newline-code-explanation'); // Added
+
+    runNewlineBtn.addEventListener('click', () => {
+        const text = newlineTextInput.value;
+        // Replace '\n' literal with actual newline characters for display
+        newlineOutput.textContent = text.replace(/\\n/g, '\n');
+        newlineCodeExplanation.textContent = `
+# Código Python
+print("${text.replace(/\n/g, '\\n')}") # \\n se escapa para mostrarlo literalmente
+
+# Explicación
+# El carácter de escape '\\n' inserta un salto de línea explícito dentro de una cadena.
+# Esto te da control preciso sobre el formato de la salida multilínea.
+        `;
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Cuál es la salida predeterminada al final de una sentencia `print()` en Python?",
+            "answerOptions": [
+                {"text": "Un espacio", "isCorrect": false},
+                {"text": "Un tabulador", "isCorrect": false},
+                {"text": "Un salto de línea", "isCorrect": true},
+                {"text": "Nada", "isCorrect": false}
+            ],
+            "rationale": "Por defecto, `print()` añade un salto de línea (`\\n`) después de imprimir todos los argumentos."
+        },
+        {
+            "question": "¿Qué parámetro de `print()` se usa para cambiar el separador entre múltiples argumentos?",
+            "answerOptions": [
+                {"text": "`end`", "isCorrect": false},
+                {"text": "`sep`", "isCorrect": true},
+                {"text": "`join`", "isCorrect": false},
+                {"text": "`format`", "isCorrect": false}
+            ],
+            "rationale": "El parámetro `sep` (separator) define el carácter o cadena que se inserta entre los argumentos cuando se imprimen varios."
+        },
+        {
+            "question": "Si ejecutas `print('Hola', end=' ')` y luego `print('Mundo')`, ¿cuál será la salida?",
+            "answerOptions": [
+                {"text": "Hola\nMundo", "isCorrect": false},
+                {"text": "Hola Mundo", "isCorrect": true},
+                {"text": "HolaMundo", "isCorrect": false},
+                {"text": "Error", "isCorrect": false}
+            ],
+            "rationale": "El primer `print()` termina con un espacio en lugar de un salto de línea, por lo que el segundo `print()` continúa en la misma línea."
+        },
+        {
+            "question": "¿Cuál es la forma correcta de usar una f-string para imprimir el nombre 'Ana' y la edad '30'?",
+            "answerOptions": [
+                {"text": "`print('Mi nombre es {nombre} y tengo {edad} años'.format(nombre='Ana', edad=30))`", "isCorrect": false},
+                {"text": "`print('Mi nombre es %s y tengo %d años' % ('Ana', 30))`", "isCorrect": false},
+                {"text": "`print(f'Mi nombre es Ana y tengo 30 años')`", "isCorrect": true},
+                {"text": "`print('Mi nombre es Ana' + ' y tengo ' + str(30) + ' años')`", "isCorrect": false}
+            ],
+            "rationale": "Las f-strings permiten incrustar variables y expresiones directamente dentro de llaves `{}` precedidas por una `f`."
+        },
+        {
+            "question": "¿Qué carácter de escape se usa para insertar un salto de línea dentro de una cadena de texto en Python?",
+            "answerOptions": [
+                {"text": "`\\t`", "isCorrect": false},
+                {"text": "`\\r`", "isCorrect": false},
+                {"text": "`\\n`", "isCorrect": true},
+                {"text": "`\\b`", "isCorrect": false}
+            ],
+            "rationale": "El carácter `\\n` representa un salto de línea (newline character)."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1.1 – Instalación de Python y VS Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application focusing on Python and VS Code installation. It features a header, an introductory section, and detailed steps presented as cards, now categorized by operating system (Linux, Windows, macOS). This structure provides clear, step-by-step instructions for the user, tailored to their specific environment. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the installation guide.
+        - Installation Steps by OS: Goal: Instruct. Method: HTML text within styled cards, categorized by OS using headings and distinct sections, including external links. Justification: Provides clear, actionable steps for users to follow, with specific instructions relevant to their operating system, improving usability.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 1.1 – Instalación</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module1_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 1</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Instalar Python y VS Code</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Para empezar a programar en Python, necesitarás instalar el intérprete de Python y un editor de código. Visual Studio Code (VS Code) es una excelente opción. Sigue estos pasos para configurar tu entorno de desarrollo según tu sistema operativo.</p>
+            </section>
+
+            <section id="installation-steps">
+                <div class="max-w-4xl mx-auto space-y-12">
+
+                    <!-- Instalación en Windows -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-teal-800 mb-4">Instalación en Windows</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 1: Instalar Python</h4>
+                                <p class="mt-2 text-slate-600">Descarga el instalador de Python para Windows desde el sitio web oficial: <a href="https://www.python.org/downloads/windows/" target="_blank" class="text-blue-600 hover:underline">python.org/downloads/windows</a>. Durante la instalación, **es crucial marcar la opción "Add Python to PATH"** para que puedas ejecutar Python desde la línea de comandos.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 2: Instalar Visual Studio Code</h4>
+                                <p class="mt-2 text-slate-600">Descarga e instala VS Code para Windows desde su sitio web oficial: <a href="https://code.visualstudio.com/download" target="_blank" class="text-blue-600 hover:underline">code.visualstudio.com/download</a>. Sigue las instrucciones del instalador.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 3: Instalar la Extensión de Python en VS Code</h4>
+                                <p class="mt-2 text-slate-600">Abre VS Code. Ve a la vista de Extensiones (Ctrl+Shift+X). En la barra de búsqueda, escribe "Python" y busca la extensión publicada por **Microsoft**. Haz clic en "Install".</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instalación en macOS -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-teal-800 mb-4">Instalación en macOS</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 1: Instalar Python</h4>
+                                <p class="mt-2 text-slate-600">macOS suele venir con una versión antigua de Python. Es mejor instalar una versión más reciente. Descarga el instalador de Python para macOS desde: <a href="https://www.python.org/downloads/macos/" target="_blank" class="text-blue-600 hover:underline">python.org/downloads/mac-os</a>. Sigue los pasos del instalador. Esto instalará Python en una ubicación separada y no interferirá con la versión del sistema.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 2: Instalar Visual Studio Code</h4>
+                                <p class="mt-2 text-slate-600">Descarga e instala VS Code para macOS desde su sitio web oficial: <a href="https://code.visualstudio.com/download" target="_blank" class="text-blue-600 hover:underline">code.visualstudio.com/download</a>. Arrastra la aplicación a tu carpeta de Aplicaciones.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 3: Instalar la Extensión de Python en VS Code</h4>
+                                <p class="mt-2 text-slate-600">Abre VS Code. Ve a la vista de Extensiones (Cmd+Shift+X). En la barra de búsqueda, escribe "Python" y busca la extensión publicada por **Microsoft**. Haz clic en "Install".</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instalación en Linux -->
+                    <div class="bg-white p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-teal-800 mb-4">Instalación en Linux</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 1: Instalar Python</h4>
+                                <p class="mt-2 text-slate-600">La mayoría de las distribuciones de Linux vienen con Python preinstalado. Sin embargo, para obtener la última versión o gestionar múltiples versiones, se recomienda usar `pyenv` o instalarlo a través del gestor de paquetes de tu distribución (ej. `sudo apt install python3` para Debian/Ubuntu o `sudo dnf install python3` para Fedora/RHEL).</p>
+                                <pre class="code-block mt-2"><code># Ejemplo para Ubuntu/Debian
+sudo apt update
+sudo apt install python3 python3-pip</code></pre>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 2: Instalar Visual Studio Code</h4>
+                                <p class="mt-2 text-slate-600">Descarga el paquete `.deb` o `.rpm` de VS Code para tu distribución Linux desde: <a href="https://code.visualstudio.com/download" target="_blank" class="text-blue-600 hover:underline">code.visualstudio.com/download</a>. Alternativamente, puedes seguir las instrucciones para instalarlo a través del repositorio oficial de VS Code.</p>
+                                <pre class="code-block mt-2"><code># Ejemplo para Ubuntu/Debian (usando apt)
+sudo apt update
+sudo apt install software-properties-common apt-transport-https wget
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt update
+sudo apt install code</code></pre>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-teal-700">Paso 3: Instalar la Extensión de Python en VS Code</h4>
+                                <p class="mt-2 text-slate-600">Abre VS Code. Ve a la vista de Extensiones (Ctrl+Shift+X). En la barra de búsqueda, escribe "Python" y busca la extensión publicada por **Microsoft**. Haz clic en "Install".</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <p class="text-lg text-slate-700">¡Con estos pasos, tu entorno de desarrollo Python estará listo en el sistema operativo de tu elección!</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 1.1 – Instalación. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

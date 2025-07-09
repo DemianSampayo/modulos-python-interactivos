@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5.3 – Simulación de Sprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 5.3 – Ejecutar simulación de Sprint completo". It features a header, an introductory section, and an interactive sprint simulation playground. Users can click buttons to advance through Scrum sprint phases (Planning, Daily Scrum, Task Completion, Review, Retrospective), observing updates on a visual Kanban-like task board and a textual log. The Python code and explanation for the simulation logic are displayed. A final quiz section assesses understanding. This structure provides a hands-on experience for understanding the full Scrum sprint cycle. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the full sprint simulation.
+        - Sprint Simulation: Goal: Demonstrate full Scrum cycle. Method: Buttons for sprint phases (Start, Daily Scrum, Complete Task, Review, Retrospective, Reset). Output includes a dynamic textual log and a simplified visual task board (HTML/CSS columns with draggable-like tasks). Python code and explanation are shown for the simulated logic. Interaction: User clicks buttons to control the sprint flow, seeing real-time updates and understanding the progression of tasks and events. Justification: Provides a comprehensive, sequential understanding of the Scrum sprint workflow through active participation.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .task-board-column {
+            background-color: #f1f5f9; /* slate-100 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 150px;
+        }
+        .task-card {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 5.3 – Simulación de Sprint</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module5_fundamentals" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 5</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-24">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Ejecutar simulación de Sprint completo</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Experimenta el ciclo completo de un Sprint Scrum, desde la planificación hasta la retrospectiva. Esta simulación interactiva te ayudará a entender la secuencia de eventos y cómo el equipo avanza en el trabajo.</p>
+            </section>
+
+            <section id="sprint-simulation-project">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div>
+                        <h3 class="text-3xl font-bold text-slate-900">Simulación de un Sprint Scrum</h3>
+                        <p class="mt-4 text-slate-600">Haz clic en los botones para avanzar por las diferentes fases del Sprint. Observa cómo las tareas se mueven por el tablero y cómo se registra la actividad.</p>
+                        
+                        <div class="flex flex-wrap justify-center gap-2 mt-6">
+                            <button id="start-sprint-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition">Iniciar Sprint</button>
+                            <button id="daily-scrum-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition disabled:opacity-50" disabled>Daily Scrum</button>
+                            <button id="complete-task-btn" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition disabled:opacity-50" disabled>Completar Tarea</button>
+                            <button id="review-sprint-btn" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition disabled:opacity-50" disabled>Sprint Review</button>
+                            <button id="retrospective-btn" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition disabled:opacity-50" disabled>Retrospectiva</button>
+                            <button id="reset-sprint-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition">Resetear Simulación</button>
+                        </div>
+
+                        <div class="bg-slate-800 rounded-lg p-6 shadow-lg mt-6">
+                            <h4 class="text-slate-300 font-semibold">Registro de la Simulación:</h4>
+                            <div id="sprint-log" class="code-block mt-2 h-64 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-lg">
+                        <h4 class="text-slate-800 font-semibold">Tablero de Tareas (Kanban Simplificado):</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                            <div class="task-board-column">
+                                <h5 class="font-bold text-slate-800 mb-2">To Do</h5>
+                                <div id="todo-tasks"></div>
+                            </div>
+                            <div class="task-board-column">
+                                <h5 class="font-bold text-slate-800 mb-2">In Progress</h5>
+                                <div id="in-progress-tasks"></div>
+                            </div>
+                            <div class="task-board-column">
+                                <h5 class="font-bold text-slate-800 mb-2">Done</h5>
+                                <div id="done-tasks"></div>
+                            </div>
+                        </div>
+                        <h4 class="text-slate-800 font-semibold mt-4">Código Python y Explicación (Conceptual):</h4>
+                        <div id="simulation-code-explanation" class="code-block mt-2 h-64 overflow-y-auto text-sm">
+                            Haz clic en "Iniciar Sprint" para ver el código.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario de Simulación de Sprint</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre el ciclo de un Sprint Scrum.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 5.3 – Simulación de Sprint. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const setupNav = () => {
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                } else if (targetId.startsWith('python_module')) {
+                    window.location.href = targetId;
+                }
+            });
+        });
+    };
+
+    // --- Sprint Simulation Project Logic ---
+    const startSprintBtn = document.getElementById('start-sprint-btn');
+    const dailyScrumBtn = document.getElementById('daily-scrum-btn');
+    const completeTaskBtn = document.getElementById('complete-task-btn');
+    const reviewSprintBtn = document.getElementById('review-sprint-btn');
+    const retrospectiveBtn = document.getElementById('retrospective-btn');
+    const resetSprintBtn = document.getElementById('reset-sprint-btn');
+
+    const todoTasksDiv = document.getElementById('todo-tasks');
+    const inProgressTasksDiv = document.getElementById('in-progress-tasks');
+    const doneTasksDiv = document.getElementById('done-tasks');
+    const sprintLog = document.getElementById('sprint-log');
+    const simulationCodeExplanation = document.getElementById('simulation-code-explanation');
+
+    const initialTasks = [
+        { id: 1, text: "Configurar base de datos", status: "todo" },
+        { id: 2, text: "Diseñar interfaz de usuario", status: "todo" },
+        { id: 3, text: "Implementar lógica de negocio", status: "todo" },
+        { id: 4, text: "Crear API de autenticación", status: "todo" }
+    ];
+    let tasks = [];
+    let sprintPhase = 'initial'; // initial, planning, in_progress, review, retrospective
+
+    const logSprintMessage = (message, isError = false) => {
+        const p = document.createElement('p');
+        p.textContent = `- ${message}`;
+        if (isError) {
+            p.className = 'text-red-400';
+        }
+        sprintLog.appendChild(p);
+        sprintLog.scrollTop = sprintLog.scrollHeight;
+    };
+
+    const updateSprintButtons = () => {
+        startSprintBtn.disabled = sprintPhase !== 'initial';
+        dailyScrumBtn.disabled = sprintPhase !== 'in_progress';
+        completeTaskBtn.disabled = sprintPhase !== 'in_progress' || tasks.filter(t => t.status === 'in_progress').length === 0;
+        reviewSprintBtn.disabled = sprintPhase !== 'in_progress' || tasks.some(t => t.status !== 'done'); // Can only review if all done
+        retrospectiveBtn.disabled = sprintPhase !== 'review';
+    };
+
+    const renderTasks = () => {
+        todoTasksDiv.innerHTML = '';
+        inProgressTasksDiv.innerHTML = '';
+        doneTasksDiv.innerHTML = '';
+
+        tasks.forEach(task => {
+            const taskCard = document.createElement('div');
+            taskCard.className = 'task-card';
+            taskCard.textContent = task.text;
+            taskCard.dataset.taskId = task.id;
+            taskCard.dataset.taskStatus = task.status;
+
+            // Only allow clicking if in_progress
+            if (task.status === 'in_progress') {
+                 taskCard.classList.add('cursor-pointer', 'hover:bg-slate-200');
+                 taskCard.addEventListener('click', () => completeSpecificTask(task.id));
+            } else {
+                 taskCard.classList.add('cursor-not-allowed');
+            }
+
+
+            if (task.status === 'todo') {
+                todoTasksDiv.appendChild(taskCard);
+            } else if (task.status === 'in_progress') {
+                inProgressTasksDiv.appendChild(taskCard);
+            } else if (task.status === 'done') {
+                doneTasksDiv.appendChild(taskCard);
+            }
+        });
+    };
+
+    const completeSpecificTask = (taskId) => {
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+        if (taskIndex !== -1 && tasks[taskIndex].status === 'in_progress') {
+            tasks[taskIndex].status = 'done';
+            logSprintMessage(`Tarea "${tasks[taskIndex].text}" completada y movida a "Done".`);
+            renderTasks();
+            updateSprintButtons();
+        }
+    };
+
+
+    const resetSprint = () => {
+        tasks = JSON.parse(JSON.stringify(initialTasks)); // Deep copy
+        sprintPhase = 'initial';
+        sprintLog.innerHTML = '';
+        logSprintMessage('Simulación de Sprint reiniciada. ¡Listo para empezar!');
+        renderTasks();
+        updateSprintButtons();
+        simulationCodeExplanation.textContent = 'Haz clic en "Iniciar Sprint" para ver el código.';
+    };
+
+    startSprintBtn.addEventListener('click', () => {
+        if (sprintPhase === 'initial') {
+            sprintPhase = 'planning';
+            logSprintMessage('Sprint iniciado. ¡Comienza la Sprint Planning!');
+            logSprintMessage('El equipo selecciona tareas del Product Backlog para el Sprint Backlog.');
+            
+            // Simulate moving tasks to In Progress during planning
+            tasks.filter(t => t.status === 'todo').forEach(task => task.status = 'in_progress');
+            renderTasks();
+            sprintPhase = 'in_progress'; // Move directly to in_progress after planning
+            logSprintMessage('Tareas movidas a "In Progress". ¡Es hora del Daily Scrum!');
+            updateSprintButtons();
+
+            simulationCodeExplanation.textContent = `
+# Código Python (Conceptual) - Iniciar Sprint y Sprint Planning
+# Este código representa la lógica detrás de la fase de inicio y planificación del Sprint.
+
+# Estado inicial de las tareas
+# tareas = [
+#     {'id': 1, 'text': "Configurar base de datos", 'status': "todo"},
+#     {'id': 2, 'text': "Diseñar interfaz de usuario", 'status': "todo"},
+#     {'id': 3, 'text': "Implementar lógica de negocio", 'status': "todo"},
+#     {'id': 4, 'text': "Crear API de autenticación", 'status': "todo"}
+# ]
+
+def iniciar_sprint(tareas):
+    print("Sprint iniciado. ¡Comienza la Sprint Planning!")
+    print("El equipo selecciona tareas del Product Backlog para el Sprint Backlog.")
+    
+    # Simular selección y movimiento de tareas a "In Progress"
+    for tarea in tareas:
+        if tarea['status'] == 'todo':
+            tarea['status'] = 'in_progress'
+    
+    print("Tareas movidas a 'In Progress'. ¡Es hora del Daily Scrum!")
+    return tareas
+
+# Ejecución simulada:
+# tareas_actualizadas = iniciar_sprint(tareas)
+# print("Estado actual de las tareas:", tareas_actualizadas)
+
+# Explicación
+# 1. La función 'iniciar_sprint' simula el inicio del Sprint y la reunión de Sprint Planning.
+# 2. Todas las tareas inicialmente en 'todo' se "mueven" a 'in_progress' como parte de la planificación.
+# 3. El registro de la simulación te muestra los mensajes y el estado de las tareas.
+            `;
+        }
+    });
+
+    dailyScrumBtn.addEventListener('click', () => {
+        if (sprintPhase === 'in_progress') {
+            logSprintMessage('Daily Scrum: El equipo se sincroniza. ¿Qué hice ayer? ¿Qué haré hoy? ¿Hay impedimentos?');
+            updateSprintButtons();
+            simulationCodeExplanation.textContent = `
+# Código Python (Conceptual) - Daily Scrum
+# Este código representa la lógica detrás de una reunión de Daily Scrum.
+
+# tareas = [ ... ] # Estado actual de las tareas
+
+def realizar_daily_scrum(tareas):
+    print("Daily Scrum: El equipo se sincroniza.")
+    print("- ¿Qué hice ayer?")
+    print("- ¿Qué haré hoy?")
+    print("- ¿Hay impedimentos?")
+    
+    # En un Daily Scrum real, el equipo actualizaría el estado de las tareas
+    # y planificaría el trabajo del día. Aquí, solo registramos la reunión.
+    
+    # Ejemplo de lógica interna (no visible para el usuario, solo para simulación)
+    # if any(tarea['status'] == 'in_progress' for tarea in tareas):
+    #     print("El equipo sigue trabajando en tareas en progreso.")
+    # else:
+    #     print("No hay tareas en progreso, el equipo debería tomar una nueva.")
+
+# Ejecución simulada:
+# realizar_daily_scrum(tareas)
+
+# Explicación
+# 1. La función 'realizar_daily_scrum' simula la reunión diaria de 15 minutos.
+# 2. El propósito es que el equipo inspeccione el progreso y adapte el plan del día.
+# 3. En esta simulación, solo se registra la ocurrencia del evento.
+            `;
+        }
+    });
+
+    completeTaskBtn.addEventListener('click', () => {
+        if (sprintPhase === 'in_progress') {
+            const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
+            if (inProgressTasks.length > 0) {
+                // Find the first task that is not yet done and is in progress
+                const taskToComplete = inProgressTasks[0];
+                const taskIndex = tasks.findIndex(t => t.id === taskToComplete.id);
+                tasks[taskIndex].status = 'done';
+                logSprintMessage(`Tarea "${taskToComplete.text}" completada y movida a "Done".`);
+                renderTasks();
+                updateSprintButtons();
+                simulationCodeExplanation.textContent = `
+# Código Python (Conceptual) - Completar Tarea
+# Este código representa la lógica para marcar una tarea como completada.
+
+# tareas = [ ... ] # Estado actual de las tareas
+
+def completar_tarea(tareas, id_tarea_a_completar):
+    for tarea in tareas:
+        if tarea['id'] == id_tarea_a_completar and tarea['status'] == 'in_progress':
+            tarea['status'] = 'done'
+            print(f"Tarea '{tarea['text']}' completada.")
+            return True
+    print(f"Error: Tarea con ID {id_tarea_a_completar} no encontrada o no en progreso.")
+    return False
+
+# Ejecución simulada:
+# id_tarea = ${taskToComplete.id} # ID de la tarea que se acaba de completar
+# si_completada = completar_tarea(tareas, id_tarea)
+# if si_completada:
+#     # Actualizar visualización del tablero
+#     pass
+
+# Explicación
+# 1. La función 'completar_tarea' busca una tarea por su ID.
+# 2. Si la encuentra y está en 'in_progress', cambia su estado a 'done'.
+# 3. Esto simula el trabajo real del equipo de desarrollo.
+            `;
+            } else {
+                logSprintMessage('No hay tareas en "In Progress" para completar.', true);
+            }
+        }
+    });
+
+    reviewSprintBtn.addEventListener('click', () => {
+        if (sprintPhase === 'in_progress' && tasks.every(t => t.status === 'done')) {
+            sprintPhase = 'review';
+            logSprintMessage('Sprint Review: El equipo presenta el Incremento a los stakeholders. ¡Excelente trabajo!');
+            updateSprintButtons();
+            simulationCodeExplanation.textContent = `
+# Código Python (Conceptual) - Sprint Review
+# Este código representa la lógica de la reunión de Sprint Review.
+
+# tareas = [ ... ] # Estado actual de las tareas (todas deberían estar 'done')
+
+def realizar_sprint_review(tareas):
+    print("Sprint Review: El equipo presenta el Incremento a los stakeholders.")
+    
+    tareas_completadas = [t for t in tareas if t['status'] == 'done']
+    if len(tareas_completadas) == len(tareas):
+        print(f"¡Todas las {len(tareas_completadas)} tareas del Sprint han sido completadas!")
+        print("Se obtiene retroalimentación de los stakeholders para el Product Backlog.")
+    else:
+        print("Advertencia: No todas las tareas fueron completadas. Se revisa el trabajo disponible.")
+
+# Ejecución simulada:
+# realizar_sprint_review(tareas)
+
+# Explicación
+# 1. La función 'realizar_sprint_review' simula la reunión donde se inspecciona el trabajo completado.
+# 2. Se verifica si todas las tareas están 'done'.
+# 3. Se simula la obtención de retroalimentación, que podría influir en futuros Sprints.
+            `;
+        } else if (sprintPhase === 'in_progress' && tasks.some(t => t.status !== 'done')) {
+            logSprintMessage('Aún quedan tareas por completar. No se puede hacer el Sprint Review.', true);
+        }
+    });
+
+    retrospectiveBtn.addEventListener('click', () => {
+        if (sprintPhase === 'review') {
+            sprintPhase = 'retrospective';
+            logSprintMessage('Sprint Retrospective: El equipo reflexiona sobre el Sprint. ¿Qué salió bien? ¿Qué podemos mejorar?');
+            logSprintMessage('¡Sprint finalizado! Puedes reiniciar la simulación para un nuevo ciclo.');
+            updateSprintButtons();
+            simulationCodeExplanation.textContent = `
+# Código Python (Conceptual) - Sprint Retrospective
+# Este código representa la lógica de la reunión de Sprint Retrospective.
+
+def realizar_sprint_retrospective():
+    print("Sprint Retrospective: El equipo reflexiona sobre el Sprint.")
+    print("- ¿Qué salió bien en este Sprint?")
+    print("- ¿Qué podríamos haber hecho mejor?")
+    print("- ¿Qué compromisos de mejora tomamos para el próximo Sprint?")
+    print("¡Sprint finalizado! El equipo se prepara para un nuevo ciclo.")
+
+# Ejecución simulada:
+# realizar_sprint_retrospective()
+
+# Explicación
+# 1. La función 'realizar_sprint_retrospective' simula la reunión de mejora continua.
+# 2. El equipo identifica oportunidades de mejora en su proceso, herramientas y colaboración.
+# 3. Es un paso clave para la adaptación y el aprendizaje en Scrum.
+            `;
+        }
+    });
+
+    resetSprintBtn.addEventListener('click', resetSprint);
+
+    resetSprint(); // Initial setup
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Cuál es la primera fase del ciclo de un Sprint Scrum?",
+            "answerOptions": [
+                {"text": "Daily Scrum", "isCorrect": false},
+                {"text": "Sprint Review", "isCorrect": false},
+                {"text": "Sprint Planning", "isCorrect": true},
+                {"text": "Sprint Retrospective", "isCorrect": false}
+            ],
+            "rationale": "El Sprint Planning es la reunión inicial donde se planifica el trabajo del Sprint."
+        },
+        {
+            "question": "¿Qué evento de Scrum ocurre diariamente durante el Sprint?",
+            "answerOptions": [
+                {"text": "Sprint Planning", "isCorrect": false},
+                {"text": "Daily Scrum", "isCorrect": true},
+                {"text": "Sprint Review", "isCorrect": false},
+                {"text": "Sprint Retrospective", "isCorrect": false}
+            ],
+            "rationale": "El Daily Scrum es una reunión de 15 minutos que se realiza cada día del Sprint."
+        },
+        {
+            "question": "¿Cuándo se puede realizar el Sprint Review en esta simulación?",
+            "answerOptions": [
+                {"text": "En cualquier momento del Sprint", "isCorrect": false},
+                {"text": "Después de cada Daily Scrum", "isCorrect": false},
+                {"text": "Solo cuando todas las tareas están en 'In Progress'", "isCorrect": false},
+                {"text": "Solo cuando todas las tareas están completadas ('Done')", "isCorrect": true}
+            ],
+            "rationale": "La simulación requiere que todas las tareas estén en 'Done' antes de poder proceder al Sprint Review, reflejando que el Incremento debe estar 'Done' para ser inspeccionado."
+        },
+        {
+            "question": "¿Qué se busca lograr en la Sprint Retrospective?",
+            "answerOptions": [
+                {"text": "Asignar nuevas tareas al equipo", "isCorrect": false},
+                {"text": "Decidir el objetivo del próximo Sprint", "isCorrect": false},
+                {"text": "Identificar y planificar mejoras para el proceso del equipo", "isCorrect": true},
+                {"text": "Presentar el producto a los usuarios finales", "isCorrect": false}
+            ],
+            "rationale": "La Retrospectiva es una oportunidad para que el equipo reflexione sobre el Sprint y encuentre formas de mejorar su forma de trabajar."
+        },
+        {
+            "question": "¿Qué representa el movimiento de una tarjeta de 'To Do' a 'In Progress' en el tablero de tareas?",
+            "answerOptions": [
+                {"text": "La tarea ha sido completada.", "isCorrect": false},
+                {"text": "La tarea ha sido eliminada del Sprint.", "isCorrect": false},
+                {"text": "El equipo ha comenzado a trabajar activamente en esa tarea.", "isCorrect": true},
+                {"text": "La tarea está bloqueada y necesita ayuda.", "isCorrect": false}
+            ],
+            "rationale": "Mover una tarea a 'In Progress' significa que el equipo ha iniciado el trabajo en ella."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    quizNextBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+            currentQuizQuestionIndex++;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizPrevBtn.addEventListener('click', () => {
+        if (currentQuizQuestionIndex > 0) {
+            currentQuizQuestionIndex--;
+            loadQuestion(currentQuizQuestionIndex);
+        }
+    });
+
+    quizSubmitBtn.addEventListener('click', () => {
+        correctQuizAnswersCount = 0;
+        quizQuestions.forEach((q, index) => {
+            if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                correctQuizAnswersCount++;
+            }
+        });
+
+        quizQuestionDisplay.classList.add('hidden');
+        quizOptionsDisplay.classList.add('hidden');
+        quizFeedbackDisplay.classList.add('hidden');
+        quizPrevBtn.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizSubmitBtn.classList.add('hidden');
+
+        quizResultsDisplay.classList.remove('hidden');
+        quizResultsDisplay.innerHTML = `
+            <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+            <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+            <div class="mt-4 space-y-2">
+                ${quizQuestions.map((q, i) => `
+                    <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                        <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                        <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                        <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                        <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+        `;
+
+        document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+            currentQuizQuestionIndex = 0;
+            userQuizAnswers = new Array(quizQuestions.length).fill(null);
+            correctQuizAnswersCount = 0;
+            quizQuestionDisplay.classList.remove('hidden');
+            quizOptionsDisplay.classList.remove('hidden');
+            quizPrevBtn.classList.remove('hidden');
+            quizNextBtn.classList.remove('hidden');
+            quizResultsDisplay.classList.add('hidden');
+            loadQuestion(currentQuizQuestionIndex);
+        });
+    });
+
+
+    setupNav();
+    // Load the first quiz question on page load
+    loadQuestion(currentQuizQuestionIndex);
+});
+</script>

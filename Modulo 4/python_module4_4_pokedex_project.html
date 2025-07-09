@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4.4 – Proyecto Pokédex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application for "Módulo 4.4 – Proyecto: Pokédex con PokéAPI + registro en CSV". It features a header, an introductory section, an interactive project area, and a quiz section. Users can search for a Pokémon, fetch its data from a simulated API, display key information, and simulate saving this data to a CSV file. The Python code and explanation for the project logic are displayed. The quiz section allows users to test their knowledge. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the Pokédex project.
+        - Pokédex Project: Goal: Apply integrated concepts & Challenge. Method: Input for Pokémon name, button to search, display area for Pokémon info (name, ID, type, image). A button to "Simular Guardar en CSV". Python code and explanation are shown for the simulated logic. Interaction: User searches for Pokémon, sees its data, and can simulate saving it. Justification: Provides a practical application of API requests, JSON parsing, and file writing, tying together concepts from the module.
+        - Quiz: Goal: Assess understanding. Method: Dynamically rendered multiple-choice questions with radio buttons. Interaction: User selects an answer, navigates questions, and receives immediate feedback. Justification: Self-assessment to reinforce learning.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fira {
+            font-family: 'Fira Code', monospace;
+        }
+        .code-block {
+            background-color: #1a202c; /* slate-900 */
+            color: #a7f3d0; /* green-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 4.4 – Proyecto Pokédex</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="python_module4_fundamentals.html" class="text-slate-600 hover:text-teal-600 transition">Volver al Módulo 4</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Proyecto: 🔍 Pokédex con PokéAPI + registro en CSV</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">En este proyecto final del módulo, construirás una Pokédex básica. Aprenderás a consumir datos de la PokéAPI para obtener información de Pokémon y simularás cómo guardar esa información en un archivo CSV para mantener un registro.</p>
+            </section>
+                
+            <section id="pokedex-project">
+                <div class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="pokemon-name-input" class="block text-sm font-medium text-slate-700">Nombre del Pokémon (ej. `pikachu`, `charmander`):</label>
+                            <input type="text" id="pokemon-name-input" value="pikachu" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2">
+                        </div>
+                        <button id="search-pokemon-btn" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">Buscar Pokémon</button>
+                    </div>
+
+                    <div id="pokemon-display-area" class="mt-6 p-4 rounded-md bg-slate-100 text-slate-800 hidden">
+                        <h4 class="font-semibold text-slate-700 mb-2">Información del Pokémon:</h4>
+                        <img id="pokemon-sprite" src="" alt="Sprite de Pokémon" class="w-24 h-24 mx-auto mb-2">
+                        <p><strong>Nombre:</strong> <span id="pokemon-name" class="font-bold text-teal-600"></span></p>
+                        <p><strong>ID:</strong> <span id="pokemon-id" class="font-bold"></span></p>
+                        <p><strong>Tipo(s):</strong> <span id="pokemon-types" class="font-bold"></span></p>
+                        <button id="save-pokemon-csv-btn" class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">Simular Guardar en CSV</button>
+                        <p id="csv-save-message" class="mt-2 text-sm text-slate-600"></p>
+                    </div>
+                    <div id="pokemon-error-message" class="mt-6 p-4 rounded-md bg-red-100 text-red-800 hidden">
+                        <p><strong>Error:</strong> <span id="pokemon-error-text"></span></p>
+                    </div>
+
+                    <h4 class="text-slate-700 font-semibold mt-4">Código Python y Explicación (Conceptual):</h4>
+                    <div id="pokedex-code-explanation" class="code-block mt-2 h-96 overflow-y-auto text-sm">
+                        Haz clic en "Buscar Pokémon" para ver el código.
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz">
+                <h3 class="text-3xl font-bold text-center text-slate-900">Cuestionario del Proyecto Pokédex</h3>
+                <p class="mt-4 text-slate-600 text-center max-w-3xl mx-auto">Pon a prueba tus conocimientos sobre la simulación de la Pokédex, consumo de APIs y manejo de archivos.</p>
+                
+                <div id="quiz-container" class="mt-8 bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <div id="quiz-question-display" class="text-lg font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-display" class="space-y-4 mb-6"></div>
+                    <div id="quiz-feedback-display" class="text-sm mt-4 p-3 rounded-md hidden"></div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button id="quiz-prev-btn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                        <button id="quiz-next-btn" class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+                        <button id="quiz-submit-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition hidden">Ver Resultados</button>
+                    </div>
+                    <div id="quiz-results-display" class="mt-8 p-4 bg-slate-100 rounded-lg hidden"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 4.4 – Proyecto Pokédex. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const pokemonNameInput = document.getElementById('pokemon-name-input');
+    const searchPokemonBtn = document.getElementById('search-pokemon-btn');
+    const pokemonDisplayArea = document.getElementById('pokemon-display-area');
+    const pokemonSprite = document.getElementById('pokemon-sprite');
+    const pokemonNameSpan = document.getElementById('pokemon-name');
+    const pokemonIdSpan = document.getElementById('pokemon-id');
+    const pokemonTypesSpan = document.getElementById('pokemon-types');
+    const pokemonErrorMessageDiv = document.getElementById('pokemon-error-message');
+    const pokemonErrorTextSpan = document.getElementById('pokemon-error-text');
+    const pokedexCodeExplanation = document.getElementById('pokedex-code-explanation');
+    const savePokemonCsvBtn = document.getElementById('save-pokemon-csv-btn');
+    const csvSaveMessage = document.getElementById('csv-save-message');
+
+    let currentPokemonData = null; // Store fetched data for CSV saving
+
+    searchPokemonBtn.addEventListener('click', async () => {
+        const pokemonName = pokemonNameInput.value.trim().toLowerCase();
+        pokemonDisplayArea.classList.add('hidden');
+        pokemonErrorMessageDiv.classList.add('hidden');
+        csvSaveMessage.textContent = '';
+        currentPokemonData = null;
+
+        if (!pokemonName) {
+            pokemonErrorMessageDiv.classList.remove('hidden');
+            pokemonErrorTextSpan.textContent = 'Por favor, ingresa un nombre de Pokémon.';
+            return;
+        }
+
+        const apiUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+        pokemonNameSpan.textContent = 'Cargando...';
+        pokemonDisplayArea.classList.remove('hidden'); // Show loading state
+
+        pokedexCodeExplanation.textContent = `
+# Código Python (Conceptual)
+import requests
+import json
+import csv # Para guardar en CSV
+
+def obtener_pokemon_info(nombre_pokemon):
+    url = f"https://pokeapi.co/api/v2/pokemon/{nombre_pokemon.lower()}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status() # Lanza excepción para errores HTTP
+        datos = response.json()
+        
+        # Extraer información relevante
+        nombre = datos['name'].capitalize()
+        id_pokemon = datos['id']
+        tipos = [t['type']['name'].capitalize() for t in datos['types']]
+        sprite_url = datos['sprites']['front_default']
+        
+        return {
+            'nombre': nombre,
+            'id': id_pokemon,
+            'tipos': ", ".join(tipos),
+            'sprite': sprite_url
+        }
+    except requests.exceptions.HTTPError as errh:
+        if errh.response.status == 404:
+            return "Pokémon no encontrado."
+        else:
+            return f"Error HTTP: {errh}"
+    except requests.exceptions.ConnectionError as errc:
+        return f"Error de Conexión: {errc}"
+    except Exception as e:
+        return f"Error inesperado: {e}"
+
+def guardar_pokemon_csv(pokemon_data):
+    nombre_archivo = "pokedex_registros.csv"
+    # Modo 'a' para añadir, 'w' si quieres sobrescribir cada vez
+    with open(nombre_archivo, 'a', newline='', encoding='utf-8') as archivo_csv:
+        escritor = csv.writer(archivo_csv)
+        # Escribir cabecera solo si el archivo está vacío (primera vez)
+        # if archivo_csv.tell() == 0: # Esto es más complejo de simular
+        #     escritor.writerow(['Nombre', 'ID', 'Tipos'])
+        escritor.writerow([pokemon_data['nombre'], pokemon_data['id'], pokemon_data['tipos']])
+    print(f"'{pokemon_data['nombre']}' registrado en {nombre_archivo}")
+
+
+# Ejecución (simulada)
+nombre_buscado = "${pokemonName}"
+info_pokemon = obtener_pokemon_info(nombre_buscado)
+
+if isinstance(info_pokemon, dict):
+    print(f"Pokémon encontrado: {info_pokemon['nombre']}")
+    # Simular visualización de info
+    # guardar_pokemon_csv(info_pokemon) # Esto se activaría con el botón
+else:
+    print(f"Error: {info_pokemon}")
+
+# Explicación
+# 1. 'obtener_pokemon_info' hace una solicitud GET a la PokéAPI.
+# 2. Maneja errores como Pokémon no encontrado (404) o problemas de red.
+# 3. Si es exitoso, extrae el nombre, ID, tipos y sprite.
+# 4. 'guardar_pokemon_csv' (simulada) toma los datos y los añade a un archivo CSV.
+# 5. La visualización muestra los datos obtenidos.
+        `;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Pokémon no encontrado. Intenta con otro nombre.');
+                }
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            const data = await response.json();
+
+            const name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+            const id = data.id;
+            const types = data.types.map(t => t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)).join(', ');
+            const sprite = data.sprites.front_default;
+
+            pokemonNameSpan.textContent = name;
+            pokemonIdSpan.textContent = id;
+            pokemonTypesSpan.textContent = types;
+            pokemonSprite.src = sprite;
+            pokemonSprite.alt = `Sprite de ${name}`;
+
+            pokemonDisplayArea.classList.remove('hidden');
+            pokemonErrorMessageDiv.classList.add('hidden');
+
+            currentPokemonData = { name, id, types, sprite }; // Store data for CSV saving
+        } catch (error) {
+            pokemonDisplayArea.classList.add('hidden');
+            pokemonErrorMessageDiv.classList.remove('hidden');
+            pokemonErrorTextSpan.textContent = error.message;
+        }
+    });
+
+    savePokemonCsvBtn.addEventListener('click', () => {
+        if (currentPokemonData) {
+            csvSaveMessage.textContent = `Simulando guardar '${currentPokemonData.name}' en pokedex_registros.csv... ¡Guardado!`;
+            csvSaveMessage.className = 'mt-2 text-sm text-green-600 font-semibold';
+            // In a real app, you'd send currentPokemonData to a backend or use a browser API to save.
+            // For this simulation, we just confirm.
+        } else {
+            csvSaveMessage.textContent = 'Primero busca un Pokémon para guardar.';
+            csvSaveMessage.className = 'mt-2 text-sm text-red-600 font-semibold';
+        }
+    });
+
+    // --- Quiz Section Logic ---
+    const quizQuestions = [
+        {
+            "question": "¿Qué librería de Python usarías para hacer una solicitud GET a la PokéAPI?",
+            "answerOptions": [
+                {"text": "`json`", "isCorrect": false},
+                {"text": "`csv`", "isCorrect": false},
+                {"text": "`requests`", "isCorrect": true},
+                {"text": "`os`", "isCorrect": false}
+            ],
+            "rationale": "La librería `requests` es la más utilizada en Python para realizar solicitudes HTTP a APIs."
+        },
+        {
+            "question": "¿En qué formato de datos suele devolver la información una API como la PokéAPI?",
+            "answerOptions": [
+                {"text": "XML", "isCorrect": false},
+                {"text": "CSV", "isCorrect": false},
+                {"text": "JSON", "isCorrect": true},
+                {"text": "HTML", "isCorrect": false}
+            ],
+            "rationale": "La mayoría de las APIs RESTful, como la PokéAPI, devuelven sus datos en formato JSON."
+        },
+        {
+            "question": "¿Qué parte de la información de un Pokémon (nombre, ID, tipos, sprite) se almacenaría mejor como una lista en Python?",
+            "answerOptions": [
+                {"text": "Nombre", "isCorrect": false},
+                {"text": "ID", "isCorrect": false},
+                {"text": "Tipo(s)", "isCorrect": true},
+                {"text": "Sprite (URL de imagen)", "isCorrect": false}
+            ],
+            "rationale": "Un Pokémon puede tener uno o varios tipos, por lo que una lista es la estructura de datos ideal para almacenar múltiples tipos."
+        },
+        {
+            "question": "¿Por qué es importante manejar errores (ej. Pokémon no encontrado) al consumir una API?",
+            "answerOptions": [
+                {"text": "Para hacer la solicitud más rápida", "isCorrect": false},
+                {"text": "Para evitar que el programa falle si la API no responde o el recurso no existe", "isCorrect": true},
+                {"text": "Para reducir el uso de datos", "isCorrect": false},
+                {"text": "Solo es necesario para APIs de pago", "isCorrect": false}
+            ],
+            "rationale": "El manejo de errores (`try/except`) es crucial para que tu aplicación sea robusta y no se bloquee si la API devuelve un error (ej. 404 Not Found) o si hay problemas de red."
+        },
+        {
+            "question": "Si quisieras guardar un registro de los Pokémon buscados en un archivo, ¿qué formato de archivo sería adecuado para una tabla simple de datos?",
+            "answerOptions": [
+                {"text": ".txt (texto plano)", "isCorrect": false},
+                {"text": ".json (objeto JSON)", "isCorrect": false},
+                {"text": ".csv (valores separados por coma)", "isCorrect": true},
+                {"text": ".xml (lenguaje de marcado)", "isCorrect": false}
+            ],
+            "rationale": "Los archivos CSV son ideales para almacenar datos tabulares (filas y columnas) de forma sencilla y legible, perfectos para un registro básico."
+        }
+    ];
+
+    let currentQuizQuestionIndex = 0;
+    let userQuizAnswers = new Array(quizQuestions.length).fill(null);
+    let correctQuizAnswersCount = 0;
+
+    const quizQuestionDisplay = document.getElementById('quiz-question-display');
+    const quizOptionsDisplay = document.getElementById('quiz-options-display');
+    const quizFeedbackDisplay = document.getElementById('quiz-feedback-display');
+    const quizPrevBtn = document.getElementById('quiz-prev-btn');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+    const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+    const quizResultsDisplay = document.getElementById('quiz-results-display');
+
+    // Initialize quiz elements (moved inside DOMContentLoaded and after quiz HTML)
+    const initializeQuiz = () => {
+        // Re-get references to ensure they are not null
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const quizPrevBtn = document.getElementById('quiz-prev-btn');
+        const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+
+        if (!quizNextBtn || !quizPrevBtn || !quizSubmitBtn) {
+            console.error("Quiz navigation buttons not found. Quiz cannot be initialized.");
+            return;
+        }
+
+        quizNextBtn.addEventListener('click', () => {
+            if (currentQuizQuestionIndex < quizQuestions.length - 1) {
+                currentQuizQuestionIndex++;
+                loadQuestion(currentQuizQuestionIndex);
+            }
+        });
+
+        quizPrevBtn.addEventListener('click', () => {
+            if (currentQuizQuestionIndex > 0) {
+                currentQuizQuestionIndex--;
+                loadQuestion(currentQuizQuestionIndex);
+            }
+        });
+
+        quizSubmitBtn.addEventListener('click', () => {
+            correctQuizAnswersCount = 0;
+            quizQuestions.forEach((q, index) => {
+                if (userQuizAnswers[index] !== null && q.answerOptions[userQuizAnswers[index]].isCorrect) {
+                    correctQuizAnswersCount++;
+                }
+            });
+
+            quizQuestionDisplay.classList.add('hidden');
+            quizOptionsDisplay.classList.add('hidden');
+            quizFeedbackDisplay.classList.add('hidden');
+            quizPrevBtn.classList.add('hidden');
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.add('hidden');
+
+            quizResultsDisplay.classList.remove('hidden');
+            quizResultsDisplay.innerHTML = `
+                <h4 class="text-xl font-bold text-slate-900 mb-4">Resultados del Cuestionario</h4>
+                <p class="text-lg text-slate-700">Has respondido correctamente a ${correctQuizAnswersCount} de ${quizQuestions.length} preguntas.</p>
+                <div class="mt-4 space-y-2">
+                    ${quizQuestions.map((q, i) => `
+                        <div class="p-2 rounded-md ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'bg-green-50' : 'bg-red-50'}">
+                            <p class="font-semibold">${i + 1}. ${q.question.split('\n')[0]}</p>
+                            <p class="text-sm ${userQuizAnswers[i] !== null && q.answerOptions[userQuizAnswers[i]]?.isCorrect ? 'text-green-700' : 'text-red-700'}">Tu respuesta: ${userQuizAnswers[i] !== null ? q.answerOptions[userQuizAnswers[i]].text : 'No respondida'}</p>
+                            <p class="text-sm text-slate-600">Respuesta correcta: ${q.answerOptions.find(opt => opt.isCorrect).text}</p>
+                            <p class="text-xs text-slate-500">Razón: ${q.rationale}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <button id="quiz-restart-btn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Reiniciar Cuestionario</button>
+            `;
+
+            document.getElementById('quiz-restart-btn').addEventListener('click', () => {
+                currentQuizQuestionIndex = 0;
+                userQuizAnswers = new Array(quizQuestions.length).fill(null);
+                correctQuizAnswersCount = 0;
+                quizQuestionDisplay.classList.remove('hidden');
+                quizOptionsDisplay.classList.remove('hidden');
+                quizPrevBtn.classList.remove('hidden');
+                quizNextBtn.classList.remove('hidden');
+                quizResultsDisplay.classList.add('hidden');
+                loadQuestion(currentQuizQuestionIndex);
+            });
+        });
+
+        loadQuestion(currentQuizQuestionIndex); // Load the first quiz question on page load
+    };
+
+    const loadQuestion = (index) => {
+        const questionData = quizQuestions[index];
+        quizQuestionDisplay.innerHTML = `${index + 1}. ${questionData.question.replace(/\n/g, '<br>')}`;
+        quizOptionsDisplay.innerHTML = '';
+        quizFeedbackDisplay.classList.add('hidden');
+        quizFeedbackDisplay.textContent = '';
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+        quizResultsDisplay.classList.add('hidden');
+
+        questionData.answerOptions.forEach((option, optionIndex) => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'quiz_option';
+            input.id = `option_${optionIndex}`;
+            input.value = optionIndex;
+            input.className = 'mr-2';
+            input.addEventListener('change', () => selectAnswer(index, optionIndex));
+
+            const label = document.createElement('label');
+            label.htmlFor = `option_${optionIndex}`;
+            label.textContent = option.text;
+            label.className = 'text-slate-700 cursor-pointer hover:text-teal-600';
+
+            div.appendChild(input);
+            div.appendChild(label);
+            quizOptionsDisplay.appendChild(div);
+
+            if (userQuizAnswers[index] === optionIndex) {
+                input.checked = true;
+                showFeedback(index);
+            }
+        });
+
+        updateQuizNavigationButtons();
+    };
+
+    const selectAnswer = (questionIndex, answerIndex) => {
+        userQuizAnswers[questionIndex] = answerIndex;
+        showFeedback(questionIndex);
+        updateQuizNavigationButtons();
+    };
+
+    const showFeedback = (questionIndex) => {
+        const questionData = quizQuestions[questionIndex];
+        const selectedAnswerIndex = userQuizAnswers[questionIndex];
+        
+        if (selectedAnswerIndex === null) {
+            quizFeedbackDisplay.classList.add('hidden');
+            return;
+        }
+
+        quizFeedbackDisplay.classList.remove('hidden');
+        quizFeedbackDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+        if (questionData.answerOptions[selectedAnswerIndex].isCorrect) {
+            quizFeedbackDisplay.classList.add('bg-green-100', 'text-green-800');
+            quizFeedbackDisplay.innerHTML = `<strong>¡Correcto!</strong> ${questionData.rationale}`;
+        } else {
+            quizFeedbackDisplay.classList.add('bg-red-100', 'text-red-800');
+            const correctAnswerText = questionData.answerOptions.find(opt => opt.isCorrect).text;
+            quizFeedbackDisplay.innerHTML = `<strong>Incorrecto.</strong> La respuesta correcta era: "${correctAnswerText}". ${questionData.rationale}`;
+        }
+    };
+
+    const updateQuizNavigationButtons = () => {
+        const quizPrevBtn = document.getElementById('quiz-prev-btn');
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const quizSubmitBtn = document.getElementById('quiz-submit-btn');
+
+        quizPrevBtn.disabled = currentQuizQuestionIndex === 0;
+        quizNextBtn.disabled = userQuizAnswers[currentQuizQuestionIndex] === null;
+
+        if (currentQuizQuestionIndex === quizQuestions.length - 1) {
+            quizNextBtn.classList.add('hidden');
+            quizSubmitBtn.classList.remove('hidden');
+        } else {
+            quizNextBtn.classList.remove('hidden');
+            quizSubmitBtn.classList.add('hidden');
+        }
+    };
+
+    // Call initializeQuiz at the end of DOMContentLoaded
+    initializeQuiz();
+});
+</script>

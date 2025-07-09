@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4 – Archivos y Consumo de APIs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application serving as the home/index for "Módulo 4 – Archivos y Consumo de APIs". It features a header, a main introductory section, and a grid of interactive cards, each representing a sub-topic of Module 4. Each card includes a title, a brief description, and a button to navigate to its respective detailed sub-page. This structure provides a clear overview of available content and easy navigation within the module, mirroring the home page structure for consistency. -->
+    <!-- Visualization & Content Choices:
+        - Introduction: Goal: Inform. Method: HTML text. Justification: Sets the context for the module.
+        - Sub-Module Cards: Goal: Organize & Navigate. Method: Grid layout of HTML divs, each styled as a card. Each card contains a sub-topic title, a short description, and a clickable button. Interaction: Clicking the button navigates to the associated sub-module's interactive page. Justification: Provides a visually appealing and intuitive way to browse and access different learning sub-topics, maintaining consistency with the main home page.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Módulo 4 – Archivos y APIs</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="../python_home_page.html" class="text-slate-600 hover:text-teal-600 transition">Volver a Módulos</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="space-y-16">
+
+            <section id="intro" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Archivos y Consumo de APIs: Temario</h2>
+                <p class="mt-6 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Aquí encontrarás los temas clave del Módulo 4. Haz clic en cada tarjeta para explorar el contenido interactivo y aprender a manejar archivos y comunicarte con servicios web.</p>
+            </section>
+
+            <section id="module4-topics">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Leer y escribir archivos .txt y .csv -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="File icon">📄</div>
+                        <h4 class="font-bold text-2xl text-slate-900">1. Leer y escribir archivos .txt y .csv</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aprende a interactuar con archivos de texto y datos estructurados en formato CSV.</p>
+                        <a href="python_module4_1_file_io.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Manejo robusto de errores con excepciones -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Shield icon">🛡️</div>
+                        <h4 class="font-bold text-2xl text-slate-900">2. Manejo robusto de errores con excepciones</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Haz tus programas más resistentes gestionando errores como `FileNotFoundError` y `PermissionError`.</p>
+                        <a href="python_module4_2_error_handling.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Consumir datos de una API con requests -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="API icon">🌐</div>
+                        <h4 class="font-bold text-2xl text-slate-900">3. Consumir datos de una API con `requests`</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aprende a realizar solicitudes HTTP y a procesar respuestas JSON de servicios web.</p>
+                        <a href="python_module4_3_api_requests.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                    <!-- Proyecto: 🔍 Pokédex con PokéAPI + registro en CSV -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+                        <div class="text-5xl mb-4" role="img" aria-label="Magnifying glass icon">🔍</div>
+                        <h4 class="font-bold text-2xl text-slate-900">4. Proyecto: Pokédex con PokéAPI + registro en CSV</h4>
+                        <p class="mt-2 text-slate-600 flex-grow">Aplica todo lo aprendido para construir una Pokédex interactiva y guardar tus registros.</p>
+                        <a href="python_module4_4_pokedex_project.html" class="mt-6 bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 transition">Explorar</a>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Módulo 4 – Archivos y APIs. Creado para facilitar el aprendizaje.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
